@@ -1,0 +1,450 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+@import "aos/dist/aos.css";
+
+/* ================= BASE ================= */
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: rgba(255, 255, 255, 0.5) !important;
+    color: #2c2c2c;
+}
+
+body > .d-flex {
+    min-height: 100vh;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar {
+    width: 300px;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #6b1f2b, #4e1620);
+    padding: 20px;
+}
+
+.sidebar h4 {
+    color: #c9a24d;
+    text-align: center;
+}
+
+.sidebar a {
+    color: #fdf8f3;
+    text-decoration: none;
+    padding: 12px 16px;
+    display: block;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    transition: 0.3s;
+}
+
+.sidebar a i {
+    color: #c9a24d;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(4px);
+}
+
+/* ================= MAIN OFFSET ================= */
+.ms-sidebar {
+    margin-left: 300px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ================= HEADER ================= */
+.header {
+    background: rgb(255, 242, 223);
+    border-bottom: 2px solid #f1e5d8;
+}
+
+.header h5 {
+    color: #2c2c2c;
+}
+
+/* ================= FOOTER ================= */
+.footer {
+    background: rgb(255, 242, 223);
+    border-top: 2px solid #f1e5d8;
+    font-size: 14px;
+    color: #6b1f2b;
+}
+
+/* ================= TABLE ================= */
+.table thead {
+    background: #f3e6e8;
+}
+
+.table th {
+    color: #6b1f2b;
+    font-weight: 600;
+}
+
+/* ================= PROFILE PAGE ================= */
+
+/* LEFT PROFILE PANEL */
+.profile-side {
+    background: #fff3db;
+    /* background: linear-gradient(to bottom right, #c9a24d, #ffe09f); */
+    border: 4px solid #6b1f2b;
+    color: #000;
+    border-radius: 24px;
+    padding: 40px 25px;
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-side::after {
+    content: '';
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    background: rgba(88, 88, 88, 0.08);
+    border-radius: 50%;
+    top: -60px;
+    right: -60px;
+}
+
+/* AVATAR */
+.avatar-xl img {
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    border: 4px solid #6b1f2b;
+    object-fit: cover;
+    box-shadow: 0 10px 25px rgba(0,0,0,.25);
+}
+
+/* BADGES */
+.badge-animated {
+    padding: 6px 16px;
+    border-radius: 20px;
+    background: rgba(107, 31, 43, 0.9);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.btn-admin
+{
+    background: #b82d42 !important;
+    color: #fff !important;
+    font-weight: 600;
+    padding: 10px 20px !important;
+    border-radius: 14px !important;
+    transition: 0.3s;
+}
+
+.btn-admin:hover
+{
+    background: #7a1726 !important;
+    color: #fff !important;
+    transform: translateY(-2px);
+}
+
+.btn-back{
+    background: #6c757d !important;
+    color: #fff !important;
+    font-weight: 600;
+    padding: 10px 20px !important;
+    border-radius: 14px !important;
+    transition: 0.3s;
+}
+
+.btn-back:hover
+{
+    background: #5a6268 !important;
+    color: #fff !important;
+    transform: translateY(-2px);
+}
+
+/* TIMELINE */
+.timeline {
+    border-left: 3px solid #c9a24d;
+    padding-left: 15px;
+    margin-top: 25px;
+}
+
+.timeline-item {
+    margin-bottom: 18px;
+    position: relative;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -9px;
+    top: 2px;
+    width: 14px;
+    height: 14px;
+    background: #c9a24d;
+    border-radius: 50%;
+    border: 3px solid #6b1f2b;
+}
+
+/* ================= GLASS CARDS ================= */
+.glass-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 15px 30px rgba(0,0,0,.08);
+    border-left: 5px solid #6b1f2b;
+    transition: 0.3s;
+}
+
+.glass-card:hover {
+    transform: translateY(-4px);
+}
+
+/* INFO TEXT */
+.info-title {
+    font-size: 12px;
+    color: #7a7a7a;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+.info-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: #2c2c2c;
+}
+
+/* ================= STATUS BAR ================= */
+/* .status-bar {
+    background: linear-gradient(to right, #6b1f2b, #8b2c34);
+    color: #fff;
+    border-radius: 18px;
+    padding: 15px 25px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    font-weight: 600;
+} */
+
+/* Dashboard */
+.ivory-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px rgba(123, 30, 30, 0.1);
+    border-top: 4px solid #7B1E1E;
+}
+
+.stat-card {
+    padding: 25px;
+    text-align: center;
+}
+
+.stat-card h6 {
+    color: #7B1E1E;
+    letter-spacing: 0.5px;
+}
+
+.stat-card h2 {
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+.section-title {
+    font-weight: 600;
+    color: #7B1E1E;
+}
+
+.bg-maroon {
+    background-color: #7B1E1E !important;
+}
+
+.table tbody tr:hover {
+    background: #FBF7F1;
+}
+
+/* Chart container height */
+.chart-box {
+    height: 250px;       /* adjust to your preferred height */
+    position: relative;   /* required for Chart.js */
+}
+
+/* Make canvas fill container */
+.chart-box canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Equal cards alignment */
+.equal-card {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Optional: section title styling */
+.section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2c2c2c;
+    margin-bottom: 0.8rem;
+}
+
+/* Settings */
+
+.settings-wrapper {
+    max-width: 900px;
+    margin: auto;
+    padding: 30px;
+}
+
+.settings-title {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+.settings-card {
+    background: #fff;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+    margin-bottom: 25px;
+}
+
+.settings-card h4 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 15px;
+}
+
+.badge {
+    background: #7B1E1E;
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+}
+
+.badge.plan {
+    background: #2ecc71;
+}
+
+.save-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg,#b33838,#7B1E1E);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.success-alert {
+    background: #d4edda;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+
+/* SweetAlert */
+
+.swal2-popup {
+    border-radius: 18px !important;
+    padding: 2rem 1.8rem !important;
+}
+
+/* Title */
+.swal2-title {
+    font-size: 1.6rem !important;
+    font-weight: 600 !important;
+    color: #7a1f28 !important;
+}
+
+/* Text */
+.swal2-html-container {
+    font-size: 1rem !important;
+    color: #555 !important;
+}
+
+/* Confirm Button */
+.swal2-confirm {
+    background: linear-gradient(135deg, #7a1f28, #b8323a) !important;
+    border-radius: 25px !important;
+    padding: 10px 28px !important;
+    font-size: 0.95rem !important;
+    box-shadow: 0 3px 10px rgba(122, 31, 40, 0.35) !important;
+}
+
+/* Icons */
+.swal2-success-ring {
+    border-color: #2d6a4f !important;
+}
+.swal2-success-line-tip,
+.swal2-success-line-long {
+    background-color: #2d6a4f !important;
+}
+
+.swal2-error {
+    color: #9b1c1c !important;
+    border-color: #9b1c1c !important;
+}
+
+.swal2-warning {
+    color: #e6c36a !important;
+}
+
+/* Animation */
+.swal2-show {
+    animation: fadeInScale 0.35s ease-out;
+}
+
+/* Confirm Button */
+.swal2-confirm {
+    color: #fff !important;
+    border-radius: 8px !important;
+    padding: 8px 24px !important;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.swal2-confirm:hover {
+    /* background: linear-gradient(90deg, #e6c36a, #c59d5f) !important; */
+     background: linear-gradient(135deg, #8e2230, #c04341) !important; /* hover effect */
+}
+
+
+
+/* ================= RESPONSIVE ================= */
+@media(max-width: 991px) {
+    .sidebar {
+        position: relative;
+        width: 100%;
+    }
+    .ms-sidebar {
+        margin-left: 0;
+    }
+}

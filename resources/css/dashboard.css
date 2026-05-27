@@ -1,0 +1,371 @@
+/* =====================
+   GLOBAL
+===================== */
+body {
+    background: #fff;
+}
+
+/* =====================
+   HERO SECTION
+===================== */
+.hero-elegant {
+    margin-top: -2%;
+    padding: 70px 0;
+    background:
+        radial-gradient(circle at left, rgba(122, 31, 40, 0.1), transparent 60%),
+        linear-gradient(180deg, #ffffff, #f7f8fc);
+    overflow: hidden;
+}
+
+.hero-badge {
+    display: inline-block;
+    background: rgba(122, 31, 40, 0.1);
+    color: #7a1f28;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+.hero-title {
+    font-size: 46px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.hero-title span {
+    color: #7a1f28;
+    position: relative;
+}
+
+.hero-title span::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 6px;
+    background: rgba(122, 31, 40, 0.18);
+    border-radius: 10px;
+    z-index: -1;
+}
+
+.hero-text {
+    font-size: 17px;
+    color: #666;
+    max-width: 520px;
+    margin-bottom: 30px;
+}
+
+.hero-image-wrapper {
+    position: relative;
+}
+
+.hero-image-wrapper img {
+    max-width: 100%;
+    border-radius: 30px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+}
+
+.hero-image-wrapper::before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    width: 120px;
+    height: 120px;
+    background: rgba(122, 31, 40, 0.12);
+    border-radius: 50%;
+    z-index: -1;
+}
+
+/* =====================
+   BUTTONS
+===================== */
+.app-btn-primary,
+.btn-view-modern {
+    background: #7a1f28 !important;
+    color: #fff !important;
+    padding: 6px 28px;
+    border-radius: 30px;
+    font-weight: 600;
+    border: none;
+    transition: 0.3s;
+}
+
+.app-btn-primary:hover,
+.btn-view-modern:hover {
+    transform: translateY(-2px);
+    color: #fff;
+}
+
+/* =====================
+   FEATURED PROFILES
+===================== */
+.profiles-section {
+    background: #fff;
+}
+
+.section-header h3 {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 12px;
+}
+
+.section-header h3::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 65%;
+    height: 3px;
+    background: linear-gradient(to right, transparent, #7a1f28, transparent);
+    transform: translateX(-50%);
+}
+
+.profile-card-modern {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+    transition: 0.35s;
+}
+
+.profile-card-modern:hover {
+    transform: translateY(-12px) scale(1.02);
+}
+
+.profile-img-wrapper {
+    position: relative;
+}
+
+.profile-img-wrapper img {
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+}
+
+.profile-img-wrapper::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.4), transparent);
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.profile-card-modern:hover .profile-img-wrapper::after {
+    opacity: 1;
+}
+
+.premium-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #ff3d67;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.profile-info {
+    padding: 18px;
+    text-align: center;
+}
+
+.profile-info h5 {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.profile-info p {
+    color: #777;
+    font-size: 14px;
+}
+
+.profile-tags span {
+    background: #ffe4e7;
+    color: #7a1f28;
+    padding: 4px 10px;
+    border-radius: 14px;
+    font-size: 12px;
+    margin: 3px;
+    display: inline-block;
+}
+
+/* =====================
+   COUNTERS
+===================== */
+.counters-section {
+    background: #f8f9fa;
+}
+
+.counter-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 30px;
+    border-top: 4px solid #7a1f28;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.counter-card h2 {
+    font-size: 38px;
+    font-weight: 800;
+    color: #7a1f28;
+}
+
+/* =====================
+   SUCCESS STORIES
+===================== */
+/* ==========================
+   Success Stories Section
+========================== */
+.success-stories-modern {
+    background: #f5f5f5;
+    padding: 60px 0;
+}
+
+/* Header */
+.stories-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #000000;
+}
+
+.stories-subtitle {
+    font-size: 1rem;
+    color: #6c757d;
+}
+
+/* Story Card */
+.story-card-modern {
+    background: rgba(255, 255, 255, 0.85);
+    /* backdrop-filter: blur(12px); */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    min-height: 280px;
+    padding: 30px 25px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease;
+}
+
+/* Hover Effect */
+.story-card-modern:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+/* Quote Icon */
+.story-card-modern .quote-icon {
+    font-size: 2.5rem;
+    color: #d63384;
+    position: absolute;
+    top: 15px;
+    left: 20px;
+}
+
+.btn-add {
+    background: #d63384 !important;
+    color: #fff !important;
+    padding: 6px 28px;
+    border-radius: 30px;
+    font-weight: 600;
+    border: none;
+    transition: 0.3s;
+}
+
+/* Story Text */
+.story-card-modern .story-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    min-height: 120px;
+    margin-top: 25px !important;
+    color: #555;
+}
+
+/* User Info */
+.story-user img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.story-user strong {
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.story-user span {
+    font-size: 0.85rem;
+    color: #7a1f28;
+}
+
+/* Carousel Indicators */
+.carousel-indicators {
+    bottom: -25px;
+}
+
+.carousel-indicators button {
+    background-color: #030303 !important;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    opacity: 0.8;
+}
+
+.carousel-indicators .active {
+    opacity: 1;
+}
+
+/* Card spacing inside carousel */
+.carousel .row>.col-lg-4 {
+    padding-top: 50px !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    padding-bottom: 50px !important;
+}
+
+
+
+
+
+/* =====================
+   RESPONSIVE
+===================== */
+@media (max-width: 992px) {
+    .hero-title {
+        font-size: 34px;
+    }
+
+    .hero-elegant {
+        padding: 90px 0;
+        text-align: center;
+    }
+
+    .hero-text {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .stories-title {
+        font-size: 26px;
+    }
+
+    .profile-img-wrapper img {
+        height: 200px;
+    }
+}

@@ -1,0 +1,138 @@
+/* GLOBAL PAGE STYLE */
+
+body {
+    background-color: #ffffff;
+}
+
+/* PAGE HEADER */
+
+.report-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #212529 !important;
+    animation: slideDown 0.8s ease;
+}
+
+.report-subtitle {
+    font-size: 1rem;
+    color: #6c757d !important;
+    animation: fadeIn 1s ease;
+}
+
+/* CARD DESIGN */
+
+.report-card {
+    background: #ffffff;
+    border-radius: 1.25rem;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    animation: cardFadeUp 0.8s ease;
+}
+
+/* FORM ELEMENTS */
+
+.report-card label {
+    color: #343a40;
+    font-weight: 600;
+}
+
+.report-card .form-control,
+.report-card .form-select {
+    background: #f8f9fa;
+    color: #212529;
+    border: 1px solid #dee2e6;
+    border-radius: 0.75rem;
+    padding: 0.6rem 0.85rem;
+    transition: all 0.25s ease;
+}
+
+.report-card .form-control::placeholder {
+    color: #adb5bd;
+}
+
+.report-card .form-control:focus,
+.report-card .form-select:focus {
+    background: #ffffff;
+    border-color: #ff416c;
+    box-shadow: 0 0 0 0.15rem rgba(255, 65, 108, 0.25);
+}
+
+/* BUTTONS */
+
+.btn-report {
+    background: linear-gradient(45deg, #ff4b2b, #ff416c);
+    color: #ffffff;
+    font-weight: 600;
+    padding: 0.55rem 1.6rem;
+    border-radius: 50px;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-report:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(255, 65, 108, 0.35);
+}
+
+.btn-cancel {
+    background: #f1f3f5;
+    color: #495057;
+    padding: 0.55rem 1.6rem;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+    background: #e9ecef;
+}
+
+/* ALERT */
+
+.alert {
+    border-radius: 0.75rem;
+}
+
+/* ANIMATIONS */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes cardFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 576px) {
+    .report-title {
+        font-size: 1.6rem;
+    }
+
+    .report-card {
+        padding: 1.25rem;
+    }
+}

@@ -1,0 +1,401 @@
+/* ===== GLASS SETTINGS PAGE ===== */
+.settings-glass {
+    margin-top: -2%;
+    /* min-height: 100vh; */
+    margin-left: 1%;
+    padding: 50px 0;
+    background:
+        radial-gradient(circle at top, rgba(122,31,40,0.08), transparent 60%),
+        linear-gradient(180deg, #ffffff, #f6f7fb);
+}
+
+/* Header */
+.glass-header h2 {
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+}
+
+.glass-header p {
+    color: #777;
+    margin-bottom: 45px;
+}
+
+/* Layout */
+.glass-layout {
+    display: grid;
+    grid-template-columns: 230px 1fr;
+    gap: 30px;
+}
+
+/* Sidebar */
+.glass-sidebar {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(15px);
+    border-radius: 22px;
+    padding: 18px;
+    min-height: 600px;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.1);
+}
+
+.tab-btn {
+    width: 100%;
+    border: none;
+    background: transparent;
+    padding: 14px 18px;
+    text-align: left;
+    font-weight: 600;
+    border-radius: 14px;
+    transition: 0.3s;
+    margin-bottom: 8px;
+}
+
+.tab-btn:hover {
+    background: rgba(122,31,40,0.1);
+}
+
+.tab-btn.active {
+    background: #7a1f28;
+    border-color: #7a1f28;
+    color: #fff !important;
+}
+
+.tab-btn.danger {
+    color: #ff3d67;
+}
+
+/* Content */
+.glass-content {
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(18px);
+    border-radius: 26px;
+    padding: 45px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.12);
+    animation: fadeUp 0.6s ease;
+}
+
+/* Tabs */
+.tab-content {
+    display: none;
+    animation: slideFade 0.4s ease;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.tab-content h4 {
+    font-weight: 800;
+    margin-bottom: 25px;
+}
+
+/* Floating Inputs */
+.floating-input {
+    position: relative;
+    margin-bottom: 24px;
+}
+
+.floating-input input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: 1px solid #ddd;
+    background: transparent;
+}
+
+.floating-input label {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    font-size: 14px;
+    color: #888;
+    transform: translateY(-50%);
+    background: #fff;
+    padding: 0 6px;
+    transition: 0.3s;
+
+}
+
+.floating-input input:focus + label,
+.floating-input input:not(:placeholder-shown) + label {
+    top: -5px;
+    font-size: 12px;
+    color: #7a1f28 !important;
+}
+
+/* Buttons */
+.primary-btn {
+    background: #7a1f28;
+    color: #fff;
+    padding: 12px 34px;
+    border-radius: 30px;
+    border: none;
+    font-weight: 600;
+}
+
+.primary-btn:hover{
+    border: 2px solid #7a1f28;
+    color: #7a1f28;
+    background-color: #fff;
+}
+
+.outline-btn {
+    border: 2px solid #7a1f28;
+    color: #7a1f28;
+    background: transparent;
+    padding: 11px 32px;
+    border-radius: 30px;
+    font-weight: 600;
+}
+
+.outline-btn:hover{
+    background: #7a1f28;
+    color: #fff;
+}
+
+.danger-btn {
+    background: #ff3d67;
+    color: #fff;
+    padding: 12px 34px;
+    border-radius: 30px;
+    border: none;
+}
+
+/* ===== UNIQUE DANGER SECTION ===== */
+#danger {
+    position: relative;
+    background: rgba(255, 245, 245, 0.15);
+    backdrop-filter: blur(20px);
+    border-radius: 28px;
+    padding: 50px 40px;
+    box-shadow: 0 20px 50px rgba(255, 61, 103, 0.15);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+/* Floating warning icon */
+#danger::before {
+    content: "⚠";
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    font-size: 90px;
+    color: rgba(255, 99, 130, 0.15);
+    animation: floatIcon 3s ease-in-out infinite;
+}
+
+@keyframes floatIcon {
+    0%,100% { transform: translateY(0) rotate(-15deg); }
+    50% { transform: translateY(10px) rotate(10deg); }
+}
+
+/* ===== RED DANGER SECTION ===== */
+#danger {
+    position: relative;
+    background-color: #fff;
+    background: rgba(255, 255, 255, 0.12); /*soft red glass*/
+    backdrop-filter: blur(20px);
+    border-radius: 28px;
+    padding: 50px 40px;
+    box-shadow: 0 20px 50px rgb(255, 255, 255);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+/* Floating warning icon */
+#danger::before {
+    content: "⚠";
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    font-size: 90px;
+    color: rgba(255, 0, 0, 0.15);
+    animation: floatIconRed 3s ease-in-out infinite;
+}
+
+@keyframes floatIconRed {
+    0%,100% { transform: translateY(0) rotate(-15deg); }
+    50% { transform: translateY(10px) rotate(10deg); }
+}
+
+/* ===== DELETE CARD MINIMAL ===== */
+.delete-card {
+    max-width: 100%;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 20px;
+    padding: 40px 30px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+    animation: fadeUp 0.5s ease;
+}
+
+/* Warning Icon */
+.delete-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+    background: #ffe4e4;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-icon i {
+    font-size: 28px;
+    color: #ff3d3d;
+}
+
+/* Heading */
+.delete-card h4 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ff3d3d;
+    margin-bottom: 12px;
+}
+
+/* Description */
+.delete-card p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+/* Buttons */
+.delete-btn {
+    width: 100%;
+    padding: 12px 0;
+    background: #a8202e;
+    color: #fff;
+    border-radius: 30px;
+    border: none;
+    font-weight: 700;
+    margin-bottom: 12px;
+    transition: 0.3s;
+}
+
+.delete-btn:hover {
+    background: #862731;
+    color: #fff;
+}
+
+.cancel-btn {
+    width: 100%;
+    padding: 12px 0;
+    background: #f5f5f5;
+    color: #333;
+    border-radius: 30px;
+    border: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.cancel-btn:hover {
+    background: #e0e0e0;
+}
+
+/* Floating Input for Password */
+.floating-input {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.floating-input input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 16px;
+    border: 1px solid #ddd;
+    background: #fff;
+}
+
+.floating-input label {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    color: #888;
+    font-size: 14px;
+    transform: translateY(-50%);
+    background: #fff;
+    padding: 0 6px;
+    transition: 0.3s;
+    pointer-events: none;
+}
+
+.floating-input input:focus + label,
+.floating-input input:not(:placeholder-shown) + label {
+    top: -7px;
+    font-size: 12px;
+    color: #ff3d3d;
+}
+
+
+/* ===== DELETE MODAL STYLE ===== */
+.delete-modal {
+    border-radius: 22px;
+    padding: 10px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+    animation: fadeUp 0.4s ease;
+}
+
+.modal-body {
+    padding: 35px 30px;
+}
+
+/* Icon already styled earlier */
+.delete-modal .delete-icon {
+    width: 60px;
+    height: 60px;
+    background: #ffe5e5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+}
+
+.delete-modal .delete-icon i {
+    font-size: 26px;
+    color: #ff3d3d;
+}
+
+
+
+
+/* Animation */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+
+
+
+/* Animations */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(25px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideFade {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .glass-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .glass-sidebar {
+        display: flex;
+        gap: 10px;
+    }
+
+    .tab-btn {
+        text-align: center;
+    }
+}

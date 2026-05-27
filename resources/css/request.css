@@ -1,0 +1,278 @@
+body {
+    background: #f5f7fa;
+}
+
+.requests-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+
+
+.request-card {
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: transform 0.3s, box-shadow 0.3s;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: slideIn 0.5s forwards;
+}
+
+.request-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.request-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.request-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #eee;
+    transition: transform 0.3s;
+}
+
+.request-avatar:hover {
+    transform: scale(1.1);
+}
+
+.request-text h6 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.request-text p {
+    margin: 0;
+    color: #888;
+    font-size: 0.9rem;
+}
+
+.request-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-accept {
+    background-color: #28a745;
+    color: white;
+    border-radius: 8px;
+    padding: 6px 14px;
+    border: none;
+    transition: all 0.3s;
+}
+
+.btn-accept:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+.btn-reject {
+    background-color: #dc3545;
+    color: white;
+    border-radius: 8px;
+    padding: 6px 14px;
+    border: none;
+    transition: all 0.3s;
+}
+
+.btn-reject:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+}
+
+.no-requests {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.btn-block {
+    background-color: #6c757d;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.btn-block:hover {
+    background-color: #5a6268;
+}
+
+
+/* Professional Title Style */
+.requests-title {
+    font-size: 2.5rem;
+    color: #2c3e50;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+/* Subtle underline */
+.requests-title::after {
+    content: '';
+    position: absolute;
+    width: 60%;
+    height: 3px;
+    background-color: #dc3545;
+    /* Accent color */
+    left: 20%;
+    bottom: 0;
+    border-radius: 2px;
+}
+
+.sent-btn {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.sent-btn:hover {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+
+
+/* Index.blade.php */
+.container {
+    margin: 0 auto;
+}
+
+.requests-title {
+    font-size: 1.8rem;
+    color: #343a40;
+}
+
+.request-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+}
+
+.request-card:hover {
+    transform: translateY(-2px);
+}
+
+.request-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.request-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ced4da;
+}
+
+.request-text h6 {
+    margin: 0;
+    font-weight: 600;
+    color: #495057;
+}
+
+.request-text p {
+    margin: 0;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.request-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-accept {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.btn-accept:hover {
+    background-color: #218838;
+}
+
+.btn-reject {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.btn-reject:hover {
+    background-color: #c82333;
+}
+
+.btn-block {
+    background-color: #6c757d;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.btn-block:hover {
+    background-color: #5a6268;
+}
+
+.empty-modern {
+    background-color: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 15px;
+    max-width: 500px;
+    margin: 0 auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.empty-modern-icon {
+    display: inline-block;
+    animation: bounce 1.5s infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}

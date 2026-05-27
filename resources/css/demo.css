@@ -1,0 +1,1457 @@
+body {
+    background: #fff;
+}
+
+/* ================= TITLES ================= */
+
+/* HERO TITLE */
+.app-title {
+    font-size: 50px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.2;
+    margin-bottom: 10px;
+}
+
+.app-title span {
+    color: #7a1f28;
+    position: relative;
+    display: inline-block;
+}
+
+.app-title span::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 6px;
+    background: rgba(122, 31, 40, 0.18);
+    border-radius: 10px;
+    z-index: -1;
+}
+
+/* HERO SUBTITLE */
+.app-subtitle {
+    font-size: 18px;
+    color: #666;
+    max-width: 620px;
+    margin: 20px auto 30px;
+}
+
+/* SECTION TITLES */
+.section-header h3,
+.section-header h4,
+.app-section-header h4 {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 12px;
+}
+
+/* TITLE UNDERLINE */
+.section-header h3::after,
+.section-header h4::after,
+.app-section-header h4::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 65%;
+    height: 3px;
+    background: linear-gradient(to right,
+            transparent,
+            #7a1f28,
+            transparent);
+    transform: translateX(-50%);
+}
+
+/* SECTION SUBTITLES */
+.section-header p,
+.app-section-header p {
+    font-size: 15px;
+    color: #777;
+    margin-top: 10px;
+    max-width: 520px;
+}
+
+/* PROFILE NAME */
+.profile-info h5 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+/* COUNTER NUMBER */
+.counter-card h2 {
+    font-size: 38px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #7a1f28;
+}
+
+
+/* Header */
+
+.notif-text{
+    display: inline-block;   /* or block */
+    width: 180px;            /* adjust as needed */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ===== ELEGANT HERO ===== */
+.hero-elegant {
+    margin-top: -2%;
+    padding: 70px 0;
+    background:
+        radial-gradient(circle at left, rgba(122, 31, 40, 0.1), transparent 60%),
+        linear-gradient(180deg, #ffffff, #f7f8fc);
+    overflow: hidden;
+}
+
+/* Badge */
+.hero-badge {
+    display: inline-block;
+    background: rgba(122, 31, 40, 0.1);
+    color: #7a1f28;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+/* Title */
+.hero-title {
+    font-size: 46px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.hero-title span {
+    color: #7a1f28;
+    position: relative;
+}
+
+.hero-title span::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 6px;
+    background: rgba(122, 31, 40, 0.18);
+    border-radius: 10px;
+    z-index: -1;
+}
+
+/* Text */
+.hero-text {
+    font-size: 17px;
+    color: #666;
+    max-width: 520px;
+    margin-bottom: 30px;
+}
+
+/* Image */
+.hero-image-wrapper {
+    position: relative;
+}
+
+.hero-image-wrapper img {
+    max-width: 100%;
+    border-radius: 30px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+}
+
+/* Floating Decoration */
+.hero-image-wrapper::before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    width: 120px;
+    height: 120px;
+    background: rgba(122, 31, 40, 0.12);
+    border-radius: 50%;
+    z-index: -1;
+}
+
+/* ===== BUTTON ===== */
+.app-btn-primary,
+.btn-view-modern {
+    background: #7a1f28 !important;
+    color: #fff !important;
+    padding: 6px 28px;
+    border-radius: 30px;
+    font-weight: 600;
+    border: none;
+    transition: 0.3s;
+}
+
+.app-btn-primary:hover,
+.btn-view-modern:hover {
+    transform: translateY(-2px);
+    color: #fff;
+}
+
+/* ===== PROFILE CARD ===== */
+.filter_badge {
+    background: #ffe4e7 !important;
+    color: #7a1f28 !important;
+    padding: 12px 16px !important;
+    font-size: 0.9rem !important;
+    border-radius: 20px !important;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.filter_badge a {
+    font-weight: bold !important;
+}
+
+/* Selected filter badge */
+.filter_badge.filter-badge-active {
+    border: 2px solid #7a1f28 !important;
+    box-shadow: 0 0 0 2px rgba(122, 31, 40, 0.25);
+    font-weight: 600;
+}
+
+
+.filter_badge:hover {
+    background: #ffd1d6 !important;
+}
+
+.profile-card-modern {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+    transition: 0.35s;
+}
+
+.profile-card-modern:hover {
+    transform: translateY(-12px) scale(1.02);
+}
+
+.profile-img-wrapper {
+    position: relative;
+}
+
+.profile-img-wrapper img {
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+}
+
+.profile-img-wrapper::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.4), transparent);
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.profile-card-modern:hover .profile-img-wrapper::after {
+    opacity: 1;
+}
+
+.premium-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #ff3d67;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* ===== PROFILE INFO ===== */
+.profile-info {
+    padding: 18px;
+    text-align: center;
+}
+
+.profile-info h5 {
+    font-weight: 700;
+}
+
+.profile-info p {
+    color: #777;
+    font-size: 14px;
+}
+
+.profile-tags span {
+    background: #ffe4e7;
+    color: #7a1f28;
+    padding: 4px 10px;
+    border-radius: 14px;
+    font-size: 12px;
+    margin: 3px;
+    display: inline-block;
+}
+
+/* ===== STATS ===== */
+.counter-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 30px;
+    border-top: 4px solid #7a1f28;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.counter-card h2 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #7a1f28;
+}
+
+/* ===== STORIES ===== */
+
+/* ===== SUCCESS STORIES (MODERN) ===== */
+.success-stories-modern {
+    padding: 90px 0;
+    background:
+        radial-gradient(circle at center, rgba(122, 31, 40, 0.06), transparent 60%),
+        #fafafa;
+}
+
+/* Title */
+.stories-title {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.stories-subtitle {
+    color: #777;
+    font-size: 16px;
+    max-width: 520px;
+    margin: 12px auto 0;
+}
+
+/* Card */
+.story-card-modern {
+    background: #fff;
+    padding: 35px;
+    border-radius: 22px;
+    height: 100%;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+    position: relative;
+    transition: transform 0.35s ease;
+}
+
+.story-card-modern:hover {
+    transform: translateY(-10px);
+}
+
+/* Quote Icon */
+.quote-icon {
+    font-size: 70px;
+    color: rgba(122, 31, 40, 0.15);
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-weight: 900;
+}
+
+/* Story Text */
+.story-text {
+    font-size: 16px;
+    width: 80%;
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 30px;
+}
+
+/* User Info */
+.story-user {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.story-user img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.story-user strong {
+    display: block;
+    font-size: 15px;
+}
+
+.story-user span {
+    font-size: 13px;
+    color: #7a1f28;
+}
+
+
+/* Footer Styling */
+.footer-section {
+    background: rgba(122, 31, 40, 0.9) !important;
+    color: #fff;
+}
+
+.footer-section h5 {
+    color: #fff;
+}
+
+.footer-link {
+    color: #fff;
+    opacity: 0.85;
+    text-decoration: none;
+    padding: 4px 0;
+    transition: all .3s ease;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.footer-link:hover {
+    opacity: 1;
+    color: #ffd369;
+    transform: translateX(5px);
+}
+
+.social-icon {
+    color: #fff;
+    transition: 0.3s;
+}
+
+.social-icon:hover {
+    color: #ffeb3b;
+    transform: scale(1.2);
+}
+
+.newsletter-form input {
+    border: none;
+    padding-left: 15px;
+    border-radius: 50px;
+    flex: 1;
+}
+
+.newsletter-form input:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.footer-bottom {
+    background: rgba(0, 0, 0, 0.15);
+    width: 100%;
+}
+
+/* ===========================
+   HEADER & NAVBAR
+=========================== */
+
+nav {
+    background: #fdf7e7;
+    color: #333 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Navbar container */
+.nav-link {
+    color: #7a1f28 !important;
+}
+
+.navbar-container {
+    max-width: 1250px;
+    margin: auto;
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Logo */
+.nav-logo {
+    font-size: 26px;
+    font-weight: 800;
+    color: #7a1f28;
+    text-decoration: none;
+}
+
+/* Desktop Menu */
+.nav-menu {
+    display: flex;
+    gap: 30px;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.nav-menu a {
+    color: #333;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+.nav-menu a:hover {
+    color: #7a1f28;
+}
+
+/* Buttons */
+.btn-outline {
+    padding: 8px 20px;
+    border-radius: 10px;
+    border: 2px solid #7a1f28;
+    color: #7a1f28;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+.btn-outline:hover {
+    background: #7a1f28;
+    color: white;
+}
+
+.btn-solid {
+    padding: 8px 20px;
+    border-radius: 10px;
+    background: #7a1f28;
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+.btn-solid:hover {
+    background: #9d2b34;
+}
+
+/* Filter */
+
+.search-btn {
+    background: #2B349D;
+    color: #fff;
+    font-weight: 600;
+    padding: 10px 20px;
+    transition: 0.3s;
+}
+
+.search-btn:hover {
+    background: #1E257B;
+    color: #fff;
+    /* transform: translateY(-2px); */
+}
+
+.save-btn {
+    background: #035726cc;
+    color: #fff;
+    font-weight: 600;
+    padding: 10px 20px;
+    transition: 0.3s;
+}
+
+
+
+/* ===========================
+   My Profile Page
+=========================== */
+/* ==================== PAGE COLORS ===================== */
+/* ==================== GLOBAL ===================== */
+/* MATCH EDIT PAGE CARD */
+.edit-btn {
+    background: #2b539d !important;
+    color: #fff !important;
+    font-weight: 600;
+    padding: 10px 20px !important;
+    border-radius: 14px !important;
+    transition: 0.3s;
+}
+
+.edit-btn:hover {
+    background: #1E257B !important;
+    color: #fff !important;
+    /* transform: translateY(-2px); */
+}
+
+.btn-deactive {
+    text-align: left;
+    margin-left: auto;
+    background: #fff !important;
+    color: #bd1f2e !important;
+    font-weight: 600;
+    padding: 10px 20px !important;
+    border-radius: 14px !important;
+    transition: 0.3s;
+}
+
+.btn-active {
+    background: #08580fe8 !important;
+    color: #fff !important;
+    font-weight: 600;
+    padding: 10px 20px !important;
+    border-radius: 14px !important;
+    transition: 0.3s;
+}
+
+.delete-btn1 {
+    background: #9d2b34 !important;
+    color: #fff !important;
+    font-weight: 600;
+    padding: 10px 20px !important;
+    border-radius: 14px !important;
+    transition: 0.3s;
+}
+
+.delete-btn1:hover {
+    background: #8a222b !important;
+    color: #fff !important;
+    /* transform: translateY(-2px); */
+}
+
+.folowers-btn {
+    background: #3d90ee !important;
+    color: #fff !important;
+    font-weight: 600;
+    padding: 10px 20px !important;
+    border-radius: 14px !important;
+    transition: 0.3s;
+}
+
+.folowers-btn:hover {
+    background: #276dbd !important;
+    color: #fff;
+}
+
+.btn-verify {
+    background: #288536 !important;
+    color: #fff !important;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 14px !important;
+    transition: 0.3s;
+}
+
+.btn-verify:hover {
+    background: #08580fe8 !important;
+}
+
+
+.edit-header {
+    background: linear-gradient(135deg,#9d2b34,#c94b53);
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(157,43,52,.25);
+}
+
+
+/* ===========================
+   MAIN CARD
+=========================== */
+.edit-card {
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(12px);
+    border-radius: 26px;
+    border: 1px solid rgba(255,255,255,0.6);
+}
+
+/* ===========================
+   HEADER
+=========================== */
+.edit-header h2 {
+    font-weight: 700;
+    letter-spacing: .5px;
+}
+
+.edit-header p {
+    opacity: .9;
+}
+
+/* ===========================
+   SECTION HEADERS
+=========================== */
+.profile-section {
+    margin-bottom: 18px;
+}
+
+.section-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #8b1d2c!important;
+}
+
+.section-subtitle {
+    font-size: 13px;
+    color: #6c757d;
+}
+
+.section-divider {
+    width: 48px;
+    height: 3px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #8b1d2c, #e18c8c);
+}
+
+/* ===========================
+   INPUTS
+=========================== */
+.modern-input {
+    border-radius: 14px;
+    padding: 12px 14px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    transition: .25s;
+}
+
+.modern-input:focus {
+    border-color: #8b1d2c;
+    box-shadow: 0 0 0 4px rgba(139,29,44,.08);
+}
+
+/* ===========================
+   PROFILE IMAGE
+=========================== */
+#profileImage {
+    border: 8px solid #fff;
+    transition: .3s;
+}
+
+#profileImage:hover {
+    transform: scale(1.03);
+}
+
+/* ===========================
+   PREFERENCE CHIPS
+=========================== */
+.pref-chip {
+    background: #f8f9fa;
+    padding: 0px 16px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.pref-chip:hover {
+    background: #f1f3f5;
+}
+
+/* ===========================
+   BUTTONS
+=========================== */
+.save-btn {
+    background: linear-gradient(135deg, #2b539d, #1e3f7a);
+    border-radius: 16px;
+    padding: 12px 28px;
+    font-weight: 600;
+}
+
+.edit-cancel-btn {
+    border-radius: 16px;
+    padding: 12px 26px;
+    background: #f1f3f5;
+}
+
+.btn-active {
+    background: linear-gradient(135deg, #198754, #0f5132);
+    border-radius: 20px;
+}
+
+.btn-deactive {
+    background: #fff;
+    color: #bd1f2e;
+    border: 1px solid #f1c2c6;
+    border-radius: 20px;
+}
+
+
+
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.85);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ==================== INPUT STYLE ==================== */
+.modern-input {
+    border-radius: 12px;
+    border: 2px solid #eee !important;
+    padding: 10px 14px;
+    transition: 0.3s;
+}
+
+.modern-input:focus {
+    border-color: #9d2b34 !important;
+    box-shadow: 0 0 8px rgba(157, 43, 52, 0.4) !important;
+}
+
+/* ==================== BUTTONS ==================== */
+.save-btn {
+    background: linear-gradient(135deg, #9d2b34, #c6454f) !important;
+    color: #fff !important;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    border: none;
+    transition: 0.3s;
+}
+
+.save-btn:hover {
+    background: #8a242d !important;
+}
+
+.edit-cancel-btn {
+    background: #ccc !important;
+    color: #333 !important;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    margin-right: 10px;
+    transition: 0.3s;
+}
+
+.edit-cancel-btn:hover {
+    background: #b5b5b5 !important;
+}
+
+/* ==================== ANIMATIONS ==================== */
+.animate-fade-in {
+    opacity: 0;
+    animation: fadeIn 0.8s forwards;
+}
+
+.animate-slide-down {
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: slideDown 0.6s forwards;
+}
+
+.delay-1 {
+    animation-delay: .3s;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== MATCH PAGE ===== */
+body {
+    background: linear-gradient(135deg, #fff1f2, #fff);
+}
+
+.page-title {
+    font-weight: 800;
+    color: #9b1c31;
+}
+
+/* ===== MATCH CARD ===== */
+.match-app-card {
+    background: #ffffff;
+    border-radius: 22px;
+    overflow: hidden;
+    display: flex;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+    transition: all 0.35s ease;
+    animation: slideFade 0.5s ease forwards;
+}
+
+.match-app-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.12);
+}
+
+/* Image */
+.match-app-img {
+    width: 40%;
+    height: 254.39px;
+    object-fit: cover;
+}
+
+/* Content */
+.match-app-body {
+    padding: 22px;
+    width: 60%;
+    position: relative;
+}
+
+/* Match Circle */
+.match-circle {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.match-circle span {
+    background: #fff;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    color: #9b1c31;
+}
+
+.view-profile-btn {
+    border-radius: 30px;
+    padding: 6px 18px;
+}
+
+/* Empty State */
+.empty-modern {
+    background: #ffffff;
+    border-radius: 28px;
+    padding: 70px 30px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+    animation: slideFade 0.5s ease;
+}
+
+.empty-modern-icon {
+    font-size: 64px;
+}
+
+/* Animation */
+@keyframes slideFade {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+
+/* profile.css */
+
+/* COVER */
+
+/* ===== Select2 FIX ===== *//* ===========================
+   SELECT2 FIX
+=========================== */
+
+/* ===========================
+   SELECT2 STYLING - MULTI-LINE WITH PROPER SPACING
+=========================== */
+
+/* ===========================
+   SELECT2 - PROPER STYLING
+=========================== */
+
+/* ===========================
+ TOM SELECT – CUSTOM THEME
+ Matches your #7a1f28 design
+=========================== */
+
+/* Main input */
+.ts-control {
+    background: #fff;
+    border: 2px solid #eee;
+    border-radius: 8px !important;
+    padding: 1px 10px !important;
+    font-size: 20px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+/* Focus state */
+.ts-control.focus {
+    border-color: #7a1f28;
+    box-shadow: 0 0 0 4px rgba(122, 31, 40, 0.15);
+}
+.ts-control input {
+    color: #000000 !important;
+    font-weight: 400 !important;
+    font-size: 16px !important;
+    padding-top:5px !important;
+    padding-bottom:5px !important;
+}
+
+/* Placeholder */
+.ts-control .ts-input {
+    font-size: 16px;
+    color: #000;
+}
+
+/* Selected tags */
+.ts-control .item {
+    background: #ffe4e7;
+    color: #7a1f28;
+    font-size: 15px;
+    font-weight: 600;
+    height: 35px;
+    padding: 3px 10px;
+    border-radius: 8px;
+    margin: 4px 6px 4px 0 !important;
+}
+
+/* Remove (×) button */
+.ts-control .remove {
+    font-size: 18px;
+    margin-left: 6px;
+    color: #7a1f28;
+    opacity: 0.8;
+}
+
+.ts-control .remove:hover {
+    opacity: 1;
+}
+
+/* Dropdown container */
+.ts-dropdown {
+    border-radius: 16px;
+    border: none;
+    margin-top: 6px;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+/* Dropdown options */
+.ts-dropdown .option {
+    font-size: 15px;
+    padding: 12px 18px;
+    font-weight: 500;
+    color: #333;
+    transition: 0.25s;
+}
+
+/* Hover option */
+.ts-dropdown .option:hover {
+    background: rgba(122, 31, 40, 0.08);
+    color: #7a1f28;
+}
+
+/* Active / selected option */
+.ts-dropdown .option.active {
+    background: #7a1f28;
+    color: #fff;
+}
+
+/* Dropdown scrollbar */
+.ts-dropdown-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.ts-dropdown-content::-webkit-scrollbar-thumb {
+    background: rgba(122, 31, 40, 0.4);
+    border-radius: 10px;
+}
+
+
+.hidden {
+    display: none !important;
+}
+
+
+.profile-card {
+    margin-top: -2% !important;
+}
+
+.profile-cover {
+    position: relative;
+    background: linear-gradient(120deg, #7a1f28, #b8323a);
+    padding-top: 80px !important;
+    padding-bottom: 120px !important;
+}
+
+.profile-cover .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, .25);
+}
+
+/* FLOATING CARD */
+.profile-floating-card {
+    background: #fff;
+    margin-top: -80px !important;
+    padding: 40px !important;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, .15);
+}
+
+/* PROFILE IMAGE */
+.profile-avatar {
+    width: 170px;
+    height: 170px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid #fff;
+}
+
+/* INFO BOX */
+.info-box {
+    background: #fafafa;
+    padding: 25px;
+    border-radius: 18px;
+    margin-bottom: 20px;
+}
+
+.info-title {
+    color: #7a1f28;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.preference-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.preference-list li {
+    margin-bottom: 10px;
+    padding-left: 10px;
+    border-left: 3px solid #7a1f28;
+}
+
+.preference-list strong {
+    color: #7a1f28;
+}
+
+
+/* SIMPLE ANIMATIONS */
+.animate-slide-down {
+    animation: slideDown .8s ease forwards;
+}
+
+.animate-fade-in {
+    animation: fadeIn 1s ease forwards;
+}
+
+.preference-list li {
+    margin-bottom: 12px;
+    line-height: 1.6;
+}
+
+.preference-list li strong {
+    color: #7a1f28;
+}
+
+/* Verification*/
+.verify-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+.verify-header {
+    background: linear-gradient(135deg, #bd3d48ff, #631919ff);
+    border-radius: 20px 20px 0 0;
+    color: #fff;
+    padding: 25px;
+    text-align: center;
+}
+
+.verify-icon {
+    width: 70px;
+    height: 70px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    margin: auto;
+    margin-bottom: 10px;
+}
+
+.status-badge {
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.status-verified {
+    background: #e7f8ef;
+    color: #1e8e5a;
+}
+
+.status-pending {
+    background: #fff4e5;
+    color: #b26a00;
+}
+
+.status-rejected {
+    background: #fdecea;
+    color: #b42318;
+}
+
+.form-control,
+.form-select {
+    border-radius: 12px;
+    padding: 12px;
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, #bd3d48ff, #631919ff);
+    border: none;
+    padding: 12px;
+    font-weight: 600;
+    border-radius: 50px;
+}
+
+.vcancel-btn {
+    background: #ccc !important;
+    border: none;
+    padding: 12px;
+    font-weight: 600;
+    border-radius: 50px;
+}
+
+.submit-btn:hover {
+    opacity: 0.95;
+}
+
+.vcancel-btn:hover {
+    opacity: 0.9;
+}
+
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+/* Responsive */
+@media (max-width: 768px) {
+    .stories-title {
+        font-size: 26px;
+    }
+
+    .story-card-modern {
+        padding: 28px;
+    }
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .hero-title {
+        font-size: 34px;
+    }
+
+    .hero-elegant {
+        padding: 90px 0;
+        text-align: center;
+    }
+
+    .hero-text {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .app-title {
+        font-size: 32px;
+    }
+
+    .profile-img-wrapper img {
+        height: 200px;
+    }
+}
+
+
+
+
+/* @extends('layouts.app')
+
+@section('title', 'About Us')
+
+@section('content')
+    <style>
+        .cta-section {
+            background: rgba(255, 255, 255, 0.1) !important;
+            Light semi-transparent
+            backdrop-filter: blur(15px) !important;
+            Blur stronger
+            -webkit-backdrop-filter: blur(15px) !important;
+            Safari support
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            Light glass border
+            padding: 80px 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            Soft shadow
+            color: #fff;
+            Text color
+        }
+    </style>
+
+    <!-- HERO -->
+    <section class="py-5 text-white" style="background: linear-gradient(135deg, #7a1f28, #b8323a);">
+        <div class="container text-center">
+            <h1 class="fw-bold mb-2">About Us</h1>
+            <p class="lead mb-0">Connecting hearts • Building lifelong relationships</p>
+        </div>
+    </section>
+
+    <!-- ABOUT INTRO -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-md-6">
+                    <h2 class="fw-bold mb-3">Who We Are</h2>
+                    <p class="text-muted">
+                        We are a trusted matrimonial platform dedicated to helping individuals find
+                        meaningful and lifelong relationships. Our goal is to blend tradition with
+                        technology to create genuine connections based on compatibility, values,
+                        and trust.
+                    </p>
+                    <p class="text-muted">
+                        Thousands of successful matches have begun their journey with us — and we
+                        continue to grow with honesty, security, and care at our core.
+                    </p>
+                </div>
+
+                <div class="col-md-6 text-center">
+                    <img src="{{ asset('images/about/couple.jpg') }}" class="img-fluid rounded-4 shadow" alt="About Us">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY CHOOSE US -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Why Choose Us?</h2>
+                <p class="text-muted">We make your search simple, safe, and meaningful</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-4">
+                        <div class="fs-1 text-danger mb-3">❤️</div>
+                        <h5 class="fw-semibold">Genuine Profiles</h5>
+                        <p class="text-muted small">
+                            Every profile is verified to ensure authenticity and trust.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-4">
+                        <div class="fs-1 text-danger mb-3">🔒</div>
+                        <h5 class="fw-semibold">Privacy First</h5>
+                        <p class="text-muted small">
+                            Your personal information stays secure and under your control.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-4">
+                        <div class="fs-1 text-danger mb-3">🤝</div>
+                        <h5 class="fw-semibold">Smart Matching</h5>
+                        <p class="text-muted small">
+                            Intelligent matching based on preferences, values, and lifestyle.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- OUR MISSION -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-md-6 order-md-2">
+                    <h2 class="fw-bold mb-3">Our Mission</h2>
+                    <p class="text-muted">
+                        Our mission is to help individuals find meaningful relationships that lead
+                        to happy marriages. We strive to provide a respectful, inclusive, and
+                        secure environment where love can grow naturally.
+                    </p>
+                    <ul class="text-muted">
+                        <li>Promote genuine connections</li>
+                        <li>Respect cultural values</li>
+                        <li>Ensure privacy & safety</li>
+                        <li>Support users at every step</li>
+                    </ul>
+                </div>
+
+                <div class="col-md-6 order-md-1 text-center">
+                    <img src="{{ asset('images/about/mission.jpg') }}" class="img-fluid rounded-4 shadow" alt="Our Mission">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA SECTION -->
+    <section class="text-center text-white py-5"
+        style="background: url('{{ asset('images/about/background.jpg') }}') no-repeat center center / cover;">
+        <div class="cta-section mx-3">
+            <div class="container py-5">
+                <h2 class="fw-bold mb-2">Start Your Journey With Us</h2>
+                <p class="mb-4">Create your profile today and take the first step towards your future.</p>
+
+                @auth
+                    <a href="{{ route('profile.create') }}" class="btn btn-light fw-semibold px-4 py-2">
+                        Complete Your Profile
+                    </a>
+                @else
+                    <a href="{{ route('register') }}" class="btn btn-light fw-semibold px-4 py-2">
+                        Get Started
+                    </a>
+                @endauth
+            </div>
+        </div>
+    </section>
+
+
+@endsection */
