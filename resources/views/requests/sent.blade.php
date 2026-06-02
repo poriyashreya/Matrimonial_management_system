@@ -8,26 +8,13 @@
             <h3>Sent Requests</h3>
         </div>
 
-        @if(session('info'))
-            <div class="alert alert-info alert-dismissible fade show mt-3" role="alert">
-                <strong>{{ session('info') }}</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
-
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                <strong>{{ session('success') }}</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
         @forelse($requests as $req)
             <div class="request-card mb-3 p-3 shadow-sm rounded-4 d-flex justify-content-between align-items-center">
 
                 {{-- Receiver Info --}}
                 <div class="d-flex align-items-center gap-3">
                     <img src="{{ $req->receiver->images->first()
-                ? asset($req->receiver->images->first()->file_path)
+                ? Storage::url($req->receiver->images->first()->file_path)
                 : 'https://via.placeholder.com/70' }}" class="rounded-circle" width="70" height="70">
 
                     <div>
@@ -110,6 +97,15 @@
     <script>
         window.ratingData = {
             status: @json($rating_status)
+        };
+    </script>
+
+    <script>
+        window.flashData = {
+            success: @json(session('success')),
+            error: @json(session('error')),
+            warning: @json(session('warning')),
+            info: @json(session('info')),
         };
     </script>
 @endsection

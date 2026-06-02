@@ -47,14 +47,6 @@
             @endcan
         </div>
 
-        <!-- SUCCESS MESSAGE
-            @if(session('status'))
-                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                    <strong>{{ session('status') }}</strong>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            @endif -->
-
         <!-- MAIN CARD -->
         <div class="edit-card shadow-lg p-4 rounded-4 animate-fade-in">
             <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
@@ -68,7 +60,7 @@
                         <div class="mb-3">
                             <label class="form-label fw-bold">Profile Photo</label><br>
                             <img id="profileImage"
-                                src="{{ $profile->images->first() ? asset($profile->images->first()->file_path) : 'https://via.placeholder.com/300' }}"
+                                src="{{ $profile->images->first() ? Storage::url($profile->images->first()->file_path) : 'https://via.placeholder.com/300' }}"
                                 class="rounded-circle shadow" width="250" height="250"
                                 style="object-fit:cover;cursor:pointer">
                             <input type="file" id="profileUpload" name="profile_image" class="d-none" accept="image/*">
@@ -93,6 +85,11 @@
                             <input type="email" name="email" class="form-control modern-input"
                                 value="{{ old('email', $user->email) }}" required>
                             @error('email') <div class="text-danger mt-2">{{ $message }}</div> @enderror
+
+                            <label class="form-label mt-3">Contact Number</label>
+                            <input type="tel" name="phone" class="form-control modern-input"
+                                value="{{ old('phone', $user->phone) }}" required>
+                            @error('phone') <div class="text-danger mt-2">{{ $message }}</div> @enderror
 
                             <label class="form-label mt-3">Age</label>
                             <input type="number" name="age" class="form-control modern-input"

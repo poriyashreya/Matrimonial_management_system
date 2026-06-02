@@ -54,6 +54,8 @@
                             <div class="col-md-12">
                                 <label class="pb-2 ps-1">Marital Status</label>
                                 <select name="marital_status" class="form-select data">
+                                    <option value="">Select Marital Status
+                                    </option>
                                     <option value="single" {{ old('marital_status') == 'single' ? 'selected' : '' }}>Single
                                     </option>
                                     <option value="divorced" {{ old('marital_status') == 'divorced' ? 'selected' : '' }}>
@@ -218,9 +220,9 @@
                                 <label class="pb-2 ps-1">Preferred Marital Status</label>
                                 <select name="preferences[marital_status][]" class="form-select data">
                                     <option value="">Select Marital Status</option>
-                                    <option value="single">Single</option>
-                                    <option value="divorced">Divorced</option>
-                                    <option value="widow">Widow</option>
+                                    <option value="single" {{ old('preferences.marital_status') == 'single' ? 'selected' : '' }}>Single</option>
+                                    <option value="divorced" {{ old('preferences.marital_status') == 'divorced' ? 'selected' : '' }}>Divorced</option>
+                                    <option value="widow" {{ old('preferences.marital_status') == 'widow' ? 'selected' : '' }}>Widow</option>
                                 </select>
 
                                 @error('preferences.marital_status.*')
@@ -231,8 +233,9 @@
 
                             <div class="col-md-6">
                                 <label class="pb-2 ps-1">Preferred Profession</label>
-                                <input type="text" name="preferences[profession][]" class="form-control"
-                                    placeholder="Preferred Profession(s) e.g. Engineer, Doctor">
+                                <input type="text" name="preferences[profession][]"
+                                    value="{{ is_array(old('preferences.profession')) ? implode(', ', old('preferences.profession')) : old('preferences.profession') }}"
+                                    class="form-control">
 
                                 @error('preferences.profession.*')
                                     <div class="text-danger mt-2">{{ $message }}</div>

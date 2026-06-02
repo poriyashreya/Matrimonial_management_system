@@ -5,3 +5,8 @@
 @import "./request.css";
 @import "./setting.css";
 @import "./report.css";
+@import "./show_profile.css";
+@import "./myprofile.css";
+@import "./plan.css";
+/* Import Font Awesome */
+@import '@fortawesome/fontawesome-free/css/all.min.css';

@@ -53,6 +53,12 @@
                             <label>Email Address</label>
                         </div>
 
+                        <div class="floating-input">
+                            <input type="number" name="contact_number" value="{{ auth()->user()->contact_number }}" required
+                                placeholder=" ">
+                            <label>Contact Number</label>
+                        </div>
+
                         <button class="btn primary-btn">Save Changes</button>
                     </form>
                 </div>
@@ -73,8 +79,8 @@
                                 <div class="invalid-feedback fw-bold">{{ session('error') }}</div>
                             @endif
                             <!-- @error('password')
-                                    <div class="invalid-feedback fw-bold">{{ $message }}</div>
-                                @enderror -->
+                                            <div class="invalid-feedback fw-bold">{{ $message }}</div>
+                                        @enderror -->
                         </div>
 
                         <!-- Confirm Password -->

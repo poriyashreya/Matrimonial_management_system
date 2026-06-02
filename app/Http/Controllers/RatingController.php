@@ -8,52 +8,63 @@ use Illuminate\Support\Facades\Auth;
 
 class RatingController extends Controller
 {
+    // SUBMIT RATING
     public function store(Request $request)
     {
-        $userId = Auth::id();
-        if (!$userId)
-            return response()->json(['success' => 'Login required'], 401);
-
-        if ($request->skip == 1) {
-            Rating::updateOrCreate(
-                ['user_id' => $userId],
-                ['skip' => 1, 'rating' => null, 'comment' => null]
-            );
-            return response()->json(['success' => 'You have skipped rating. Thank you!']);
-        }
-
         $request->validate([
             'rating' => 'required|integer|min:1|max:5',
-            'comment' => 'nullable|string|max:100',
+            'comment' => 'nullable|string|max:255',
         ]);
 
         Rating::updateOrCreate(
-            ['user_id' => $userId],
-            ['rating' => $request->rating, 'comment' => $request->comment, 'skip' => 0]
+            ['user_id' => Auth::id()],
+            [
+                'rating' => $request->rating,
+                'comment' => $request->comment,
+                'skip' => 0,
+                'status' => 'rated'
+            ]
         );
 
-        return response()->json(['success' => 'Thanks for your rating!']);
+        return response()->json([
+            'message' => 'Thanks for your rating!'
+        ]);
     }
 
-    public function skip(Request $request)
+    // SKIP BUTTON
+    public function skip()
     {
-        $userId = Auth::id();
+        Rating::updateOrCreate(
+            ['user_id' => Auth::id()],
+            [
+                'rating' => 0,
+                'comment' => null,
+                'skip' => 1,
+                'updated_at' => now(),
+                'status' => 'skipped'
+            ]
+        );
 
-        if (!$userId) {
-            return response()->json(['success' => 'Please login to skip rating.']);
-        }
-
-        if ($request->skip == 1) {
-            Rating::updateOrCreate(
-                ['user_id' => $userId],
-                [
-                    'skip' => 1,
-                    'rating' => 0,
-                    'comment' => null
-                ]
-            );
-        }
-        return response()->json(['success' => 'You have skipped rating. Thank you!']);
+        return response()->json([
+            'message' => 'You skipped rating.'
+        ]);
     }
 
+    // CANCEL / CLOSE POPUP
+    public function cancel()
+    {
+        Rating::updateOrCreate(
+            ['user_id' => Auth::id()],
+            [
+                'rating' => 0,
+                'comment' => null,
+                'skip' => 0,
+                'status' => 'cancelled'
+            ]
+        );
+
+        return response()->json([
+            'message' => 'Popup closed.'
+        ]);
+    }
 }

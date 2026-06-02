@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Validator;
 // use App\Http\Requests;
 use App\Models\Profile;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 
 class UserSettingController extends Controller
@@ -16,6 +18,74 @@ class UserSettingController extends Controller
     public function index()
     {
         $rating_status = "nothing";
+
+        $user = auth()->user();
+
+        if ($user) {
+
+            $rating = DB::table('ratings')
+                ->where('user_id', $user->id)
+                ->latest('updated_at')
+                ->first();
+
+            // Never rated before
+            if (!$rating) {
+
+                $rating_status = "show";
+
+            } else {
+
+                // User already rated
+                if ($rating->status == "rated") {
+
+                    if (
+                        Carbon::parse($rating->updated_at)
+                            ->lte(now()->subDays(30))
+                    ) {
+
+                        $rating_status = "show";
+
+                    } else {
+
+                        $rating_status = "nothing";
+                    }
+                }
+
+                // User skipped
+                elseif ($rating->status == "skipped") {
+
+                    if (
+                        Carbon::parse($rating->updated_at)
+                            ->lte(now()->subDays(3))
+                    ) {
+
+                        $rating_status = "show";
+
+                    } else {
+
+                        $rating_status = "nothing";
+                    }
+                }
+
+                // User cancelled popup
+                elseif ($rating->status == "cancelled") {
+
+                    if (
+                        Carbon::parse($rating->updated_at)
+                            ->lte(now()->subDays(1))
+                    ) {
+
+                        $rating_status = "show";
+
+                    } else {
+
+                        $rating_status = "nothing";
+                    }
+                } elseif ($rating->status === "pending") {
+                    $rating_status = "show";
+                }
+            }
+        }
         return view('user.settings', compact('rating_status'));
     }
 
@@ -24,12 +94,21 @@ class UserSettingController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . Auth::id(),
+            'contact_number' => 'required|string|max:10',
         ]);
 
-        Auth::user()->update($request->only('name', 'email'));
-        $rating_status = "nothing";
+        $user = Auth::user();
 
-        return back()->with('success', 'Profile updated successfully.')->with('activeTab', 'profile')->with('rating_status', $rating_status);
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'contact_number' => $request->contact_number, // ✅ FIXED HERE
+        ]);
+
+        return back()
+            ->with('success', 'Profile updated successfully.')
+            ->with('activeTab', 'profile')
+            ->with('rating_status', 'nothing');
     }
 
     public function updatePassword(Request $request)

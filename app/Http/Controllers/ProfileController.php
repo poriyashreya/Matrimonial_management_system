@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\Models\UserRequest;
 use Carbon\Carbon;
+use App\Models\Subscription;
+use App\Models\Payment;
 
 class ProfileController extends Controller
 {
@@ -26,116 +28,123 @@ class ProfileController extends Controller
     {
         $myProfile = Profile::where('user_id', Auth::id())->first();
 
-
-        if ($myProfile) {
-            // All public profiles except logged-in user
-            $profiles = Profile::with(['user', 'images'])
-                ->where('visibility', 'public')
-                ->where('user_id', '!=', Auth::id())
-                // ->where('gender', '!=', $myProfile->gender)
-                ->where('is_active', 1)
-                ->whereHas('user', function ($q) {
-                    $q->where('status', '!=', 'banned');
-                })
-                ->get();
-
-            $myFilters = collect();
-            $myFilters = Filter::where('profile_id', $myProfile->id)->get();
-
-            $relations = [];
-            if ($myProfile) {
-                $relations = UserRequest::where(function ($q) use ($myProfile) {
-                    $q->where('sender_id', $myProfile->id)
-                        ->orWhere('receiver_id', $myProfile->id);
-                })->get();
-            }
-
-            $profiles = $profiles->transform(function ($profile) use ($relations, $myProfile) {
-
-                $profile->requestStatus = null;
-
-                foreach ($relations as $relation) {
-
-                    $isMatch =
-                        ($relation->sender_id == $myProfile->id && $relation->receiver_id == $profile->id) ||
-                        ($relation->sender_id == $profile->id && $relation->receiver_id == $myProfile->id);
-
-                    if ($isMatch) {
-                        if ($relation->is_accepted) {
-                            $profile->requestStatus = 'friends';
-                        } elseif ($relation->is_pending) {
-                            $profile->requestStatus =
-                                $relation->sender_id == $myProfile->id ? 'sent' : 'received';
-                        } elseif ($relation->is_rejected) {
-                            $profile->requestStatus = 'rejected';
-                        } elseif ($relation->is_blocked) {
-                            $profile->requestStatus = 'blocked';
-                        }
-                        break;
-                    }
-                }
-
-                return $profile;
-            });
-
-            /* ✅ FILTER HERE */
-            $profiles = $profiles
-                ->filter(fn($profile) => $profile->requestStatus === null)
-                ->values(); // reset index
-
-            $countries = DB::table('countries')
-                ->get();
-
-            $user = auth()->user();
-            $rating_status = "";
-
-            if ($user) {
-
-                $rating = DB::table('ratings')
-                    ->select('rating', 'skip', 'user_id', 'created_at', 'updated_at')
-                    ->where('user_id', $user->id)
-                    ->orderBy('updated_at', 'desc')
-                    ->first();
-
-                //No rating exists
-                if (!$rating) {
-
-                    if ($user->created_at->gte(now()->subDays(7))) {
-                        $rating_status = "new";
-                    } else {
-                        $rating_status = "null";
-                    }
-
-                } else {
-
-                    //User skipped rating
-                    if ($rating->skip == 1) {
-
-                        if (Carbon::parse($rating->updated_at)->gte(now()->subHours(24))) {
-                            $rating_status = "nothing"; // skip within 42h
-                        } else {
-                            $rating_status = "skip"; // can show again
-                        }
-
-                    }
-                    // User rated
-                    else {
-
-                        if (Carbon::parse($rating->updated_at)->gte(now()->subDays(3))) {
-                            $rating_status = "rated";
-                        } else {
-                            $rating_status = "nothing";
-                        }
-
-                    }
-                }
-            }
-
-            return view('profile.index', compact('profiles', 'myFilters', 'countries', 'rating_status'));
-        } else {
+        if (!$myProfile) {
             return redirect()->route('profile.create');
         }
 
+        // Query
+        $profiles = Profile::with(['user', 'images'])
+            ->where('visibility', 'public')
+            ->where('user_id', '!=', Auth::id())
+            ->where('is_active', 1)
+            ->whereHas('user', function ($q) {
+                $q->where('status', '!=', 'banned');
+            })
+            ->paginate(6);
+
+        // Saved Filters
+        $myFilters = Filter::where('profile_id', $myProfile->id)->get();
+
+        // Relations
+        $relations = UserRequest::where(function ($q) use ($myProfile) {
+            $q->where('sender_id', $myProfile->id)
+                ->orWhere('receiver_id', $myProfile->id);
+        })->get();
+
+        // Transform collection without breaking pagination
+        $profiles->getCollection()->transform(function ($profile) use ($relations, $myProfile) {
+
+            $profile->requestStatus = null;
+
+            foreach ($relations as $relation) {
+
+                $match =
+                    ($relation->sender_id == $myProfile->id &&
+                        $relation->receiver_id == $profile->id)
+                    ||
+                    ($relation->sender_id == $profile->id &&
+                        $relation->receiver_id == $myProfile->id);
+
+                if ($match) {
+
+                    if ($relation->is_accepted) {
+                        $profile->requestStatus = 'friends';
+
+                    } elseif ($relation->is_pending) {
+
+                        $profile->requestStatus =
+                            $relation->sender_id == $myProfile->id
+                            ? 'sent'
+                            : 'received';
+
+                    } elseif ($relation->is_rejected) {
+
+                        $profile->requestStatus = 'rejected';
+
+                    } elseif ($relation->is_blocked) {
+
+                        $profile->requestStatus = 'blocked';
+                    }
+
+                    break;
+                }
+            }
+
+            return $profile;
+        });
+
+        // Remove matched profiles
+        $filteredProfiles = $profiles->getCollection()
+            ->filter(function ($profile) {
+                return $profile->requestStatus === null;
+            })
+            ->values();
+
+        // Keep paginator
+        $profiles->setCollection($filteredProfiles);
+
+        // Countries
+        $countries = DB::table('countries')->get();
+
+        // Rating Popup Logic
+        $rating_status = "nothing";
+
+        $rating = DB::table('ratings')
+            ->where('user_id', Auth::id())
+            ->latest('updated_at')
+            ->first();
+
+        if (!$rating) {
+
+            $rating_status = "show";
+
+        } else {
+
+            if (
+                ($rating->status == 'rated' &&
+                    Carbon::parse($rating->updated_at)->lte(now()->subDays(30)))
+                ||
+                ($rating->status == 'skipped' &&
+                    Carbon::parse($rating->updated_at)->lte(now()->subDays(3)))
+                ||
+                ($rating->status == 'cancelled' &&
+                    Carbon::parse($rating->updated_at)->lte(now()->subDays(1)))
+                ||
+                $rating->status == 'pending'
+            ) {
+                $rating_status = "show";
+            }
+        }
+
+        return view(
+            'profile.index',
+            compact(
+                'profiles',
+                'myFilters',
+                'countries',
+                'rating_status'
+            )
+        );
     }
 
     public function getStates($country_id)
@@ -159,7 +168,91 @@ class ProfileController extends Controller
             ->where('id', $id)   // user_id from route
             ->firstOrFail();
 
+        $city = DB::table('cities')->where('id', $profile->city)->first();
+        if ($city) {
+            $profile->city = $city->name;
+        }
+
+        $country = DB::table('countries')->where('id', $profile->country)->first();
+        if ($country) {
+            $profile->country = $country->name;
+        }
+
+        $state = DB::table('states')->where('id', $profile->state)->first();
+        if ($state) {
+            $profile->state = $state->name;
+        }
+
         $rating_status = "nothing";
+
+        $user = auth()->user();
+
+        if ($user) {
+
+            $rating = DB::table('ratings')
+                ->where('user_id', $user->id)
+                ->latest('updated_at')
+                ->first();
+
+            // Never rated before
+            if (!$rating) {
+
+                $rating_status = "show";
+
+            } else {
+
+                // User already rated
+                if ($rating->status == "rated") {
+
+                    if (
+                        Carbon::parse($rating->updated_at)
+                            ->lte(now()->subDays(30))
+                    ) {
+
+                        $rating_status = "show";
+
+                    } else {
+
+                        $rating_status = "nothing";
+                    }
+                }
+
+                // User skipped
+                elseif ($rating->status == "skipped") {
+
+                    if (
+                        Carbon::parse($rating->updated_at)
+                            ->lte(now()->subDays(3))
+                    ) {
+
+                        $rating_status = "show";
+
+                    } else {
+
+                        $rating_status = "nothing";
+                    }
+                }
+
+                // User cancelled popup
+                elseif ($rating->status == "cancelled") {
+
+                    if (
+                        Carbon::parse($rating->updated_at)
+                            ->lte(now()->subDays(1))
+                    ) {
+
+                        $rating_status = "show";
+
+                    } else {
+
+                        $rating_status = "nothing";
+                    }
+                } elseif ($rating->status === "pending") {
+                    $rating_status = "show";
+                }
+            }
+        }
+
 
         return view('profile.show', compact('profile', 'rating_status'));
     }
@@ -171,18 +264,14 @@ class ProfileController extends Controller
     {
         $countries = DB::table('countries')
             ->get();
-            $rating_status = "nothing";
+        $rating_status = "nothing";
         return view('profile.create', compact('countries', 'rating_status'));
-
     }
 
     public function submit(Request $request)
     {
         return $request->skills; // array
     }
-
-
-
 
 
     // Store profile data
@@ -254,9 +343,6 @@ class ProfileController extends Controller
             array_filter($preferences['personality'] ?? [])
         );
         // city, state, country
-        // city, state, country
-        // city, state, country
-
 
         if (!empty($preferences['location'][0])) {
 
@@ -270,6 +356,7 @@ class ProfileController extends Controller
         $preferences = array_filter($preferences, function ($value) {
             return $value !== null && $value !== '' && $value !== [];
         });
+
 
         /*CREATE PROFILE*/
         $profile = Profile::create([
@@ -297,7 +384,7 @@ class ProfileController extends Controller
             $profile->images()->create([
                 'user_id' => Auth::id(),
                 'file_name' => $fileName,
-                'file_path' => 'storage/' . $path,
+                'file_path' => $path,
                 'Type_of_image' => 'profile',
             ]);
         }
@@ -312,47 +399,72 @@ class ProfileController extends Controller
         $profile = Profile::where('user_id', Auth::id())->first();
         $countries = DB::table('countries')
             ->get();
+        $rating_status = "nothing";
+
         $user = auth()->user();
-        $rating_status = "";
 
         if ($user) {
 
             $rating = DB::table('ratings')
-                ->select('rating', 'skip', 'user_id', 'created_at', 'updated_at')
                 ->where('user_id', $user->id)
-                ->orderBy('updated_at', 'desc')
+                ->latest('updated_at')
                 ->first();
 
-            //No rating exists
+            // Never rated before
             if (!$rating) {
 
-                if ($user->created_at->gte(now()->subDays(7))) {
-                    $rating_status = "new";
-                } else {
-                    $rating_status = "null";
-                }
+                $rating_status = "show";
 
             } else {
 
-                //User skipped rating
-                if ($rating->skip == 1) {
+                // User already rated
+                if ($rating->status == "rated") {
 
-                    if (Carbon::parse($rating->updated_at)->gte(now()->subHours(24))) {
-                        $rating_status = "nothing"; // skip within 42h
+                    if (
+                        Carbon::parse($rating->updated_at)
+                            ->lte(now()->subDays(30))
+                    ) {
+
+                        $rating_status = "show";
+
                     } else {
-                        $rating_status = "skip"; // can show again
-                    }
 
-                }
-                // User rated
-                else {
-
-                    if (Carbon::parse($rating->updated_at)->gte(now()->subDays(3))) {
-                        $rating_status = "rated";
-                    } else {
                         $rating_status = "nothing";
                     }
+                }
 
+                // User skipped
+                elseif ($rating->status == "skipped") {
+
+                    if (
+                        Carbon::parse($rating->updated_at)
+                            ->lte(now()->subDays(3))
+                    ) {
+
+                        $rating_status = "show";
+
+                    } else {
+
+                        $rating_status = "nothing";
+                    }
+                }
+
+                // User cancelled popup
+                elseif ($rating->status == "cancelled") {
+
+                    if (
+                        Carbon::parse($rating->updated_at)
+                            ->lte(now()->subDays(1))
+                    ) {
+
+                        $rating_status = "show";
+
+                    } else {
+
+                        $rating_status = "nothing";
+                    }
+                } elseif ($rating->status === "pending") {
+                    $rating_status = "show";
                 }
             }
         }
@@ -399,7 +511,7 @@ class ProfileController extends Controller
 
                 $oldImage->update([
                     'file_name' => $fileName,
-                    'file_path' => 'storage/' . $path,
+                    'file_path' => $path,
                     'Type_of_image' => 'profile',
                 ]);
             } else {
@@ -407,7 +519,7 @@ class ProfileController extends Controller
                     'user_id' => $user->id,
                     'profile_id' => $profile->id,
                     'file_name' => $fileName,
-                    'file_path' => 'storage/' . $path,
+                    'file_path' => $path,
                     'Type_of_image' => 'profile',
                 ]);
             }
@@ -447,30 +559,45 @@ class ProfileController extends Controller
         return view('profile.partials.delete-user-form', compact('rating_status'));
     }
 
+
+
     public function destroyProfile(Request $request)
     {
-        // PASSWORD VALIDATION
         $request->validate([
             'password' => ['required'],
         ]);
 
         $user = Auth::user();
 
-        // PASSWORD CHECK
         if (!Hash::check($request->password, $user->password)) {
             return back()->withErrors([
                 'password' => 'Incorrect password.',
             ]);
         }
 
-        // GET PROFILE
         $profile = Profile::where('user_id', $user->id)->first();
 
         if (!$profile) {
             return back()->with('error', 'Profile not found.');
         }
 
-        // DELETE PROFILE IMAGES
+        Subscription::where('user_id', $user->id)
+            ->where('stripe_status', 'active')
+            ->update([
+                'stripe_status' => 'cancelled',
+            ]);
+
+        Payment::where('user_id', $user->id)
+            ->where('payment_status', 'success')
+            ->update([
+                'payment_status' => 'cancelled',
+            ]);
+
+        $user->update([
+            'plan' => 'free',
+        ]);
+
+
         foreach ($profile->images as $image) {
 
             $filePath = public_path($image->file_path);
@@ -482,19 +609,16 @@ class ProfileController extends Controller
             $image->delete();
         }
 
-        // DELETE PROFILE
         $profile->delete();
 
-        // LOGOUT USER
         Auth::logout();
 
-        // INVALIDATE SESSION
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return redirect()
-            ->route('/')
-            ->with('success', 'Profile deleted successfully!');
+            ->route('dashboard')
+            ->with('success', 'Profile deleted and subscription cancelled successfully.');
     }
 
     public function search(Request $request)
@@ -558,12 +682,83 @@ class ProfileController extends Controller
             $query->where('city', 'like', '%' . $request->city . '%');
         }
 
-        $profiles = $query->get();
+        $profiles = $query->paginate(9)->withQueryString();
 
         /* ✅ ACTIVE FILTER ONLY (SoftDeletes respected) */
         $myFilters = Filter::where('profile_id', $profile->id)->get();
 
-        return view('profile.index', compact('profiles', 'myFilters'));
+        $rating_status = "nothing";
+
+        $user = auth()->user();
+
+        if ($user) {
+
+            $rating = DB::table('ratings')
+                ->where('user_id', $user->id)
+                ->latest('updated_at')
+                ->first();
+
+            // Never rated before
+            if (!$rating) {
+
+                $rating_status = "show";
+
+            } else {
+
+                // User already rated
+                if ($rating->status == "rated") {
+
+                    if (
+                        Carbon::parse($rating->updated_at)
+                            ->lte(now()->subDays(30))
+                    ) {
+
+                        $rating_status = "show";
+
+                    } else {
+
+                        $rating_status = "nothing";
+                    }
+                }
+
+                // User skipped
+                elseif ($rating->status == "skipped") {
+
+                    if (
+                        Carbon::parse($rating->updated_at)
+                            ->lte(now()->subDays(3))
+                    ) {
+
+                        $rating_status = "show";
+
+                    } else {
+
+                        $rating_status = "nothing";
+                    }
+                }
+
+                // User cancelled popup
+                elseif ($rating->status == "cancelled") {
+
+                    if (
+                        Carbon::parse($rating->updated_at)
+                            ->lte(now()->subDays(1))
+                    ) {
+
+                        $rating_status = "show";
+
+                    } else {
+
+                        $rating_status = "nothing";
+                    }
+                } elseif ($rating->status === "pending") {
+                    $rating_status = "show";
+                }
+            }
+        }
+
+
+        return view('profile.index', compact('profiles', 'myFilters', 'rating_status'));
     }
 
     public function myProfile()
@@ -574,47 +769,99 @@ class ProfileController extends Controller
             return redirect()->route('profile.create')->with('info', 'Please create your profile first.');
         }
 
+        $user = DB::table('users')->where('id', Auth::id())->first();
+        if ($user->contact_number) {
+            $profile->contact_number = $user->contact_number;
+        }
+
+        $role = DB::table('users')->where('id', Auth::id())->first();
+
+        // dd($role->plan);
+        if ($role->plan) {
+            $profile->plan = $role->plan;
+        }
+
+        $city = DB::table('cities')->where('id', $profile->city)->first();
+        if ($city) {
+            $profile->city = $city->name;
+        }
+
+        $country = DB::table('countries')->where('id', $profile->country)->first();
+        if ($country) {
+            $profile->country = $country->name;
+        }
+
+        $state = DB::table('states')->where('id', $profile->state)->first();
+        if ($state) {
+            $profile->state = $state->name;
+        }
+
+        $rating_status = "nothing";
+
         $user = auth()->user();
-        $rating_status = "";
 
         if ($user) {
 
             $rating = DB::table('ratings')
-                ->select('rating', 'skip', 'user_id', 'created_at', 'updated_at')
                 ->where('user_id', $user->id)
-                ->orderBy('updated_at', 'desc')
+                ->latest('updated_at')
                 ->first();
 
-            //No rating exists
+            // Never rated before
             if (!$rating) {
 
-                if ($user->created_at->gte(now()->subDays(7))) {
-                    $rating_status = "new";
-                } else {
-                    $rating_status = "null";
-                }
+                $rating_status = "show";
 
             } else {
 
-                //User skipped rating
-                if ($rating->skip == 1) {
+                // User already rated
+                if ($rating->status == "rated") {
 
-                    if (Carbon::parse($rating->updated_at)->gte(now()->subHours(24))) {
-                        $rating_status = "nothing"; // skip within 42h
+                    if (
+                        Carbon::parse($rating->updated_at)
+                            ->lte(now()->subDays(30))
+                    ) {
+
+                        $rating_status = "show";
+
                     } else {
-                        $rating_status = "skip"; // can show again
-                    }
 
-                }
-                // User rated
-                else {
-
-                    if (Carbon::parse($rating->updated_at)->gte(now()->subDays(3))) {
-                        $rating_status = "rated";
-                    } else {
                         $rating_status = "nothing";
                     }
+                }
 
+                // User skipped
+                elseif ($rating->status == "skipped") {
+
+                    if (
+                        Carbon::parse($rating->updated_at)
+                            ->lte(now()->subDays(3))
+                    ) {
+
+                        $rating_status = "show";
+
+                    } else {
+
+                        $rating_status = "nothing";
+                    }
+                }
+
+                // User cancelled popup
+                elseif ($rating->status == "cancelled") {
+
+                    if (
+                        Carbon::parse($rating->updated_at)
+                            ->lte(now()->subDays(1))
+                    ) {
+
+                        $rating_status = "show";
+
+                    } else {
+
+                        $rating_status = "nothing";
+                    }
+                } elseif ($rating->status === "pending") {
+                    $rating_status = "show";
                 }
             }
         }

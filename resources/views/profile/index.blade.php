@@ -244,7 +244,7 @@
                                     <div class="profile-card-modern">
                                         <div class="profile-img-wrapper">
                                             <img src="{{ $profile->images->first()
-                        ? asset($profile->images->first()->file_path)
+                        ? Storage::url($profile->images->first()->file_path)
                         : 'https://via.placeholder.com/300' }}" class="w-100">
 
                                             @if($profile->is_premium)
@@ -272,10 +272,22 @@
                             <h4 class="text-muted">No profiles found.</h4>
                         </div>
                     @endforelse
-
                 </div>
-            </div>
 
+                <!-- Pagination -->
+                @if(isset($profiles) && method_exists($profiles, 'hasPages') && $profiles->hasPages())
+                    <div class="pagination-wrapper-admin pt-5">
+                        <div class="pagination-info-admin">
+                            <i class="fas fa-chart-simple me-1"></i>
+                            Showing {{ $profiles->firstItem() }} to {{ $profiles->lastItem() }} of {{ $profiles->total() }}
+                            results
+                        </div>
+                        <div class="pagination-links-admin">
+                            {{ $profiles->appends(request()->query())->onEachSide(1)->links('pagination::bootstrap-5') }}
+                        </div>
+                    </div>
+                @endif
+            </div>
         </div>
     </div>
 
@@ -306,6 +318,15 @@
     <script>
         window.ratingData = {
             status: @json($rating_status)
+        };
+    </script>
+
+    <script>
+        window.flashData = {
+            success: @json(session('success')),
+            error: @json(session('error')),
+            warning: @json(session('warning')),
+            info: @json(session('info')),
         };
     </script>
 

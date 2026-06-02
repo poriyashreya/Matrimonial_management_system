@@ -53,7 +53,7 @@
                             <div class="profile-card-modern">
                                 <div class="profile-img-wrapper">
                                     <img src="{{ $profile->images->first()
-                    ? asset($profile->images->first()->file_path)
+                    ? Storage::url($profile->images->first()->file_path)
                     : 'https://via.placeholder.com/300' }}">
 
                                     @if($profile->is_premium)
@@ -168,7 +168,7 @@
                                                         <!-- User Info -->
                                                         <div class="story-user d-flex align-items-center mt-4">
                                                             <img src="{{ $story->image
-                                        ? asset('storage/' . $story->image)
+                                        ? Storage::url($story->image)
                                         : asset('images/default-couple.jpg') }}"
                                                                 class="rounded-circle me-3 border border-2 border-white shadow-sm" width="60"
                                                                 height="60" alt="Couple Image">
@@ -224,15 +224,16 @@
     </script>
 
     <!-- sweetalert -->
+
     <script>
         window.routes = {
-            rate: "{{ route('rate.store') }}",
-            skip: "{{ route('rating.skip') }}"
+            rate: "{{ route('rating.store') }}",
+            skip: "{{ route('rating.skip') }}",
+            cancel: "{{ route('rating.cancel') }}"
         };
-    </script>
-    <script>
+
         window.ratingData = {
-            status: @json($rating_status)
+            status: @json($rating_status ?? 'nothing')
         };
     </script>
     <script>

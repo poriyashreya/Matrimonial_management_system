@@ -24,6 +24,12 @@
         </div>
     </section>
 
+    <?php
+    if (isset($success)) {
+        echo "<div class='container mt-4'><div class='alert alert-success alert-dismissible fade show' role='alert'><strong>$success</strong> $rating_status <button type='button' class='btn-close' data-bs-dismiss='alert'></button></div></div>";
+    }
+                                            ?>
+
     <!-- ABOUT INTRO -->
     <section class="py-5">
         <div class="container">
@@ -100,7 +106,7 @@
                     Create your profile today and take the first step towards your future.
                 </p>
 
-                @auth
+                @if(!auth()->user()->profile)
                     <a href="{{ route('profile.create') }}" class="btn btn-light fw-semibold px-4 py-2">
                         Complete Your Profile
                     </a>
@@ -108,7 +114,7 @@
                     <a href="{{ route('matches.show') }}" class="btn btn-light fw-semibold px-4 py-2">
                         Explore your matches
                     </a>
-                @endauth
+                @endif
             </div>
         </div>
     </section>
@@ -143,6 +149,19 @@
         window.ratingData = {
             status: @json($rating_status)
         };
+    </script>
+
+    <script>
+        window.routes = {
+            rate: "{{ route('rating.store') }}",
+            skip: "{{ route('rating.skip') }}"
+        };
+
+        window.ratingData = {
+            status: @json($rating_status)
+        };
+
+        console.log(window.routes);
     </script>
 
 

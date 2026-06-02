@@ -27,18 +27,28 @@
                     <a class="nav-link fw-semibold px-3" href="{{ route('profile.index') }}">View Profiles</a>
                 </li>
 
-                @if(auth()->user()->profile)
+                @if(auth()->user()->profile && strtolower(auth()->user()->plan) !== "free" && strtolower(auth()->user()->plan) !== "none")
                     <li class="nav-item">
                         <a class="nav-link fw-semibold px-3" href="{{ route('matches.show') }}">Matches</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link fw-semibold px-3" href="{{ route('request.index') }}">Requests</a>
-                    </li>
-
-                    <li class="nav-item">
                         <a class="nav-link fw-semibold px-3" href="{{ route('request.view') }}">Followers</a>
                     </li>
+                @endif
+
+                @if(auth()->user()->profile)
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold px-3" href="{{ route('request.index') }}">Requests</a>
+                    </li>
+                @endif
+
+
+
+                @if(strtolower(auth()->user()->plan) === 'premium' || strtolower(auth()->user()->plan) === 'free' || strtolower(auth()->user()->plan) === 'none')
+                    <a href="{{ route('plans') }}" class="btn-premium">
+                        <i class="fas fa-gem"></i> Upgrade
+                    </a>
                 @endif
 
                 @auth

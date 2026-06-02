@@ -3,15 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Profile;
-use Illuminate\Http\Request;
 use App\Models\Testimonial;
-use App\Models\Rating;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
         $query = Profile::with(['user', 'images'])
             ->where('visibility', 'public')
@@ -22,105 +20,145 @@ class DashboardController extends Controller
             ->where('user_id', '!=', auth()->id());
 
         $profiles = $query->paginate(4);
-        $testimonials = Testimonial::where('is_active', 1)->latest()->get();
+
+        $testimonials = Testimonial::where('is_active', 1)
+            ->latest()
+            ->get();
+
+        $rating_status = "nothing";
 
         $user = auth()->user();
-        $rating_status = "";
 
         if ($user) {
 
             $rating = DB::table('ratings')
-                ->select('rating', 'skip', 'user_id', 'created_at', 'updated_at')
                 ->where('user_id', $user->id)
-                ->orderBy('updated_at', 'desc')
+                ->latest('updated_at')
                 ->first();
 
-            //No rating exists
+            // Never rated before
             if (!$rating) {
 
-                if ($user->created_at->lt(now()->subDays(7))) {
-                    $rating_status = "new";
-                } else {
-                    $rating_status = "nothing";
-                }
+                $rating_status = "show";
 
             } else {
 
-                //User skipped rating
-                if ($rating->skip == 1) {
+                // User already rated
+                if ($rating->status == "rated") {
 
-                    if (Carbon::parse($rating->updated_at)->gte(now()->subHours(24)))  {
-                        $rating_status = "nothing"; // skip within 42h
+                    if (
+                        Carbon::parse($rating->updated_at)
+                            ->lte(now()->subDays(30))
+                    ) {
+
+                        $rating_status = "show";
+
                     } else {
-                        $rating_status = "skip"; // can show again
-                    }
 
-                }
-                // User rated
-                else {
-
-                    if (Carbon::parse($rating->updated_at)->gte(now()->subDays(3))) {
-                        $rating_status = "rated";
-                    } else {
                         $rating_status = "nothing";
                     }
+                }
 
+                // User skipped
+                elseif ($rating->status == "skipped") {
+
+                    if (
+                        Carbon::parse($rating->updated_at)
+                            ->lte(now()->subDays(3))
+                    ) {
+
+                        $rating_status = "show";
+
+                    } else {
+
+                        $rating_status = "nothing";
+                    }
+                }
+
+                // User cancelled popup
+                elseif ($rating->status == "cancelled") {
+
+                    if (
+                        Carbon::parse($rating->updated_at)
+                            ->lte(now()->subDays(1))
+                    ) {
+
+                        $rating_status = "show";
+
+                    } else {
+
+                        $rating_status = "nothing";
+                    }
+                } elseif ($rating->status === "pending") {
+                    $rating_status = "show";
                 }
             }
         }
 
-        // dd($rating_status);
-
-        return view('user.dashboard', compact('profiles', 'testimonials', 'rating_status'));
+        return view(
+            'user.dashboard',
+            compact('profiles', 'testimonials', 'rating_status')
+        );
     }
-
     public function about()
     {
         $user = auth()->user();
-        $rating_status = "";
+
+        $rating_status = "nothing";
 
         if ($user) {
 
             $rating = DB::table('ratings')
-                ->select('rating', 'skip', 'user_id', 'created_at', 'updated_at')
                 ->where('user_id', $user->id)
-                ->orderBy('updated_at', 'desc')
+                ->latest('updated_at')
                 ->first();
 
-            //No rating exists
+            // Never rated before
             if (!$rating) {
 
-                if ($user->created_at->gte(now()->subDays(7))) {
-                    $rating_status = "new";
-                } else {
-                    $rating_status = "null";
-                }
+                $rating_status = "show";
 
             } else {
-                //User skipped rating
-                if ($rating->skip == 1) {
 
-                    if (Carbon::parse($rating->updated_at)->gte(now()->subHours(24))) {
-                        $rating_status = "nothing"; // skip within 42h
-                    } else {
-                        $rating_status = "skip"; // can show again
-                    }
+                // User already rated
+                if ($rating->status == "rated") {
 
+                    $rating_status = "nothing";
                 }
-                // User rated
-                else {
 
-                    if (Carbon::parse($rating->updated_at)->gte(now()->subDays(3))) {
-                        $rating_status = "rated";
+                // User skipped
+                elseif ($rating->status == "skipped") {
+
+                    if (
+                        Carbon::parse($rating->updated_at)
+                            ->lte(now()->subDays(3))
+                    ) {
+
+                        $rating_status = "show";
+
                     } else {
+
                         $rating_status = "nothing";
                     }
+                }
 
+                // User cancelled popup
+                elseif ($rating->status == "cancelled") {
+
+                    if (
+                        Carbon::parse($rating->updated_at)
+                            ->lte(now()->subDays(7))
+                    ) {
+
+                        $rating_status = "show";
+
+                    } else {
+
+                        $rating_status = "nothing";
+                    }
                 }
             }
         }
-
-        // dd($rating_status);
 
         return view('user.about', compact('rating_status'));
     }

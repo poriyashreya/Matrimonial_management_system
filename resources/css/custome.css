@@ -118,7 +118,7 @@
    HEADER & NAVBAR
 =========================== */
 
-nav {
+.navbar {
     background: #fdf7e7;
     color: #333 !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -218,9 +218,6 @@ nav {
 /* ===========================
    My Profile Page
 =========================== */
-/* ==================== PAGE COLORS ===================== */
-/* ==================== GLOBAL ===================== */
-/* MATCH EDIT PAGE CARD */
 .edit-btn {
     background: #2b539d !important;
     color: #fff !important;
@@ -307,7 +304,7 @@ nav {
    MAIN CARD
 =========================== */
 .edit-card {
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.85) !important;
     backdrop-filter: blur(12px);
     border-radius: 26px;
     border: 1px solid rgba(255, 255, 255, 0.6);
@@ -607,26 +604,6 @@ body {
 
 /* profile.css */
 
-/* COVER */
-
-/* ===== Select2 FIX ===== */
-/* ===========================
-   SELECT2 FIX
-=========================== */
-
-/* ===========================
-   SELECT2 STYLING - MULTI-LINE WITH PROPER SPACING
-=========================== */
-
-/* ===========================
-   SELECT2 - PROPER STYLING
-=========================== */
-
-/* ===========================
- TOM SELECT – CUSTOM THEME
- Matches your #7a1f28 design
-=========================== */
-
 /* Main input */
 .ts-control {
     background: #fff;
@@ -762,6 +739,22 @@ body {
     object-fit: cover;
     border-radius: 50%;
     border: 5px solid #fff;
+}
+
+.pagination-wrapper-admin {
+    padding: 1rem 1.5rem;
+    /* background: #fafafa !important; */
+    border-top: 1px solid var(--admin-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.pagination-links-admin {
+    display: flex;
+    gap: 6px;
 }
 
 
@@ -1059,6 +1052,7 @@ input,
 .swal2-success-ring {
     border-color: #2d6a4f !important;
 }
+
 .swal2-success-line-tip,
 .swal2-success-line-long {
     background-color: #2d6a4f !important;
@@ -1108,12 +1102,14 @@ input,
 
 .swal2-confirm:hover {
     /* background: linear-gradient(90deg, #e6c36a, #c59d5f) !important; */
-     background: linear-gradient(135deg, #8e2230, #c04341) !important; /* hover effect */
+    background: linear-gradient(135deg, #8e2230, #c04341) !important;
+    /* hover effect */
 }
 
 /* Deny Button */
 .swal2-deny {
-    background-color: #f0ad4e !important; /* Amber / Gold */
+    background-color: #f0ad4e !important;
+    /* Amber / Gold */
     color: #fff !important;
     border-radius: 8px !important;
     padding: 8px 20px !important;
@@ -1122,13 +1118,15 @@ input,
 }
 
 .swal2-deny:hover {
-    background-color: #ec971f !important; /* Darker on hover */
+    background-color: #ec971f !important;
+    /* Darker on hover */
     color: #fff !important;
 }
 
 /* Cancel Button */
 .swal2-cancel {
-    background-color: #6c757d !important; /* Gray */
+    background-color: #6c757d !important;
+    /* Gray */
     color: #fff !important;
     border-radius: 8px !important;
     padding: 8px 20px !important;
@@ -1149,6 +1147,7 @@ input,
         opacity: 0;
         transform: scale(0.9);
     }
+
     to {
         opacity: 1;
         transform: scale(1);

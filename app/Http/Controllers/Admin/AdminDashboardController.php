@@ -3,18 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\admin_images;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 class AdminDashboardController extends Controller
 {
-
     public function index()
     {
-        // Verifications
+        // ================= VERIFICATIONS =================
+
         $verifications = DB::table('verifications')
             ->join('profiles', 'verifications.profile_id', '=', 'profiles.id')
             ->join('users', 'profiles.user_id', '=', 'users.id')
@@ -22,7 +19,9 @@ class AdminDashboardController extends Controller
             ->orderBy('verifications.id', 'desc')
             ->get();
 
-        // Users per month for last 6 months
+
+        // ================= USER REGISTRATIONS =================
+
         $registrations = DB::table('users')
             ->select(
                 DB::raw('MONTH(created_at) as month'),
@@ -32,6 +31,9 @@ class AdminDashboardController extends Controller
             ->groupBy('month')
             ->orderBy('month')
             ->get();
+
+
+        // ================= PROFILES CREATED =================
 
         $profiles_created = DB::table('profiles')
             ->select(
@@ -43,19 +45,55 @@ class AdminDashboardController extends Controller
             ->orderBy('month')
             ->get();
 
+
+        // ================= PROFILES BY CITY =================
+
         $profilesByCity = DB::table('profiles')
             ->select('city', DB::raw('count(*) as total'))
             ->groupBy('city')
             ->pluck('total', 'city')
             ->toArray();
-        $logo=DB::table('admin_images')
-                ->select('file_path')
-                ->where('Type_of_image','favicon');
-
-        return view('admin.admindashboard', compact('verifications', 'registrations', 'profiles_created', 'profilesByCity'));
 
 
-        // return view('admin.admindashboard', compact('verifications', 'registrations', 'profiles_created'));
+        // ================= DASHBOARD COUNTS =================
+
+        $totalUsers = DB::table('users')->count();
+
+        $premiumUsers = DB::table('users')
+            ->where('plan', 'premium')
+            ->count();
+
+        $proUsers = DB::table('users')
+            ->where('plan', 'pro')
+            ->count();
+
+        $totalRevenue = DB::table('payments')
+            ->where('payment_status', 'Paid')
+            ->sum('amount');
+
+        $pendingReports = DB::table('reports')
+            ->where('status', 0)
+            ->count();
+
+
+        // ================= ADMIN LOGO =================
+
+        $logo = DB::table('admin_images')
+            ->where('Type_of_image', 'favicon')
+            ->value('file_path');
+
+
+        return view('admin.admindashboard', compact(
+            'verifications',
+            'registrations',
+            'profiles_created',
+            'profilesByCity',
+            'totalUsers',
+            'premiumUsers',
+            'proUsers',
+            'totalRevenue',
+            'pendingReports',
+            'logo'
+        ));
     }
-
 }

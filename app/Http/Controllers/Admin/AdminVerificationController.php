@@ -27,7 +27,7 @@ class AdminVerificationController extends Controller
                 'profiles.verified_by'
             )
             ->orderBy('verifications.created_at', 'desc')
-            ->get();
+            ->paginate(7);
 
         return view('admin.verification.admin-verification', compact('verifications'));
     }
@@ -71,8 +71,8 @@ class AdminVerificationController extends Controller
         DB::table('profiles')
             ->where('id', function ($query) use ($id) {
                 $query->select('profile_id')
-                      ->from('verifications')
-                      ->where('id', $id);
+                    ->from('verifications')
+                    ->where('id', $id);
             })
             ->update(['verified_by' => true]);
 

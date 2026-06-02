@@ -12,7 +12,7 @@
 
                 <div class="request-info">
                     <img src="{{ $req->sender->images->first()
-                ? asset($req->sender->images->first()->file_path)
+                ? Storage::url($req->sender->images->first()->file_path)
                 : 'https://via.placeholder.com/70' }}" class="request-avatar">
 
                     <div class="request-text">
@@ -96,6 +96,15 @@
     <script>
         window.ratingData = {
             status: @json($rating_status)
+        };
+    </script>
+
+    <script>
+        window.flashData = {
+            success: @json(session('success')),
+            error: @json(session('error')),
+            warning: @json(session('warning')),
+            info: @json(session('info')),
         };
     </script>
 @endsection

@@ -19,10 +19,101 @@ use App\Http\Controllers\ProfileReportController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\SubscriptionController;
+use Laravel\Cashier\Http\Controllers\WebhookController;
+use App\Http\Controllers\Admin\PaymentManagementController;
+use App\Http\Controllers\Admin\SubscriptionManagementController;
+use App\Http\Controllers\Admin\NotificationController;
+use App\Models\User;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\AdminTestNotification;
+use App\Http\Controllers\Admin\AdminPasswordController;
+
+
+Route::get('/admin/password', [AdminPasswordController::class, 'showForm'])
+    ->name('admin.password.form');
+
+Route::post('/admin/password', [AdminPasswordController::class, 'verify'])
+    ->name('admin.password.verify');
+
+
+Route::get('/test-admin-notification', function () {
+
+    $admin = User::where('role', 'admin')->first();
+
+    $admin->notify(
+        new AdminTestNotification(
+            'This is a dummy admin notification for testing.'
+        )
+    );
+
+    return 'Dummy notification sent successfully!';
+});
 
 Route::middleware('auth')->group(function () {
-    Route::post('/rating/store', [RatingController::class, 'store'])->name('rate.store');
-    Route::post('/rating/skip', [RatingController::class, 'skip'])->name('rating.skip');
+
+    Route::get(
+        '/admin/notifications',
+        [NotificationController::class, 'index']
+    )->name('admin.notifications');
+
+    Route::post(
+        '/admin/notifications/read/{id}',
+        [NotificationController::class, 'markAsRead']
+    )->name('admin.notifications.read');
+
+    Route::post(
+        '/admin/notifications/read-all',
+        [NotificationController::class, 'markAllAsRead']
+    )->name('admin.notifications.readAll');
+
+    Route::delete(
+        '/admin/notifications/delete/{id}',
+        [NotificationController::class, 'destroy']
+    )->name('admin.notifications.delete');
+
+});
+
+Route::post('/stripe/webhook', [WebhookController::class, 'handleWebhook']);
+
+Route::middleware(['auth', 'premium'])->group(function () {
+
+    Route::get('/view-contact/{id}', function () {
+
+        return "Premium Feature";
+
+    });
+
+});
+
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/plans', [SubscriptionController::class, 'plans'])
+        ->name('plans');
+
+    Route::get('/checkout/{id}', [SubscriptionController::class, 'checkout'])
+        ->name('checkout');
+
+    Route::get('/subscription-success', [SubscriptionController::class, 'success'])
+        ->name('subscription.success');
+
+    Route::delete('/subscription-cancel', [SubscriptionController::class, 'cancel'])
+        ->name('subscription.cancel');
+
+    Route::post('/free-plan/{plan}', [SubscriptionController::class, 'activateFreePlan'])
+        ->name('free.subscribe');
+});
+
+Route::middleware('auth')->group(function () {
+
+    Route::post('/rating/store', [RatingController::class, 'store'])
+        ->name('rating.store');
+
+    Route::post('/rating/skip', [RatingController::class, 'skip'])
+        ->name('rating.skip');
+
+    Route::post('/rating/cancel', [RatingController::class, 'cancel'])
+        ->name('rating.cancel');
 
 });
 
@@ -36,6 +127,16 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         ->name('admin.settings.update');
 
     Route::post('/upload', [AdminSettingController::class, 'handleUpload'])->name('upload.handle');
+
+    Route::get(
+        '/admin/payments',
+        [PaymentManagementController::class, 'index']
+    )->name('admin.payments');
+
+    Route::post(
+        '/admin/subscription/cancel/{id}',
+        [SubscriptionManagementController::class, 'cancel']
+    )->name('admin.subscription.cancel');
 });
 
 
@@ -47,6 +148,21 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         '/verifications',
         [AdminVerificationController::class, 'index']
     )->name('admin.verifications');
+
+    Route::post(
+        '/admin/user/{id}/ban',
+        [UserController::class, 'ban']
+    )->name('admin.user.ban');
+
+    Route::post(
+        '/admin/user/{id}/unban',
+        [UserController::class, 'unban']
+    )->name('admin.user.unban');
+
+    Route::get(
+        '/admin/subscriptions',
+        [SubscriptionManagementController::class, 'index']
+    )->name('admin.subscriptions');
 
     Route::get('/reports', [ReportsController::class, 'index'])
         ->name('admin.reports');

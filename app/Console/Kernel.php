@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         \App\Console\Commands\NotifyPendingVerifications::class,
         \App\Console\Commands\GenerateWeeklyRegistrationsReport::class,
+        \App\Console\Commands\CheckSubscriptionExpiry::class,
     ];
 
     /**
@@ -25,6 +26,8 @@ class Kernel extends ConsoleKernel
         // Schedule your commands here
         $schedule->command('notify:pending-verifications')->dailyAt('09:00');
         $schedule->command('report:weekly-registrations')->weeklyOn(1, '08:00');
+        $schedule->command('subscription:check-expiry')->daily();
+        $schedule->command('subscriptions:check-expiry')->dailyAt('09:00');
     }
 
 

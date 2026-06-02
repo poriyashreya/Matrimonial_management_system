@@ -71,8 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
 $(document).ready(function () {
 
     const oldCountry = window.profileLocation?.country;
-    const oldState   = window.profileLocation?.state;
-    const oldCity    = window.profileLocation?.city;
+    const oldState = window.profileLocation?.state;
+    const oldCity = window.profileLocation?.city;
 
     /* LOAD STATES */
     function loadStates(countryId, selectedState = null) {
@@ -196,11 +196,11 @@ modal.addEventListener('show.bs.modal', e => {
     const action = e.relatedTarget.dataset.action;
     document.getElementById('activationInput').value = action;
 
-    if(action === 'deactivate'){
+    if (action === 'deactivate') {
         modalTitle.innerText = 'Deactivate Profile?';
         modalText.innerText = 'Your profile will be hidden from others.';
         modalConfirm.className = 'btn btn-danger';
-    }else{
+    } else {
         modalTitle.innerText = 'Activate Profile?';
         modalText.innerText = 'Your profile will be visible to others.';
         modalConfirm.className = 'btn btn-success';

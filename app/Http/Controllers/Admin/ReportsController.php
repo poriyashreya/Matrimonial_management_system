@@ -40,7 +40,8 @@ class ReportsController extends Controller
                 'reported_users.email as reported_email'
             )
             ->orderBy('reports.created_at', 'desc')
-            ->get();
+            ->paginate(10);
+
 
         return view('admin.reports.index', compact('reports'));
     }

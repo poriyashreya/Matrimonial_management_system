@@ -11,25 +11,27 @@ class UserRequestNotification extends Notification
 
     public $message;
     public $requestId;
+    public $url;
 
-    public function __construct($message, $requestId)
+    public function __construct($message, $requestId, $url = null)
     {
         $this->message = $message;
         $this->requestId = $requestId;
+        $this->url = $url;
     }
 
     public function via($notifiable)
     {
-        return ['database']; // later you can add 'mail'
+        return ['database'];
     }
 
     public function toDatabase($notifiable)
     {
         return [
+            'type' => 'user_request',
             'message' => $this->message,
             'request_id' => $this->requestId,
-            'url' => $this->url ?? route('request.index'), // 👈 fallback
+            'url' => $this->url ?? route('request.index'),
         ];
     }
-
 }

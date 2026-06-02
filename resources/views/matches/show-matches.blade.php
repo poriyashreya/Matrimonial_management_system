@@ -13,7 +13,7 @@
     <div class="container" style="margin-bottom: 5%;">
 
         <div class="section-header text-center mb-5">
-            <h4 style="font-size: 24px;">Curated Matches For You</h4>
+            <h3>Curated Matches For You</h3>
         </div>
 
         <div class="row g-4">
@@ -29,7 +29,7 @@
 
                         <!-- Profile Image -->
                         <img src="{{ $profile->images->first()
-                ? asset($profile->images->first()->file_path)
+                ? Storage::url($profile->images->first()->file_path)
                 : 'https://via.placeholder.com/300' }}" class="match-app-img" alt="Profile Image">
 
                         <!-- Profile Details -->

@@ -15,6 +15,7 @@ class Rating extends Model
         'rating',
         'comment',
         'skip',
+        'status'
     ];
 
     public function user()

@@ -22,6 +22,7 @@ class UserController extends Controller
                 'users.email',
                 'users.role',
                 'users.plan',
+                'users.status',
                 'users.gender',
                 'profiles.id as profile_id',
                 'profiles.age',
@@ -37,7 +38,7 @@ class UserController extends Controller
             ->orderBy('users.id', 'desc')
             ->where('users.id', '!=', Auth::id())
             ->where('users.id', '!=', 1)
-            ->get();
+            ->paginate(7);
 
         return view('admin.users.index', compact('users'));
     }
@@ -45,6 +46,24 @@ class UserController extends Controller
     public function show(Profile $profile)
     {
         $profile->load('user');
+
+        $city = DB::table('cities')
+            ->where('id', $profile->city)
+            ->value('name');
+
+        $profile->city = $city;
+
+        $country = DB::table('countries')
+            ->where('id', $profile->country)
+            ->value('name');
+
+        $profile->country = $country;
+
+        $state = DB::table('states')
+            ->where('id', $profile->state)
+            ->value('name');
+
+        $profile->state = $state;
 
         return view('admin.users.show', compact('profile'));
     }
@@ -118,5 +137,51 @@ class UserController extends Controller
             ->route('admin.users.index')
             ->with('success', 'User has been demoted to user successfully and logged out if they were online.');
     }
+
+    public function ban($id)
+    {
+        $user = DB::table('users')
+            ->where('id', $id)
+            ->update([
+                'status' => 'banned',
+                'updated_at' => now()
+            ]);
+
+
+        DB::table('users')
+            ->where('id', $id)
+            ->update([
+                'status' => 'banned',
+                'updated_at' => now()
+            ]);
+
+        return back()->with(
+            'success',
+            'User banned successfully.'
+        );
+    }
+
+    public function unban($id)
+    {
+        $user = DB::table('users')
+            ->where('id', $id)
+            ->update([
+                'status' => 'None',
+                'updated_at' => now()
+            ]);
+
+        DB::table('users')
+            ->where('id', $id)
+            ->update([
+                'status' => 'None',
+                'updated_at' => now()
+            ]);
+
+        return back()->with(
+            'success',
+            'User unbanned successfully.'
+        );
+    }
+
 
 }

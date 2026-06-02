@@ -71,47 +71,72 @@ class MatchController extends Controller
         /* SORT BY SCORE */
         usort($matches, fn($a, $b) => $b['score'] <=> $a['score']);
 
+        $rating_status = "nothing";
+
         $user = auth()->user();
-        $rating_status = "";
 
         if ($user) {
 
             $rating = DB::table('ratings')
-                ->select('rating', 'skip', 'user_id', 'created_at', 'updated_at')
                 ->where('user_id', $user->id)
-                ->orderBy('updated_at', 'desc')
+                ->latest('updated_at')
                 ->first();
 
-            //No rating exists
+            // Never rated before
             if (!$rating) {
 
-                if ($user->created_at->gte(now()->subDays(7))) {
-                    $rating_status = "new";
-                } else {
-                    $rating_status = "null";
-                }
+                $rating_status = "show";
 
             } else {
 
-                //User skipped rating
-                if ($rating->skip == 1) {
+                // User already rated
+                if ($rating->status == "rated") {
 
-                    if (Carbon::parse($rating->updated_at)->gte(now()->subHours(24))) {
-                        $rating_status = "nothing"; // skip within 42h
+                    if (
+                        Carbon::parse($rating->updated_at)
+                            ->lte(now()->subDays(30))
+                    ) {
+
+                        $rating_status = "show";
+
                     } else {
-                        $rating_status = "skip"; // can show again
-                    }
 
-                }
-                // User rated
-                else {
-
-                    if (Carbon::parse($rating->updated_at)->gte(now()->subDays(3))) {
-                        $rating_status = "rated";
-                    } else {
                         $rating_status = "nothing";
                     }
+                }
 
+                // User skipped
+                elseif ($rating->status == "skipped") {
+
+                    if (
+                        Carbon::parse($rating->updated_at)
+                            ->lte(now()->subDays(3))
+                    ) {
+
+                        $rating_status = "show";
+
+                    } else {
+
+                        $rating_status = "nothing";
+                    }
+                }
+
+                // User cancelled popup
+                elseif ($rating->status == "cancelled") {
+
+                    if (
+                        Carbon::parse($rating->updated_at)
+                            ->lte(now()->subDays(1))
+                    ) {
+
+                        $rating_status = "show";
+
+                    } else {
+
+                        $rating_status = "nothing";
+                    }
+                } elseif ($rating->status === "pending") {
+                    $rating_status = "show";
                 }
             }
         }

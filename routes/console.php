@@ -4,6 +4,9 @@ use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
 
+Schedule::command('subscription:expiry-notify')
+    ->daily();
+
 Schedule::command('report:weekly-registrations')
     ->weekly()
     ->mondays()

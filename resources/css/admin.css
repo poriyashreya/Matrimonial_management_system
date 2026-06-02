@@ -3,7 +3,8 @@
 @import "aos/dist/aos.css";
 
 /* ================= BASE ================= */
-html, body {
+html,
+body {
     height: 100%;
     margin: 0;
     font-family: 'Poppins', sans-serif;
@@ -11,7 +12,7 @@ html, body {
     color: #2c2c2c;
 }
 
-body > .d-flex {
+body>.d-flex {
     min-height: 100vh;
 }
 
@@ -116,7 +117,7 @@ body > .d-flex {
     border-radius: 50%;
     border: 4px solid #6b1f2b;
     object-fit: cover;
-    box-shadow: 0 10px 25px rgba(0,0,0,.25);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .25);
 }
 
 /* BADGES */
@@ -129,8 +130,7 @@ body > .d-flex {
     font-weight: 600;
 }
 
-.btn-admin
-{
+.btn-admin {
     background: #b82d42 !important;
     color: #fff !important;
     font-weight: 600;
@@ -139,14 +139,13 @@ body > .d-flex {
     transition: 0.3s;
 }
 
-.btn-admin:hover
-{
+.btn-admin:hover {
     background: #7a1726 !important;
     color: #fff !important;
     transform: translateY(-2px);
 }
 
-.btn-back{
+.btn-back {
     background: #6c757d !important;
     color: #fff !important;
     font-weight: 600;
@@ -155,8 +154,7 @@ body > .d-flex {
     transition: 0.3s;
 }
 
-.btn-back:hover
-{
+.btn-back:hover {
     background: #5a6268 !important;
     color: #fff !important;
     transform: translateY(-2px);
@@ -191,7 +189,7 @@ body > .d-flex {
     background: #ffffff;
     border-radius: 20px;
     padding: 24px;
-    box-shadow: 0 15px 30px rgba(0,0,0,.08);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, .08);
     border-left: 5px solid #6b1f2b;
     transition: 0.3s;
 }
@@ -215,16 +213,6 @@ body > .d-flex {
 }
 
 /* ================= STATUS BAR ================= */
-/* .status-bar {
-    background: linear-gradient(to right, #6b1f2b, #8b2c34);
-    color: #fff;
-    border-radius: 18px;
-    padding: 15px 25px;
-    display: flex;
-    justify-content: space-between;
-    margin-top: 25px;
-    font-weight: 600;
-} */
 
 /* Dashboard */
 .ivory-card {
@@ -264,8 +252,10 @@ body > .d-flex {
 
 /* Chart container height */
 .chart-box {
-    height: 250px;       /* adjust to your preferred height */
-    position: relative;   /* required for Chart.js */
+    height: 250px;
+    /* adjust to your preferred height */
+    position: relative;
+    /* required for Chart.js */
 }
 
 /* Make canvas fill container */
@@ -306,7 +296,7 @@ body > .d-flex {
     background: #fff;
     padding: 25px;
     border-radius: 14px;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
     margin-bottom: 25px;
 }
 
@@ -354,7 +344,7 @@ body > .d-flex {
 .save-btn {
     width: 100%;
     padding: 14px;
-    background: linear-gradient(135deg,#b33838,#7B1E1E);
+    background: linear-gradient(135deg, #b33838, #7B1E1E);
     color: white;
     border: none;
     border-radius: 12px;
@@ -403,6 +393,7 @@ body > .d-flex {
 .swal2-success-ring {
     border-color: #2d6a4f !important;
 }
+
 .swal2-success-line-tip,
 .swal2-success-line-long {
     background-color: #2d6a4f !important;
@@ -433,18 +424,6 @@ body > .d-flex {
 
 .swal2-confirm:hover {
     /* background: linear-gradient(90deg, #e6c36a, #c59d5f) !important; */
-     background: linear-gradient(135deg, #8e2230, #c04341) !important; /* hover effect */
-}
-
-
-
-/* ================= RESPONSIVE ================= */
-@media(max-width: 991px) {
-    .sidebar {
-        position: relative;
-        width: 100%;
-    }
-    .ms-sidebar {
-        margin-left: 0;
-    }
+    background: linear-gradient(135deg, #8e2230, #c04341) !important;
+    /* hover effect */
 }

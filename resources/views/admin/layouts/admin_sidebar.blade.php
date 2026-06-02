@@ -1,10 +1,6 @@
 <aside class="sidebar p-3 position-fixed h-100">
     <h4 class="fw-bold text-white mb-4">
-        <img
-            src="{{ asset($logo) }}"
-            alt="Logo"
-            style="height:40px; width:40px;"
-        >
+        <img src="{{ asset($logo) }}" alt="Logo" style="height:40px; width:40px;">
         Vivah Bandhan
     </h4>
 
@@ -23,6 +19,20 @@
 
     <a href="{{ route('admin.reports') }}" class="{{ request()->routeIs('admin.reports*') ? 'active' : '' }}">
         <i class="bi bi-clipboard-data me-2"></i> Reports
+    </a>
+
+    <a href="{{ route('admin.subscriptions') }}"
+        class="{{ request()->routeIs('admin.subscriptions*') ? 'active' : '' }}">
+        <i class="bi bi-credit-card me-2"></i> Subscriptions
+    </a>
+
+    <a href="{{ route('admin.payments') }}" class="{{ request()->routeIs('admin.payments*') ? 'active' : '' }}">
+        <i class="bi bi-credit-card me-2"></i> Payments
+    </a>
+
+    <a href="{{ route('admin.notifications') }}"
+        class="{{ request()->routeIs('admin.notifications*') ? 'active' : '' }}">
+        <i class="bi bi-bell me-2"></i> Notifications
     </a>
 
     <hr class="text-secondary">

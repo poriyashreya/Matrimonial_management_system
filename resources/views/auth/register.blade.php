@@ -167,6 +167,15 @@
                         @enderror
                     </div>
 
+                    <div class="mb-3">
+                        <label class="fw-semibold text-dark">Contact Number</label>
+                        <input type="text" name="contact_number" class="form-control @error('contact_number') is-invalid @enderror"
+                            value="{{ old('contact_number') }}">
+                        @error('contact_number')
+                            <div class="invalid-feedback fw-bold">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                     <!-- Gender -->
                     <div class="mb-3">
                         <label class="fw-semibold text-dark">Gender</label>

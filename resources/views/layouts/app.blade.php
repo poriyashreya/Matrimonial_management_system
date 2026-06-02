@@ -19,12 +19,15 @@
 
     <script>
         window.routes = {
-            rate: "{{ route('rate.store') }}"
+            rate: "{{ route('rating.store') }}",
+            skip: "{{ route('rating.skip') }}"
         };
 
         window.ratingData = {
             status: @json($rating_status ?? "new")
         };
+
+        console.log(window.routes);
     </script>
 
     <!-- Custom CSS -->
@@ -37,7 +40,7 @@
     @include('layouts.header')
 
     <!-- Main Content -->
-    <main style="padding-top: 7%; padding-bottom: 0%;">
+    <main style="padding-top: 40px; padding-bottom: 0%;">
         <!-- Featured Profiles -->
         @yield('content')
     </main>
