@@ -690,11 +690,22 @@
             @if(session('success'))
                 Swal.fire({
                     icon: 'success',
-                    title: 'Success',
+                    title: 'Success!',
                     text: "{{ session('success') }}",
-                    confirmButtonColor: '#4f46e5'
+                    confirmButtonColor: '#5a1620',
+                    timer: 3000
                 });
             @endif
+
+            @if(session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: "{{ session('error') }}",
+                    confirmButtonColor: '#5a1620',
+                    timer: 3000
                 });
+            @endif
+                        });
     </script>
 @endsection

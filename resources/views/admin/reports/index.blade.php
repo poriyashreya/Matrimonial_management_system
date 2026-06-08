@@ -355,16 +355,6 @@
                 flex-wrap: wrap;
             }
 
-            /* Alert */
-            .alert-admin {
-                background: #f0fdf4;
-                border: 1px solid #bbf7d0;
-                border-radius: 12px;
-                color: #166534;
-                margin-bottom: 24px;
-                padding: 14px 16px;
-            }
-
             /* Pagination */
             .pagination-wrapper-admin {
                 padding: 16px 24px;
@@ -435,26 +425,16 @@
 
         <!-- Page Header -->
         <!-- <div class="page-header-wrapper">
-                                                                                                                                                                <div class="secure-badge">
-                                                                                                                                                                    <i class="fas fa-id-card me-1"></i> VERIFICATION SYSTEM
-                                                                                                                                                                </div>
-                                                                                                                                                                <h1>
-                                                                                                                                                                    <i class="fas fa-user-check me-2"></i>
-                                                                                                                                                                    Profile Verification Requests
-                                                                                                                                                                </h1>
-                                                                                                                                                                <p>Review and manage user profile verification requests</p>
-                                                                                                                                                            </div> -->
+                                                                                                                                                                                <div class="secure-badge">
+                                                                                                                                                                                    <i class="fas fa-id-card me-1"></i> VERIFICATION SYSTEM
+                                                                                                                                                                                </div>
+                                                                                                                                                                                <h1>
+                                                                                                                                                                                    <i class="fas fa-user-check me-2"></i>
+                                                                                                                                                                                    Profile Verification Requests
+                                                                                                                                                                                </h1>
+                                                                                                                                                                                <p>Review and manage user profile verification requests</p>
+                                                                                                                                                                            </div> -->
 
-        <!-- Success Alert -->
-        @if(session('success'))
-            <div class="alert alert-admin alert-dismissible fade show" role="alert">
-                <div class="d-flex align-items-center gap-2">
-                    <i class="fas fa-check-circle"></i>
-                    <span>{{ session('success') }}</span>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
 
         <!-- Stats Cards -->
         <div class="stats-row">
@@ -664,5 +644,29 @@
                 }
             });
         }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            @if(session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: "{{ session('success') }}",
+                    confirmButtonColor: '#5a1620',
+                    timer: 3000
+                });
+            @endif
+
+            @if(session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: "{{ session('error') }}",
+                    confirmButtonColor: '#5a1620',
+                    timer: 3000
+                });
+            @endif
+                        });
     </script>
 @endsection

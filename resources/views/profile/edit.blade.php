@@ -88,7 +88,7 @@
 
                             <label class="form-label mt-3">Contact Number</label>
                             <input type="tel" name="phone" class="form-control modern-input"
-                                value="{{ old('phone', $user->phone) }}" required>
+                                value="{{ old('phone', $user->contact_number) }}">
                             @error('phone') <div class="text-danger mt-2">{{ $message }}</div> @enderror
 
                             <label class="form-label mt-3">Age</label>
@@ -101,6 +101,7 @@
                                 <option value="public" {{ old('visibility', $profile->visibility) === 'public' ? 'selected' : '' }}>Public</option>
                                 <option value="private" {{ old('visibility', $profile->visibility) === 'private' ? 'selected' : '' }}>Private</option>
                             </select>
+                            @error('visibility') <div class="text-danger mt-2">{{ $message }}</div> @enderror
 
                             <label class="form-label mt-3">Marital Status</label>
                             <select name="marital_status" class="form-select modern-input">
@@ -108,6 +109,8 @@
                                 <option value="divorced" {{ old('marital_status', $profile->marital_status) === 'divorced' ? 'selected' : '' }}>Divorced</option>
                                 <option value="widow" {{ old('marital_status', $profile->marital_status) === 'widow' ? 'selected' : '' }}>Widow</option>
                             </select>
+
+                            @error('marital_status') <div class="text-danger mt-2">{{ $message }}</div> @enderror
                         </div>
                     </div>
 
@@ -124,6 +127,9 @@
                                 <label class="form-label">Religion</label>
                                 <input type="text" name="religion" class="form-control modern-input"
                                     value="{{ old('religion', $profile->religion) }}">
+                                @error('religion')
+                                    <div class="text-danger mt-2">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="col-md-6 mb-3">
@@ -131,6 +137,9 @@
                                 <input type="text" name="community" class="form-control modern-input"
                                     value="{{ old('community', $profile->community) }}" required>
                             </div>
+                            @error('community')
+                                <div class="text-danger mt-2">{{ $message }}</div>
+                            @enderror
 
                             @php
                                 $oldCountry = old('country', $profile->country ?? '');
@@ -154,6 +163,9 @@
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
+                                @error('country')
+                                    <div class="text-danger mt-2">{{ $message }}</div>
+                                @enderror
 
                                 <!-- STATE -->
                                 <div class="col-md-4">
@@ -165,6 +177,9 @@
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
+                                @error('state')
+                                    <div class="text-danger mt-2">{{ $message }}</div>
+                                @enderror
 
                                 <!-- CITY -->
                                 <div class="col-md-4">
@@ -176,6 +191,9 @@
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
+                                @error('city')
+                                    <div class="text-danger mt-2">{{ $message }}</div>
+                                @enderror
 
                             </div>
 
@@ -201,21 +219,34 @@
                                         <input type="number" name="preferences[age_min]" class="form-control modern-input"
                                             placeholder="Minimum Age"
                                             value="{{ old('preferences.age_min', $prefs['age_min'] ?? '') }}">
+
+                                        @error('preferences.age_min')
+                                            <div class="text-danger mt-2">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-6">
                                         <input type="number" name="preferences[age_max]" class="form-control modern-input"
                                             placeholder="Maximum Age"
                                             value="{{ old('preferences.age_max', $prefs['age_max'] ?? '') }}">
                                     </div>
+                                    @error('preferences.age_max')
+                                        <div class="text-danger mt-2">{{ $message }}</div>
+                                    @enderror
                                 </div>
 
                                 <input type="text" name="preferences[religion]" class="form-control modern-input mt-2"
                                     placeholder="Preferred Religion"
                                     value="{{ old('preferences.religion', $prefs['religion'] ?? '') }}">
+                                @error('preferences.religion')
+                                    <div class="text-danger mt-2">{{ $message }}</div>
+                                @enderror
 
-                                <input type="text" name="preferences[Cast]" class="form-control modern-input mt-2"
-                                    placeholder="Preferred Cast"
-                                    value="{{ old('preferences.Cast', $prefs['cast'] ?? '') }}">
+                                <input type="text" name="preferences[cast]" class="form-control modern-input mt-2"
+                                    placeholder="Preferred cast"
+                                    value="{{ old('preferences.cast', $prefs['cast'] ?? '') }}">
+                                @error('preferences.cast')
+                                    <div class="text-danger mt-2">{{ $message }} </div>
+                                @enderror
 
                                 <label class="mt-2">Preferred Locations</label>
                                 <select name="preferences[location][]" class="form-select">
@@ -264,6 +295,10 @@
                                     <option value="Germany,Berlin,Berlin" {{ $oldLocation === 'Germany,Berlin,Berlin' ? 'selected' : '' }}>Germany,Berlin,Berlin</option>
                                     <option value="Germany,Hesse,Frankfurt" {{ $oldLocation === 'Germany,Hesse,Frankfurt' ? 'selected' : '' }}>Germany,Hesse,Frankfurt</option>
                                 </select>
+                                @error('preferences.location')
+                                    <div class="text-danger mt-2">{{ $message }} </div>
+                                @enderror
+
 
                                 <label class="mt-3 form-label">Preferred Marital Status</label>
                                 <div class="d-flex gap-3 flex-wrap">
@@ -275,9 +310,16 @@
                                     @endforeach
                                 </div>
 
+                                @error('preferences.maritabl_status')
+                                    <div class="text-danger mt-2">{{ $message }} </div>
+                                @enderror
+
                                 <label class="mt-3">Preferred Profession(s)</label>
                                 <input type="text" name="preferences[profession][]" class="form-control modern-input"
                                     placeholder="Example: Engineer, Doctor" value="{{ implode(', ', $oldProfession) }}">
+                                @error('preferences.profession')
+                                    <div class="text-danger mt-2">{{ $message }} </div>
+                                @enderror
 
                                 <label class="mt-3">Personality Traits</label>
 
@@ -295,6 +337,9 @@
                                     <option value="Spiritual" {{ in_array('Spiritual', old('preferences.personality', $oldPersonality)) ? 'selected' : '' }}>Spiritual</option>
                                     <option value="Funny" {{ in_array('Funny', old('preferences.personality', $oldPersonality)) ? 'selected' : '' }}>Funny</option>
                                 </select>
+                                @error('preferences.personality')
+                                    <div class="text-danger mt-2">{{ $message }} </div>
+                                @enderror
                             </div>
                         </div>
                     </div>

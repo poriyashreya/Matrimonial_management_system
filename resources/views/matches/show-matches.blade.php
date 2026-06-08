@@ -57,7 +57,7 @@
                                 Status: {{ ucfirst($profile->marital_status) }}
                             </p>
 
-                            <a href="{{ route('user.show', $profile->id) }}" class="btn btn-outline-danger view-profile-btn">
+                            <a href="{{ route('user.show',  ['id' => $profile->id, 'page' => 'match']) }}" class="btn btn-outline-danger view-profile-btn">
                                 View Profile
                             </a>
                         </div>

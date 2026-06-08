@@ -40,25 +40,11 @@ class AuthenticatedSessionController extends Controller
         // Check profile exists
         $profileExists = Profile::where('user_id', $user->id)->exists();
 
-        // dd($profileExists);
-
-        /**
-         * ADMIN LOGIN FLOW
-         */
         if ($user->isAdmin()) {
-
-            // Store admin id temporarily
-            session([
-                'admin_user_id' => $user->id
-            ]);
-
-            // Logout temporarily
-            Auth::logout();
-
             // Redirect to admin password page
             return redirect()
-                ->route('admin.password.form')
-                ->withInput();
+                ->route('admin.dashboard')
+                ->with('success', 'Welcom! To Admin dashboard');
         }
 
         /**

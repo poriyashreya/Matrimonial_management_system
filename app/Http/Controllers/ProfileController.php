@@ -28,123 +28,106 @@ class ProfileController extends Controller
     {
         $myProfile = Profile::where('user_id', Auth::id())->first();
 
-        if (!$myProfile) {
-            return redirect()->route('profile.create');
-        }
 
-        // Query
-        $profiles = Profile::with(['user', 'images'])
-            ->where('visibility', 'public')
-            ->where('user_id', '!=', Auth::id())
-            ->where('is_active', 1)
-            ->whereHas('user', function ($q) {
-                $q->where('status', '!=', 'banned');
-            })
-            ->paginate(6);
+        if ($myProfile) {
+            // All public profiles except logged-in user
+            $profiles = Profile::with(['user', 'images'])
+                ->where('visibility', 'public')
+                ->where('user_id', '!=', Auth::id())
+                // ->where('gender', '!=', $myProfile->gender)
+                ->where('is_active', 1)
+                ->whereHas('user', function ($q) {
+                    $q->where('status', '!=', 'banned');
+                })
+                ->get();
 
-        // Saved Filters
-        $myFilters = Filter::where('profile_id', $myProfile->id)->get();
+            $myFilters = collect();
+            $myFilters = Filter::where('profile_id', $myProfile->id)->get();
 
-        // Relations
-        $relations = UserRequest::where(function ($q) use ($myProfile) {
-            $q->where('sender_id', $myProfile->id)
-                ->orWhere('receiver_id', $myProfile->id);
-        })->get();
+            $relations = [];
+            if ($myProfile) {
+                $relations = UserRequest::where(function ($q) use ($myProfile) {
+                    $q->where('sender_id', $myProfile->id)
+                        ->orWhere('receiver_id', $myProfile->id);
+                })->get();
+            }
 
-        // Transform collection without breaking pagination
-        $profiles->getCollection()->transform(function ($profile) use ($relations, $myProfile) {
+            $profiles = $profiles->transform(function ($profile) use ($relations, $myProfile) {
 
-            $profile->requestStatus = null;
+                $profile->requestStatus = null;
 
-            foreach ($relations as $relation) {
+                foreach ($relations as $relation) {
 
-                $match =
-                    ($relation->sender_id == $myProfile->id &&
-                        $relation->receiver_id == $profile->id)
-                    ||
-                    ($relation->sender_id == $profile->id &&
-                        $relation->receiver_id == $myProfile->id);
+                    $isMatch =
+                        ($relation->sender_id == $myProfile->id && $relation->receiver_id == $profile->id) ||
+                        ($relation->sender_id == $profile->id && $relation->receiver_id == $myProfile->id);
 
-                if ($match) {
-
-                    if ($relation->is_accepted) {
-                        $profile->requestStatus = 'friends';
-
-                    } elseif ($relation->is_pending) {
-
-                        $profile->requestStatus =
-                            $relation->sender_id == $myProfile->id
-                            ? 'sent'
-                            : 'received';
-
-                    } elseif ($relation->is_rejected) {
-
-                        $profile->requestStatus = 'rejected';
-
-                    } elseif ($relation->is_blocked) {
-
-                        $profile->requestStatus = 'blocked';
+                    if ($isMatch) {
+                        if ($relation->is_accepted) {
+                            $profile->requestStatus = 'friends';
+                        } elseif ($relation->is_pending) {
+                            $profile->requestStatus =
+                                $relation->sender_id == $myProfile->id ? 'sent' : 'received';
+                        } elseif ($relation->is_rejected) {
+                            $profile->requestStatus = 'rejected';
+                        } elseif ($relation->is_blocked) {
+                            $profile->requestStatus = 'blocked';
+                        }
+                        break;
                     }
+                }
 
-                    break;
+                return $profile;
+            });
+
+            /* ✅ FILTER HERE */
+            $profiles = $profiles
+                ->filter(fn($profile) => $profile->requestStatus === null)
+                ->values(); // reset index
+
+            $countries = DB::table('countries')
+                ->get();
+
+            // Rating Popup Logic
+            $rating_status = "nothing";
+
+            $rating = DB::table('ratings')
+                ->where('user_id', Auth::id())
+                ->latest('updated_at')
+                ->first();
+
+            if (!$rating) {
+
+                $rating_status = "show";
+
+            } else {
+
+                if (
+                    ($rating->status == 'rated' &&
+                        Carbon::parse($rating->updated_at)->lte(now()->subDays(30)))
+                    ||
+                    ($rating->status == 'skipped' &&
+                        Carbon::parse($rating->updated_at)->lte(now()->subDays(3)))
+                    ||
+                    ($rating->status == 'cancelled' &&
+                        Carbon::parse($rating->updated_at)->lte(now()->subDays(1)))
+                    ||
+                    $rating->status == 'pending'
+                ) {
+                    $rating_status = "show";
+                } else {
+                    $rating_status = "nothing";
                 }
             }
 
-            return $profile;
-        });
+            // dd($rating);
 
-        // Remove matched profiles
-        $filteredProfiles = $profiles->getCollection()
-            ->filter(function ($profile) {
-                return $profile->requestStatus === null;
-            })
-            ->values();
-
-        // Keep paginator
-        $profiles->setCollection($filteredProfiles);
-
-        // Countries
-        $countries = DB::table('countries')->get();
-
-        // Rating Popup Logic
-        $rating_status = "nothing";
-
-        $rating = DB::table('ratings')
-            ->where('user_id', Auth::id())
-            ->latest('updated_at')
-            ->first();
-
-        if (!$rating) {
-
-            $rating_status = "show";
+            return view('profile.index', compact('profiles', 'myFilters', 'countries', 'rating_status'));
 
         } else {
-
-            if (
-                ($rating->status == 'rated' &&
-                    Carbon::parse($rating->updated_at)->lte(now()->subDays(30)))
-                ||
-                ($rating->status == 'skipped' &&
-                    Carbon::parse($rating->updated_at)->lte(now()->subDays(3)))
-                ||
-                ($rating->status == 'cancelled' &&
-                    Carbon::parse($rating->updated_at)->lte(now()->subDays(1)))
-                ||
-                $rating->status == 'pending'
-            ) {
-                $rating_status = "show";
-            }
+            return redirect()->route('profile.create');
         }
 
-        return view(
-            'profile.index',
-            compact(
-                'profiles',
-                'myFilters',
-                'countries',
-                'rating_status'
-            )
-        );
     }
 
     public function getStates($country_id)
@@ -162,8 +145,10 @@ class ProfileController extends Controller
     }
 
 
-    public function show($id)
+    public function show($id, $page)
     {
+
+        // dd($page);
         $profile = Profile::with(['user', 'images'])
             ->where('id', $id)   // user_id from route
             ->firstOrFail();
@@ -253,8 +238,10 @@ class ProfileController extends Controller
             }
         }
 
+        // dd($rating_status);
 
-        return view('profile.show', compact('profile', 'rating_status'));
+
+        return view('profile.show', compact('profile', 'rating_status', 'page'));
     }
 
 
@@ -338,7 +325,6 @@ class ProfileController extends Controller
             ));
         }
 
-        // Optional safety cleanup
         $preferences['personality'] = array_values(
             array_filter($preferences['personality'] ?? [])
         );
@@ -402,6 +388,8 @@ class ProfileController extends Controller
         $rating_status = "nothing";
 
         $user = auth()->user();
+
+        // dd($user->contact_number);
 
         if ($user) {
 
@@ -469,7 +457,6 @@ class ProfileController extends Controller
             }
         }
 
-
         return view('profile.edit', [
             'user' => $request->user(),
             'profile' => $profile,
@@ -478,35 +465,162 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function update(ProfileUpdateRequest $request)
+    public function update(Request $request)
     {
+        $request->validate(
+            [
+                // User
+                'name' => 'required|string|max:50',
+                'email' => 'required|email|max:255',
+                'phone' => 'required|digits_between:10,15',
 
+                // Profile
+                'age' => 'required|integer|min:18|max:100',
+                'religion' => 'required|string|max:50',
+                'community' => 'required|string|max:50',
+                'marital_status' => 'required|in:single,divorced,widow',
+                'profession' => 'required|string|max:100',
+
+                'country' => 'required',
+                'state' => 'required',
+                'city' => 'required',
+
+                'visibility' => 'required|in:public,private',
+
+                // Image (optional while editing)
+                'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+
+                /* ---------- PREFERENCES ---------- */
+
+                'preferences.age_min' => 'required|integer|min:18|max:100',
+                'preferences.age_max' => 'required|integer|min:18|max:100|gte:preferences.age_min',
+
+                'preferences.religion' => 'required|string|max:50',
+                'preferences.cast' => 'required|string|max:50',
+
+                'preferences.marital_status' => 'required|array',
+                'preferences.marital_status.*' => 'string',
+
+                'preferences.profession' => 'required|array',
+                'preferences.profession.*' => 'string',
+
+                'preferences.personality' => 'required|array',
+                'preferences.personality.*' => 'string',
+
+                'preferences.location' => 'required|array',
+                'preferences.location.*' => 'string',
+            ],
+            [
+                'preferences.age_max.gte' =>
+                    'Maximum age must be greater than or equal to minimum age.',
+
+                'preferences.personality.*.required' =>
+                    'Please select at least one personality trait.',
+
+                'preferences.location.*.required' =>
+                    'Please select a preferred location.',
+
+                'preferences.marital_status.*.required' =>
+                    'Please select a preferred marital status.',
+
+                'preferences.profession.*.required' =>
+                    'Please enter preferred profession.',
+            ]
+        );
+
+        // dd($request->cast);
         $user = $request->user();
-        $profile = Profile::firstOrCreate(['user_id' => $user->id]);
 
-        /* NORMAL PROFILE UPDATE */
+        $profile = Profile::firstOrCreate([
+            'user_id' => $user->id
+        ]);
 
-        // Update user fields
-        $user->fill($request->validated());
-        $user->save();
+        /*
+        |--------------------------------------------------------------------------
+        | Update User
+        |--------------------------------------------------------------------------
+        */
 
-        // Update profile fields (except image)
-        $profile->fill($request->except('profile_image'));
-        $profile->save();
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'contact_number' => $request->phone,
+        ]);
 
-        /* PROFILE IMAGE UPLOAD  */
+        /*
+        |--------------------------------------------------------------------------
+        | Clean Preferences
+        |--------------------------------------------------------------------------
+        */
+
+        $preferences = $request->preferences ?? [];
+
+        // Profession
+        if (!empty($preferences['profession'][0])) {
+            $preferences['profession'] = array_values(array_filter(
+                array_map('trim', explode(',', $preferences['profession'][0]))
+            ));
+        }
+
+        // Personality
+        $preferences['personality'] = array_values(
+            array_filter($preferences['personality'] ?? [])
+        );
+
+        // Location
+        if (!empty($preferences['location'][0])) {
+            $preferences['location'] = array_values(array_filter(
+                array_map('trim', explode(',', $preferences['location'][0]))
+            ));
+        }
+
+        $preferences = array_filter($preferences, function ($value) {
+            return $value !== null && $value !== '' && $value !== [];
+        });
+
+        /*
+        |--------------------------------------------------------------------------
+        | Update Profile
+        |--------------------------------------------------------------------------
+        */
+
+        $profile->update([
+            'age' => $request->age,
+            'religion' => $request->religion,
+            'community' => $request->community,
+            'marital_status' => $request->marital_status,
+            'profession' => $request->profession,
+            'country' => $request->country,
+            'state' => $request->state,
+            'city' => $request->city,
+            'visibility' => $request->visibility,
+            'preferences' => $preferences,
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Profile Image Upload
+        |--------------------------------------------------------------------------
+        */
+
         if ($request->hasFile('profile_image')) {
 
             $file = $request->file('profile_image');
+
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs('uploads/profiles', $fileName, 'public');
+
+            $path = $file->storeAs(
+                'uploads/profiles',
+                $fileName,
+                'public'
+            );
 
             $oldImage = $profile->images()->first();
 
             if ($oldImage) {
-                // delete old file
-                if (Storage::disk('public')->exists(str_replace('storage/', '', $oldImage->file_path))) {
-                    Storage::disk('public')->delete(str_replace('storage/', '', $oldImage->file_path));
+
+                if (Storage::disk('public')->exists($oldImage->file_path)) {
+                    Storage::disk('public')->delete($oldImage->file_path);
                 }
 
                 $oldImage->update([
@@ -514,7 +628,9 @@ class ProfileController extends Controller
                     'file_path' => $path,
                     'Type_of_image' => 'profile',
                 ]);
+
             } else {
+
                 $profile->images()->create([
                     'user_id' => $user->id,
                     'profile_id' => $profile->id,
@@ -529,6 +645,7 @@ class ProfileController extends Controller
             ->route('profile.edit')
             ->with('success', 'Profile updated successfully!');
     }
+
 
 
     public function changeActivation(Request $request): RedirectResponse
@@ -682,7 +799,7 @@ class ProfileController extends Controller
             $query->where('city', 'like', '%' . $request->city . '%');
         }
 
-        $profiles = $query->paginate(9)->withQueryString();
+        $profiles = $query->get();
 
         /* ✅ ACTIVE FILTER ONLY (SoftDeletes respected) */
         $myFilters = Filter::where('profile_id', $profile->id)->get();

@@ -1,3 +1,6 @@
 <?php
 
-Route::post('/stripe/webhook', [\Laravel\Cashier\Http\Controllers\WebhookController::class, 'handleWebhook']);
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StripeWebhookController;
+
+Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook']);

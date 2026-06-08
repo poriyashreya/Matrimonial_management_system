@@ -180,10 +180,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             .getAttribute('content')
                     },
 
-                    body: JSON.stringify({
-                        skip: 1
-                    })
-
                 })
                     .then(res => res.json())
 

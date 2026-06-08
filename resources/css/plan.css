@@ -66,7 +66,7 @@
     position: relative;
     transition: all 0.3s ease;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e8e0d8;
+    border: 2px solid #7a1f28;
     display: flex;
     flex-direction: column;
     height: 100%;

@@ -438,20 +438,6 @@
                 transform: scale(0.95);
             }
 
-            /* Alert */
-            .alert-vibrant {
-                background: linear-gradient(135deg, var(--emerald-soft), #d1fae5);
-                border-left: 4px solid var(--emerald);
-                border-radius: 16px;
-                padding: 0.75rem 1rem;
-                margin-bottom: 1.5rem;
-                display: flex;
-                align-items: center;
-                gap: 0.75rem;
-                font-size: 0.875rem;
-                color: var(--emerald);
-            }
-
             /* Pagination */
             .pagination-wrapper-admin {
                 padding: 1rem 1.5rem;
@@ -573,14 +559,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Success Alert -->
-            @if(session('success'))
-                <div class="alert-vibrant">
-                    <i class="fas fa-check-circle fa-lg"></i>
-                    <span>{{ session('success') }}</span>
-                </div>
-            @endif
 
             <!-- Main Table Card -->
             <div class="table-card-vibrant">

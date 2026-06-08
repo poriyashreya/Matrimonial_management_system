@@ -337,16 +337,6 @@
                 color: var(--admin-text-light);
             }
 
-            /* Alert */
-            .alert-admin {
-                background: #f0fdf4;
-                border: 1px solid #bbf7d0;
-                border-radius: 12px;
-                color: #166534;
-                margin-bottom: 1.5rem;
-                padding: 0.875rem 1rem;
-            }
-
             .pagination-wrapper-admin {
                 padding: 1rem 1.5rem;
                 background: #fafafa;
@@ -416,17 +406,6 @@
             </h1>
             <p>Monitor and manage all financial activities across the platform</p>
         </div>
-
-        <!-- Success Alert -->
-        @if(session('success'))
-            <div class="alert alert-admin alert-dismissible fade show" role="alert">
-                <div class="d-flex align-items-center gap-2">
-                    <i class="fas fa-check-circle"></i>
-                    <span>{{ session('success') }}</span>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
 
         <!-- Stats Cards -->
         <div class="stats-row">
@@ -590,5 +569,7 @@
             @endif
         </div>
     </div>
+
+    
 
 @endsection

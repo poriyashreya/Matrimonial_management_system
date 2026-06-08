@@ -74,9 +74,19 @@
 
                     <!-- Action Buttons -->
                     <div class="d-grid gap-2 mb-4">
-                        <a href="{{ route('profile.index') }}" class="btn-back">
-                            <i class="fas fa-arrow-left me-2"></i> Back to Search
-                        </a>
+                        @if($page === "index")
+                            <a href="{{ route('profile.index') }}" class="btn-back">
+                                <i class="fas fa-arrow-left me-2"></i> Back to profiles
+                            </a>
+                        @elseif($page === "match")
+                            <a href="{{ route('matches.show') }}" class="btn-back">
+                                <i class="fas fa-arrow-left me-2"></i> Back to Matches
+                            </a>
+                        @elseif($page === "dashboard")
+                            <a href="{{ route('dashboard') }}" class="btn-back">
+                                <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+                            </a>
+                        @endif
 
                         <a href="{{ route('profile.report', $profile->id) }}" class="btn-report">
                             <i class="fas fa-flag me-2"></i> Report Profile
@@ -84,13 +94,15 @@
 
                         @if(auth()->user()->role == 'Free' || auth()->user()->role == 'free')
                             <a href="{{ route('plans') }}" class="btn-upgrade1 w-100">
-                                <i class="fas fa-gem me-2"></i> Upgrade to Connect 💎
+                                <i class="fas fa-gem me-2"></i> Upgrade to Connect <i class="fa-regular fa-gem"
+                                    style="color: #5a1620;"></i>
                             </a>
                         @else
                             <form method="POST" action="{{ route('request.send', $profile->id) }}">
                                 @csrf
                                 <button class="btn-send-request w-100">
-                                    <i class="fas fa-paper-plane me-2"></i> Send Interest Request 💌
+                                    <i class="fas fa-paper-plane me-2"></i> Send Interest Request <i
+                                        class="fa-solid fa-user-plus" style="color: #5a1620;"></i>
                                 </button>
                             </form>
                         @endif

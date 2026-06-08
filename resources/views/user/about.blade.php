@@ -24,11 +24,7 @@
         </div>
     </section>
 
-    <?php
-    if (isset($success)) {
-        echo "<div class='container mt-4'><div class='alert alert-success alert-dismissible fade show' role='alert'><strong>$success</strong> $rating_status <button type='button' class='btn-close' data-bs-dismiss='alert'></button></div></div>";
-    }
-                                            ?>
+
 
     <!-- ABOUT INTRO -->
     <section class="py-5">
@@ -36,13 +32,13 @@
             <div class="row align-items-center g-5">
                 <div class="col-md-6">
                     <h2 class="fw-bold mb-3">Who We Are</h2>
-                    <p class="text-muted">
+                    <p class="text-muted" style="text-align:justify">
                         We are a trusted matrimonial platform dedicated to helping individuals find
                         meaningful and lifelong relationships. Our goal is to blend tradition with
                         technology to create genuine connections based on compatibility, values,
                         and trust.
                     </p>
-                    <p class="text-muted">
+                    <p class="text-muted" style="text-align:justify">
                         Thousands of successful matches have begun their journey with us — and we
                         continue to grow with honesty, security, and care at our core.
                     </p>
@@ -125,7 +121,7 @@
             <div class="row align-items-center g-5">
                 <div class="col-md-6 order-md-2">
                     <h2 class="fw-bold mb-3">Our Mission</h2>
-                    <p class="text-muted">
+                    <p class="text-muted" style="text-align:justify">
                         Our mission is to help individuals find meaningful relationships that lead
                         to happy marriages. We strive to provide a respectful, inclusive, and
                         secure environment where love can grow naturally.

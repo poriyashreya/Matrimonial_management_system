@@ -244,30 +244,6 @@
                 color: white;
             }
 
-            /* Alert Styles */
-            .alert-vibrant {
-                border-radius: 16px;
-                padding: 12px 16px;
-                margin-bottom: 24px;
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                font-size: 14px;
-                border: none;
-            }
-
-            .alert-success-vibrant {
-                background: linear-gradient(135deg, var(--emerald-soft), #d1fae5);
-                border-left: 4px solid var(--emerald);
-                color: var(--emerald);
-            }
-
-            .alert-danger-vibrant {
-                background: linear-gradient(135deg, #fee2e2, #fecaca);
-                border-left: 4px solid var(--rose);
-                color: var(--rose);
-            }
-
             /* Main Table Card */
             .table-card-vibrant {
                 background: var(--bg-card);
@@ -515,22 +491,6 @@
                 </div>
             </div>
 
-            <!-- Success Alert -->
-            @if(session('success'))
-                <div class="alert-vibrant alert-success-vibrant">
-                    <i class="fas fa-check-circle fa-lg"></i>
-                    <span>{{ session('success') }}</span>
-                </div>
-            @endif
-
-            <!-- Error Alert -->
-            @if(session('error'))
-                <div class="alert-vibrant alert-danger-vibrant">
-                    <i class="fas fa-exclamation-circle fa-lg"></i>
-                    <span>{{ session('error') }}</span>
-                </div>
-            @endif
-
             <!-- Main Table Card -->
             <div class="table-card-vibrant">
                 <div class="table-header-vibrant">
@@ -621,5 +581,29 @@
                 });
             }, 5000);
         });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            @if(session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: "{{ session('success') }}",
+                    confirmButtonColor: '#5a1620',
+                    timer: 3000
+                });
+            @endif
+
+            @if(session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: "{{ session('error') }}",
+                    confirmButtonColor: '#5a1620',
+                    timer: 3000
+                });
+            @endif
+                        });
     </script>
 @endsection

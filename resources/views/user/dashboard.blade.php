@@ -70,7 +70,8 @@
                                         <span>{{ $profile->community }}</span>
                                     </div>
 
-                                    <a href="{{ route('user.show', $profile->id) }}" class="btn btn-view-modern">
+                                    <a href="{{ route('user.show', ['id' => $profile->id, 'page' => 'dashboard']) }}"
+                                        class="btn btn-view-modern">
                                         View Profile
                                     </a>
                                     <div class="mb-3"></div>

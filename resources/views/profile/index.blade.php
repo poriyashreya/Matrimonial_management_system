@@ -261,7 +261,8 @@
                                                 <span>{{ $profile->community }}</span>
                                             </div>
 
-                                            <a href="{{ route('user.show', $profile->id) }}" class="btn btn-view-modern">
+                                            <a href="{{ route('user.show', ['id' => $profile->id, 'page' => 'index']) }}"
+                                                class="btn btn-view-modern">
                                                 View Profile
                                             </a>
                                         </div>
@@ -274,19 +275,7 @@
                     @endforelse
                 </div>
 
-                <!-- Pagination -->
-                @if(isset($profiles) && method_exists($profiles, 'hasPages') && $profiles->hasPages())
-                    <div class="pagination-wrapper-admin pt-5">
-                        <div class="pagination-info-admin">
-                            <i class="fas fa-chart-simple me-1"></i>
-                            Showing {{ $profiles->firstItem() }} to {{ $profiles->lastItem() }} of {{ $profiles->total() }}
-                            results
-                        </div>
-                        <div class="pagination-links-admin">
-                            {{ $profiles->appends(request()->query())->onEachSide(1)->links('pagination::bootstrap-5') }}
-                        </div>
-                    </div>
-                @endif
+                <!--  -->
             </div>
         </div>
     </div>

@@ -27,14 +27,6 @@ use App\Http\Controllers\Admin\NotificationController;
 use App\Models\User;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\AdminTestNotification;
-use App\Http\Controllers\Admin\AdminPasswordController;
-
-
-Route::get('/admin/password', [AdminPasswordController::class, 'showForm'])
-    ->name('admin.password.form');
-
-Route::post('/admin/password', [AdminPasswordController::class, 'verify'])
-    ->name('admin.password.verify');
 
 
 Route::get('/test-admin-notification', function () {
@@ -279,7 +271,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/search', [ProfileController::class, 'search'])->name('profile.search');
     Route::get('/index', [ProfileController::class, 'index'])->name('profile.index');
     Route::post('/profile/change-activation', [ProfileController::class, 'changeActivation'])->name('profile.changeactivation');
-    Route::get('/show/{id}', [ProfileController::class, 'show'])->name('user.show');
+    Route::get('/show/{id}/{page}', [ProfileController::class, 'show'])->name('user.show');
     Route::get('/my-profile', [ProfileController::class, 'myProfile'])->name('profile.myprofile');
     Route::post('/save-result', [FilterController::class, 'saveresult'])->name('filter.save');
     Route::patch('/filter/{filter}/remove/{field}', [FilterController::class, 'removeField'])

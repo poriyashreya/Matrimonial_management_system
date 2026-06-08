@@ -17,7 +17,6 @@
 
     <style>
         body {
-            /* font-family: 'Playfair Display', serif; */
             background: #f8f5f0;
         }
 
@@ -758,7 +757,7 @@
             <hr class="border-light">
 
             <p class="text-center small mb-0">
-                © {{ date('Y') }} Nimta Wedding. All Rights Reserved.
+                © {{ date('Y') }} Vivahbandhan. All Rights Reserved.
             </p>
         </div>
     </footer>

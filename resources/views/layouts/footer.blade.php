@@ -5,7 +5,10 @@
             <!-- About -->
             <div class="col-md-4 mb-4" style="margin-right: 8%;">
                 <h5 class="fw-bold pb-4">About Matrimony</h5>
-                <p>A trusted platform helping you find your ideal life partner with complete privacy.</p>
+                <p style="text-align:justify;">We are a trusted matrimonial platform dedicated to helping individuals
+                    find meaningful and lifelong
+                    relationships. Our goal is to blend tradition with technology to create genuine connections based on
+                    compatibility, values, and trust.</p>
                 <div class="d-flex gap-3 fs-4">
                     <a href="#" class="social-icon"><i class="bi bi-facebook"></i></a>
                     <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
@@ -19,10 +22,35 @@
                 <h5 class="fw-bold pb-4">Quick Links</h5>
                 <div class="d-flex gap-3 fs-4">
                     <ul class="list-unstyled text-center">
-                        <li><a href="#" class="footer-link">Dashboard</a></li>
-                        <li><a href="#" class="footer-link">Matches</a></li>
-                        <li><a href="#" class="footer-link">Requests</a></li>
-                        <li><a href="#" class="footer-link">Contact</a></li>
+                        <li>
+                            <a href="{{ route('dashboard') }}" class="footer-link">
+                                Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('about') }}" class="footer-link">
+                                About US
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('profile.index') }}" class="footer-link">
+                                View Profiles
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ strtolower(auth()->user()->plan) !== 'free' ? route('matches.show') : '#' }}"
+                                class="footer-link">
+                                Matches
+                            </a>
+                        </li>
+                        <li><a href="{{ route('request.view') }}" class="footer-link">Requests</a></li>
+                        @if(strtolower(auth()->user()->plan) !== 'free')
+                            <li>
+                                <a href="{{ route('request.index') }}" class="footer-link">
+                                    Followers
+                                </a>
+                            </li>
+                        @endif
                     </ul>
 
                 </div>

@@ -106,8 +106,8 @@
     <script>
 
         window.verificationData = [
-            {{ $verifications->where('status', 0)->count() }},
-            {{ $verifications->where('status', 1)->count() }},
+                        {{ $verifications->where('status', 0)->count() }},
+                        {{ $verifications->where('status', 1)->count() }},
             {{ $verifications->where('status', 2)->count() }}
         ];
 
@@ -117,13 +117,13 @@
                 @foreach($registrations as $r)
                     "{{ \Carbon\Carbon::create()->month($r->month)->format('M') }}",
                 @endforeach
-            ],
+                        ],
 
             data: [
                 @foreach($registrations as $r)
                     {{ $r->total }},
                 @endforeach
-            ]
+                        ]
         };
 
 
@@ -132,15 +132,39 @@
                 @foreach($profiles_created as $p)
                     "{{ \Carbon\Carbon::create()->month($p->month)->format('M') }}",
                 @endforeach
-            ],
+                        ],
 
             data: [
                 @foreach($profiles_created as $p)
                     {{ $p->total }},
                 @endforeach
-            ]
+                        ]
         };
 
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            @if(session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: "{{ session('success') }}",
+                    confirmButtonColor: '#5a1620',
+                    timer: 3000
+                });
+            @endif
+
+            @if(session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: "{{ session('error') }}",
+                    confirmButtonColor: '#5a1620',
+                    timer: 3000
+                });
+            @endif
+                                    });
     </script>
 
 @endsection

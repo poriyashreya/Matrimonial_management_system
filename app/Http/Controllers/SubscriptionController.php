@@ -124,50 +124,24 @@ class SubscriptionController extends Controller
         return $user
             ->newSubscription('default', $plan->stripe_price_id)
             ->checkout([
-                'success_url' => route(
-                    'subscription.success',
-                    [
-                        'plan_id' => $plan->id
-                    ]
-                ),
-
+                'success_url' => route('subscription.success'),
                 'cancel_url' => route('subscription.cancel'),
+
+                'metadata' => [
+                    'user_id' => $user->id,
+                    'plan_id' => $plan->id,
+                ],
             ]);
     }
 
-    public function success(Request $request)
+    public function success()
     {
-        $user = auth()->user();
-
-        $plan = Plan::findOrFail($request->plan_id);
-
-        Payment::create([
-            'user_id' => $user->id,
-            'plan_id' => $plan->id,
-            'stripe_payment_id' => $request->session_id ?? 'stripe-session',
-            'amount' => $plan->price,
-            'payment_status' => 'Paid',
-            'paid_at' => now(),
-        ]);
-
-        $user->update([
-            'role' => 'User',
-            'plan' => $plan->name,
-        ]);
-
-        DB::table('subscriptions')
-            ->where('user_id', $user->id)
-            ->update([
-                'ends_at' => Carbon::now()->addDays(30),
-            ]);
-
-        // dd($user);
-
+        // dd('Success Method Called');
         return redirect()
             ->route('plans')
             ->with(
                 'success',
-                "{$plan->name} subscription activated successfully!"
+                'Payment completed successfully.'
             );
     }
 
@@ -208,7 +182,8 @@ class SubscriptionController extends Controller
 
         return redirect()
             ->route('profile.myprofile')
-            ->with('success', 'Subscription cancelled successfully.');
+            ->with('success', 'Subscription cancelled successfully. If you are eligible for a refund, the amount will be credited to your account within 3–4 business days.
+');
     }
 
     public function activateFreePlan(Plan $plan)
