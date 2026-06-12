@@ -513,10 +513,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <span
-                                        class="amount-admin {{ $payment->payment_status == 'Paid' ? 'amount-success' : 'amount-cancelled' }}">
-                                        ${{ number_format($payment->amount, 2) }}
-                                    </span>
+                                    
                                 </td>
                                 <td>
                                     <code class="transaction-id-admin">
@@ -570,6 +567,6 @@
         </div>
     </div>
 
-    
+
 
 @endsection

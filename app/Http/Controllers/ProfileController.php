@@ -21,6 +21,7 @@ use App\Models\UserRequest;
 use Carbon\Carbon;
 use App\Models\Subscription;
 use App\Models\Payment;
+use App\Models\Plan;
 
 class ProfileController extends Controller
 {
@@ -983,11 +984,56 @@ class ProfileController extends Controller
             }
         }
 
-        return view('profile.myprofile', compact('profile', 'rating_status'));
+
+        $refundAmount = 0;
+
+        $user = auth()->user();
+
+        $subscription = $user->subscription('default');
+
+        if ($subscription && strtolower($user->plan) !== 'free') {
+
+            $currentPlan = Plan::where(
+                'stripe_price_id',
+                $subscription->stripe_price
+            )->first();
+
+            if ($currentPlan) {
+
+                $startDate = Carbon::parse($subscription->created_at);
+
+                $endDate = $startDate->copy()->addMonth();
+
+                $remainingDays = max(
+                    now()->diffInDays($endDate, false),
+                    0
+                );
+
+                // Refund only if more than 5 days remain
+                if ($remainingDays > 5) {
+
+                    $totalDays = $startDate->diffInDays($endDate);
+
+                    $refundAmount = round(
+                        ($currentPlan->price / $totalDays)
+                        * $remainingDays,
+                        2
+                    );
+                }
+            }
+        }
+
+        return view(
+            'profile.myprofile',
+            compact(
+                'profile',
+                'rating_status',
+                'refundAmount'
+            )
+        );
     }
 
     // Soft delete a filter
-
     public function softDeleteFilter($id)
     {
         $filter = Filter::findOrFail($id);
@@ -1002,7 +1048,6 @@ class ProfileController extends Controller
         return redirect()->back()->with('success', 'Filter removed successfully!');
     }
 
-    // Restore a soft deleted filter
     public function restoreFilter($id)
     {
         $filter = Filter::withTrashed()->findOrFail($id);

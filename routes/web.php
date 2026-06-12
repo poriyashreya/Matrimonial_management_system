@@ -28,7 +28,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\AdminTestNotification;
 
-
 Route::get('/test-admin-notification', function () {
 
     $admin = User::where('role', 'admin')->first();
@@ -66,18 +65,6 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::post('/stripe/webhook', [WebhookController::class, 'handleWebhook']);
-
-Route::middleware(['auth', 'premium'])->group(function () {
-
-    Route::get('/view-contact/{id}', function () {
-
-        return "Premium Feature";
-
-    });
-
-});
-
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/plans', [SubscriptionController::class, 'plans'])
@@ -94,6 +81,25 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/free-plan/{plan}', [SubscriptionController::class, 'activateFreePlan'])
         ->name('free.subscribe');
+
+    Route::get('/upgrade-preview/{id}', [SubscriptionController::class, 'upgradePreview'])
+        ->name('plan.upgrade');
+
+    Route::get(
+        '/subscription/refund-preview',
+        [SubscriptionController::class, 'getRefundPreview']
+    )->name('subscription.refund.preview');
+
+    Route::post(
+        '/subscription/preview/{plan}',
+        [SubscriptionController::class, 'previewUpgrade']
+    )
+        ->name('subscription.preview');
+
+    Route::get(
+        '/upgrade/{id}',
+        [SubscriptionController::class, 'upgradeCheckout']
+    )->name('upgrade.checkout');
 });
 
 Route::middleware('auth')->group(function () {
@@ -121,12 +127,12 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::post('/upload', [AdminSettingController::class, 'handleUpload'])->name('upload.handle');
 
     Route::get(
-        '/admin/payments',
+        '/payments',
         [PaymentManagementController::class, 'index']
     )->name('admin.payments');
 
     Route::post(
-        '/admin/subscription/cancel/{id}',
+        '/subscription/cancel/{id}',
         [SubscriptionManagementController::class, 'cancel']
     )->name('admin.subscription.cancel');
 });
@@ -142,17 +148,17 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     )->name('admin.verifications');
 
     Route::post(
-        '/admin/user/{id}/ban',
+        '/user/{id}/ban',
         [UserController::class, 'ban']
     )->name('admin.user.ban');
 
     Route::post(
-        '/admin/user/{id}/unban',
+        '/user/{id}/unban',
         [UserController::class, 'unban']
     )->name('admin.user.unban');
 
     Route::get(
-        '/admin/subscriptions',
+        '/subscriptions',
         [SubscriptionManagementController::class, 'index']
     )->name('admin.subscriptions');
 
@@ -162,7 +168,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/reports/{id}', [ReportsController::class, 'show'])
         ->name('admin.reports.show');
 
-    Route::post('admin/reports/{report}/resolve', [ReportsController::class, 'resolve'])->name('admin.reports.resolve');
+    Route::post('/reports/{report}/resolve', [ReportsController::class, 'resolve'])->name('admin.reports.resolve');
 
     Route::get('reports/{reportId}/destroy', [ReportsController::class, 'destroy'])->name('admin.reports.destroy');
 

@@ -6,13 +6,19 @@
 
         <!-- Header with Elegant Burgundy Theme -->
         <div class="edit-header mb-5 text-center">
-            <div class="profile-header-icon">
-                <i class="fas fa-hand-holding-heart"></i>
+            <div class="row">
+                <div class="col-5 text-end">
+                    <div class="profile-header-icon">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                </div>
+                <div class="col-7 text-start">
+                    <h2 class=" profile-header-title animate-slide-down">Profile Details</h2>
+                    <p class="profile-header-subtitle animate-slide-down delay-1">
+                        <i class="fas fa-heart me-1"></i> Discover your soulmate's journey
+                    </p>
+                </div>
             </div>
-            <h2 class="profile-header-title animate-slide-down">Profile Details</h2>
-            <p class="profile-header-subtitle animate-slide-down delay-1">
-                <i class="fas fa-heart me-1"></i> Discover your soulmate's journey
-            </p>
         </div>
 
         <!-- Main Card -->
@@ -41,13 +47,17 @@
 
                     <!-- Membership & Age Badges -->
                     <div class="d-flex justify-content-center gap-2 flex-wrap mb-3">
-                        @if($profile->user->subscribed('default'))
+                        @if(strtolower($profile->user->plan) === 'premium')
                             <span class="badge-premium px-3 py-2">
                                 <i class="fas fa-crown me-1"></i> Premium Member
                             </span>
+                        @elseif(strtolower($profile->user->plan) === 'pro')
+                            <span class="badge-free px-3 py-2">
+                                <i class="fa-regular fa-gem fa-xl" style="color: rgb(255, 255, 255);"></i> Pro Member
+                            </span>
                         @else
                             <span class="badge-free px-3 py-2">
-                                <i class="fas fa-user me-1"></i> Free Member
+                                <i class="fas fa-user me-1"></i> Pro Member
                             </span>
                         @endif
 
@@ -180,7 +190,7 @@
                             <i class="fas fa-address-card me-2"></i> Contact Information
                         </h4>
 
-                        @if(auth()->user()->role == "Pro")
+                        @if(strtolower(auth()->user()->plan) == "pro")
                             <div class="contact-card burgundy-light-bg">
                                 <div class="row align-items-center">
                                     <div class="col-md-6 mb-3 mb-md-0">

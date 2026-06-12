@@ -26,20 +26,24 @@
 
                     $features = json_decode($plan->features, true) ?? [];
 
-                    $userPlan = strtolower($user->plan);
+                    $userPlan = strtolower($user->plan ?? 'free');
                     $planName = strtolower($plan->name);
 
                     $isCurrent = $userPlan === $planName;
 
                     $isPopular = in_array($planName, ['pro', 'premium']);
 
-                    $disableButton = false;
+                    $levels = [
+                        'free' => 1,
+                        'premium' => 2,
+                        'pro' => 3,
+                    ];
 
-                    if ($userPlan === 'premium' && $planName === 'free' || $userPlan === 'pro' && $planName === 'free') {
-                        $disableButton = true;
-                    } elseif ($userPlan === 'pro' && $planName === 'premium') {
-                        $disableButton = true;
-                    }
+                    $currentLevel = $levels[$userPlan] ?? 0;
+                    $planLevel = $levels[$planName] ?? 0;
+
+                    $isUpgrade = $planLevel > $currentLevel;
+                    $isDowngrade = $planLevel < $currentLevel;
 
                 @endphp
 
@@ -137,47 +141,36 @@
 
                         @elseif($planName === 'free')
 
-                            @if($disableButton)
+                            <button class="btn-free opacity-75" disabled>
+                                <i class="fas fa-lock"></i>
+                                Not Available
+                            </button>
 
-                                <button class="btn-free opacity-75" disabled>
-                                    <i class="fas fa-lock"></i>
-                                    Not Available
-                                </button>
+                        @elseif($isDowngrade)
 
-                            @else
-
-                                <form action="{{ route('free.subscribe', $plan->id) }}" method="POST" class="plan-form">
-                                    @csrf
-
-                                    <button type="submit" class="btn-free">
-                                        <i class="fas fa-check"></i>
-                                        Activate Free Plan
-                                    </button>
-
-                                </form>
-
-                            @endif
+                            <button class="btn-subscribe opacity-75" disabled>
+                                <i class="fas fa-lock"></i>
+                                Not Available
+                            </button>
 
                         @else
 
-                            @if($disableButton)
+                            <button type="button" class="btn-subscribe upgrade-btn" data-plan="{{ $plan->id }}"
+                                data-current-plan="{{ $userPlan }}" data-target-plan="{{ $planName }}">
 
-                                <button class="btn-subscribe opacity-75" disabled>
-                                    <i class="fas fa-lock"></i>
-                                    Not Available
-                                </button>
+                                @if($isUpgrade)
 
-                            @else
+                                    <i class="fas fa-arrow-up"></i>
+                                    Upgrade to {{ $plan->name }}
 
-                                <a href="{{ route('checkout', $plan->id) }}" class="btn-subscribe">
+                                @else
 
                                     <i class="fas fa-rocket"></i>
                                     Subscribe Now
-                                    <i class="fas fa-arrow-right"></i>
 
-                                </a>
+                                @endif
 
-                            @endif
+                            </button>
 
                         @endif
 
@@ -207,6 +200,107 @@
             warning: @json(session('warning')),
             info: @json(session('info')),
         };
+    </script>
+
+    <script>
+
+        document.querySelectorAll('.upgrade-btn')
+            .forEach(button => {
+
+                button.addEventListener('click', function () {
+
+                    let planId =
+                        this.dataset.plan;
+
+                    fetch(
+                        '/subscription/preview/' + planId,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN':
+                                    '{{ csrf_token() }}',
+                                'Accept':
+                                    'application/json'
+                            }
+                        }
+                    )
+                        .then(response => response.json())
+                        .then(data => {
+
+                            if (!data.success) {
+
+                                Swal.fire(
+                                    'Error',
+                                    data.message,
+                                    'error'
+                                );
+
+                                return;
+                            }
+
+                            Swal.fire({
+                                title: 'Upgrade Plan',
+
+                                html:
+                                    '<b>New Plan:</b> '
+                                    + data.new_plan
+                                    + '<br><br>'
+
+                                    + '<b>Unused Credit:</b> $'
+                                    + data.credit.toFixed(2)
+
+                                    + '<br><br>'
+
+                                    + '<b>Amount Due Today:</b> $'
+                                    + data.amount_due.toFixed(2),
+
+                                icon: 'info',
+
+                                showCancelButton: true,
+
+                                confirmButtonText:
+                                    'Continue'
+                            })
+                                .then(result => {
+
+                                    if (result.isConfirmed) {
+
+                                        let currentPlan =
+                                            button.dataset.currentPlan;
+
+                                        let targetPlan =
+                                            button.dataset.targetPlan;
+
+                                        /*
+                                        | Premium -> Pro
+                                        */
+                                        if (
+                                            currentPlan === 'premium' &&
+                                            targetPlan === 'pro'
+                                        ) {
+
+                                            window.location =
+                                                '/upgrade/' + planId;
+                                        }
+
+                                        /*
+                                        | Free -> Premium
+                                        | Free -> Pro
+                                        */
+                                        else {
+
+                                            window.location =
+                                                '/checkout/' + planId;
+                                        }
+                                    }
+                                });
+
+                        });
+
+                });
+
+            });
+
     </script>
 
 @endsection

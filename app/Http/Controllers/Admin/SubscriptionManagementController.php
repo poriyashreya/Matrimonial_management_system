@@ -12,9 +12,16 @@ class SubscriptionManagementController extends Controller
 {
     public function index()
     {
+        // dd("this is subscription");
+
         $subscriptions = Payment::with(['user', 'plan'])
             ->orderBy('payment_status', 'desc')
             ->paginate(7);
+
+        $subscription = DB::table('subscriptions')->select('*')->paginate(7);
+
+        // dd($subscription);
+
 
         // Add purchase_date & expiry_date
         $subscriptions->getCollection()->transform(function ($subscription) {
@@ -32,9 +39,16 @@ class SubscriptionManagementController extends Controller
             return $subscription;
         });
 
+
+        $amount = DB::table('payments')->select('amount')->get();
+        // dd($amount);
+        \Log::info('amount');
+
         // Total Revenue
         $totalRevenue = Payment::where('payment_status', 'Paid')
             ->sum('amount');
+
+
 
         // Premium Users
         $premiumUsers = DB::table('users')
@@ -45,6 +59,8 @@ class SubscriptionManagementController extends Controller
         $proUsers = DB::table('users')
             ->where('role', 'Pro')
             ->count();
+
+        // dd($subscriptions);
 
         return view(
             'admin.subscriptions.index',

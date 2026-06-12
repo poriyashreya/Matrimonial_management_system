@@ -63,7 +63,8 @@
 
                 <form class="newsletter-form d-flex">
                     <input type="email" class="form-control me-2" placeholder="Enter your email">
-                    <button class="btn btn-light rounded-pill px-4">Subscribe</button>
+                    <button class="btn btn-light rounded-pill px-4"
+                        style="background:#fdf7e7 !important;">Subscribe</button>
                 </form>
             </div>
 

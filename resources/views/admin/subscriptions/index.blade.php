@@ -495,6 +495,8 @@
                 <p>Manage and monitor all user subscriptions across the platform</p>
             </div>
 
+
+
             <!-- Stats Grid with Different Colors -->
             <div class="stats-grid-vibrant">
                 <!-- Total Revenue - Teal -->
@@ -560,6 +562,10 @@
                 </div>
             </div>
 
+
+
+
+
             <!-- Main Table Card -->
             <div class="table-card-vibrant">
                 <div class="table-header-vibrant">
@@ -572,6 +578,8 @@
                         Total: {{ $subscriptions->total() }} subscriptions
                     </div>
                 </div>
+
+
 
                 <div class="table-responsive">
                     <table class="vibrant-table">
@@ -588,11 +596,15 @@
                             </tr>
                         </thead>
                         <tbody>
+
+
                             @forelse($subscriptions as $i => $subscription)
+
                                 <tr>
                                     <td style="font-weight: 700; color: #4f46e5;">
-                                        #{{ $i + $subscriptions->firstItem() }}
+                                        #{{ $i + 1 }}
                                     </td>
+
                                     <td>
                                         <div class="user-info-vibrant">
                                             <div>
@@ -601,6 +613,7 @@
                                             </div>
                                         </div>
                                     </td>
+
                                     <td>
                                         @if($subscription->plan)
                                             @if($subscription->plan->name == 'Premium')
@@ -622,10 +635,12 @@
                                             </span>
                                         @endif
                                     </td>
+
                                     <td>
-                                        <span class="amount-vibrant">${{ number_format($subscription->amount, 2) }}</span>
+
                                     </td>
                                     <td>
+
                                         @if($subscription->payment_status == 'Paid')
                                             <span class="status-vibrant status-active">
                                                 <i class="fas fa-check-circle fa-xs"></i> Active
@@ -640,6 +655,9 @@
                                             </span>
                                         @endif
                                     </td>
+
+
+
                                     <td>
                                         <div class="date-vibrant">
                                             <i class="far fa-calendar-alt"></i>
@@ -676,6 +694,8 @@
                                     </td>
                                 </tr>
                             @endforelse
+
+
                         </tbody>
                     </table>
                 </div>

@@ -34,16 +34,18 @@ class RatingController extends Controller
     // SKIP BUTTON
     public function skip()
     {
-        Rating::updateOrCreate(
+        
+        $rating = Rating::updateOrCreate(
             ['user_id' => Auth::id()],
             [
                 'rating' => 0,
                 'comment' => null,
                 'skip' => 1,
-                'updated_at' => now(),
                 'status' => 'skipped'
             ]
         );
+
+        \Log::info($rating);
 
         return response()->json([
             'message' => 'You skipped rating.'

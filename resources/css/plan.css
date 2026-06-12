@@ -320,6 +320,10 @@
     transform: translateY(-2px);
 }
 
+.btn-disabled {
+    cursor: not-allowed;
+}
+
 /* Trust Badges */
 .trust-badges {
     display: flex;
