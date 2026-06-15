@@ -43,17 +43,10 @@
                     @endif
 
                     @if(strtolower($profile->plan) !== "free" && strtolower($profile->plan) !== "none")
-                        <form action="{{ route('subscription.cancel') }}" method="POST" id="cancelSubscriptionForm">
-
-                            @csrf
-                            @method('DELETE')
-
-                            <button type="button" class="btn-cancel1" onclick="confirmCancel()">
-                                <i class="fas fa-times-circle"></i> Cancel Subscription
-                            </button>
-
-                        </form>
-                    @endif
+    <button type="button" class="btn-cancel1" onclick="confirmCancel()">
+        <i class="fas fa-times-circle"></i> Cancel Subscription
+    </button>
+@endif
                 </div>
             </div>
         </div>
@@ -107,6 +100,14 @@
                             <div class="contact-detail">
                                 <span class="contact-label">Member Since</span>
                                 <span class="contact-value">{{ $profile->created_at->format('F Y') }}</span>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon"><i class="fas fa-calendar-alt"></i></div>
+                            <div class="contact-detail">
+                                <span class="contact-label">Subscription Expire  Date</span>
+                                <span class="contact-value">{{ $profile->expire_date }}</span>
                             </div>
                         </div>
                     </div>
@@ -394,23 +395,39 @@
     </script>
 
     <script>
-        function confirmCancel() {
-            Swal.fire({
-                title: 'Cancel Subscription?',
-                text: "Your subscription will be cancelled and premium access may stop.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#7a1f28',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Yes, Cancel It',
-                cancelButtonText: 'Keep Subscription'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('cancelSubscriptionForm').submit();
-                }
-            });
-        }
-    </script>
+function confirmCancel() {
+
+    Swal.fire({
+        title: 'Cancel Subscription?',
+        text: "Your subscription will be cancelled and premium access may stop.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#7a1f28',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Yes, Cancel It',
+        cancelButtonText: 'Keep Subscription'
+    }).then((result) => {
+
+        if (!result.isConfirmed) return;
+
+        // CREATE FORM DYNAMICALLY (FORCE POST)
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = "{{ route('subscription.cancel') }}";
+
+        // CSRF TOKEN
+        const token = document.createElement('input');
+        token.type = 'hidden';
+        token.name = '_token';
+        token.value = "{{ csrf_token() }}";
+
+        form.appendChild(token);
+        document.body.appendChild(form);
+
+        form.submit();
+    });
+}
+</script>
 
     <script>
         window.flashData = {

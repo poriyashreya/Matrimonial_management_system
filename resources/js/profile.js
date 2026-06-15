@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const confirmBtn = Swal.getConfirmButton();
                 confirmBtn.disabled = false;
             },
-            timer: 3000
         });
     }
 
@@ -41,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const confirmBtn = Swal.getConfirmButton();
                 confirmBtn.disabled = false;
             },
-            timer: 3000
         });
     }
 
@@ -54,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const confirmBtn = Swal.getConfirmButton();
                 confirmBtn.disabled = false;
             },
-            timer: 3000
         });
     }
 
@@ -67,7 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const confirmBtn = Swal.getConfirmButton();
                 confirmBtn.disabled = false;
             },
-            timer: 3000
         });
     }
 });

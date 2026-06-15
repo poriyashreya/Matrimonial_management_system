@@ -76,7 +76,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/subscription-success', [SubscriptionController::class, 'success'])
         ->name('subscription.success');
 
-    Route::delete('/subscription-cancel', [SubscriptionController::class, 'cancel'])
+    Route::post('/subscription-cancel', [SubscriptionController::class, 'cancel'])
         ->name('subscription.cancel');
 
     Route::post('/free-plan/{plan}', [SubscriptionController::class, 'activateFreePlan'])

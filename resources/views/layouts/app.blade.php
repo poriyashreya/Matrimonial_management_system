@@ -17,19 +17,6 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-    <script>
-        window.routes = {
-            rate: "{{ route('rating.store') }}",
-            skip: "{{ route('rating.skip') }}"
-        };
-
-        window.ratingData = {
-            status: @json($rating_status ?? "new")
-        };
-
-        console.log(window.routes);
-    </script>
-
     <!-- Custom CSS -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>

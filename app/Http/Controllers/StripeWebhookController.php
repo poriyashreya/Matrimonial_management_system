@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Notifications\PaymentFailedNotification;
+use App\Notifications\PlanActivatedNotification;
+use function Laravel\Prompts\notify;
 
 class StripeWebhookController extends CashierController
 {
@@ -23,6 +25,8 @@ class StripeWebhookController extends CashierController
 
     public function handleCheckoutSessionCompleted(array $payload)
     {
+        \Log::info("this is checkout session");
+        \Log::info(json_encode($payload));
         $session = $payload['data']['object'];
 
         try {
@@ -70,6 +74,10 @@ class StripeWebhookController extends CashierController
                             'paid_at' => now(),
                         ]);
 
+                        if ($plan) {
+                            $user->notify(new PlanActivatedNotification($plan));
+                        }
+
                     }
 
                     return parent::successMethod();
@@ -98,7 +106,7 @@ class StripeWebhookController extends CashierController
                         'user_id' => $user->id,
                         'plan_id' => $plan->id,
                         'stripe_payment_id' => $session['id'],
-                        'amount' => ($session['amount_total'] ?? 0) / 100,
+                        'amount' => 0,
                         'payment_status' => 'Pending',
                         'paid_at' => null,
                         'failure_reason' => null,
@@ -110,6 +118,7 @@ class StripeWebhookController extends CashierController
                         'role' => 'User',
                         'plan' => $plan->name,
                     ]);
+
                 }
             }
 
@@ -148,79 +157,46 @@ class StripeWebhookController extends CashierController
     }
 
     /* Invoice Payment Succeeded */
-    public function handleInvoicePaymentSucceeded(array $payload)
+    public function handlePaymentIntentSucceeded(array $payload)
     {
+
+        $paymentIntent = $payload['data']['object'];
 
         try {
 
-            $invoice = $payload['data']['object'];
+            $user = User::where('stripe_id', $paymentIntent['customer'])->first();
 
-            $user = User::where(
-                'stripe_id',
-                $invoice['customer']
-            )->first();
-
-            if (!$user) {
+            if (!$user)
                 return parent::successMethod();
-            }
-
-            $subscription = $user->subscription('default');
-
-            \Log::info('Subscription', [
-                'found' => !is_null($subscription)
-            ]);
-
-            if (!$subscription) {
-                return parent::successMethod();
-            }
-
-            $plan = Plan::where(
-                'stripe_price_id',
-                $subscription->stripe_price
-            )->first();
-
-
-            if (!$plan) {
-                return parent::successMethod();
-            }
 
             $payment = Payment::where('user_id', $user->id)
-                ->where('stripe_payment_id', 'like', 'cs_test%')
                 ->where('payment_status', 'Pending')
-                ->where('created_at', '>=', Carbon::now()->subSeconds(1))
                 ->latest()
                 ->first();
 
+            \Log::info('Payment', [
+                'payment_id' => $payment
+            ]);
+
             if ($payment) {
                 $payment->update([
-                    'plan_id' => $plan->id,
-                    'stripe_payment_id' => $invoice['payment_intent'] ?? $invoice['id'],
-                    'amount' => ($invoice['amount_paid'] ?? 0) / 100,
+                    'stripe_payment_id' => $paymentIntent['id'],
                     'payment_status' => 'Paid',
+                    'amount' => ($paymentIntent['amount_received'] ?? 0) / 100,
                     'paid_at' => now(),
                 ]);
             }
 
-            // Payment::create([
-            //     'user_id' => $user->id,
-            //     'plan_id' => $plan->id,
-            //     'stripe_payment_id' => $invoice['payment_intent'] ?? $invoice['id'],
-            //     'amount' => ($invoice['amount_paid'] ?? 0) / 100,
-            //     'curruncy' => 'INR',
-            //     'payment_status' => 'Paid',
-            //     'failure_reason' => null,
-            //     'paid_at' => now(),
-            // ]);
+            $plan = Plan::find($payment->plan_id);
 
-            $user->update([
-                'role' => 'User',
-                'plan' => $plan->name,
-            ]);
+            if ($plan) {
+                $user->notify(new PlanActivatedNotification($plan));
+            }
 
-            \Log::info('New paid payment created');
+
+            \Log::info('Payment updated successfully');
 
         } catch (\Exception $e) {
-
             \Log::error($e->getMessage());
         }
 

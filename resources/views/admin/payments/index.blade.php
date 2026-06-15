@@ -513,12 +513,15 @@
                                     </span>
                                 </td>
                                 <td>
-                                    
+                                    <span
+                                        class="amount-admin {{ $payment->payment_status == 'Paid' ? 'amount-success' : 'amount-cancelled' }}">
+                                        ${{ number_format($payment->amount, 2) }}
+                                    </span>
                                 </td>
                                 <td>
                                     <code class="transaction-id-admin">
-                                                                                                                                                                        {{ substr($payment->stripe_payment_id ?? 'stripe-session', 0, 12) }}...
-                                                                                                                                                                    </code>
+                                                                                                                                                                                        {{ substr($payment->stripe_payment_id ?? 'stripe-session', 0, 12) }}...
+                                                                                                                                                                                    </code>
                                 </td>
                                 <td>
                                     @if($payment->payment_status == 'Paid')
@@ -527,7 +530,7 @@
                                         </span>
                                     @else
                                         <span class="status-badge-admin status-cancelled-admin">
-                                            <i class="fas fa-times-circle fa-xs" style="font-size: 13px;"></i> Cancelled
+                                            <i class="fas fa-times-circle fa-xs" style="font-size: 13px;"></i> Refunded
                                         </span>
                                     @endif
                                 </td>

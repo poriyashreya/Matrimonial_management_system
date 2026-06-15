@@ -16,7 +16,7 @@ class Payment extends Model
         'stripe_charge_id',
 
         'amount',
-        'refund_amount',
+        'amount_refunded',
 
         'currency',
 
@@ -24,14 +24,15 @@ class Payment extends Model
         'failure_reason',
 
         'paid_at',
-        'refunded_at',
+        'refund_at',
     ];
 
     protected $casts = [
         'paid_at' => 'datetime',
-        'refunded_at' => 'datetime',
-        'amount' => 'decimal:2',
-        'refund_amount' => 'decimal:2',
+        'refund_at' => 'datetime',
+
+        'amount' => 'float',
+        'amount_refunded' => 'float',
     ];
 
     public function user()

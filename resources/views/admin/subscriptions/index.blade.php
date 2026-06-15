@@ -495,8 +495,6 @@
                 <p>Manage and monitor all user subscriptions across the platform</p>
             </div>
 
-
-
             <!-- Stats Grid with Different Colors -->
             <div class="stats-grid-vibrant">
                 <!-- Total Revenue - Teal -->
@@ -562,10 +560,6 @@
                 </div>
             </div>
 
-
-
-
-
             <!-- Main Table Card -->
             <div class="table-card-vibrant">
                 <div class="table-header-vibrant">
@@ -579,8 +573,6 @@
                     </div>
                 </div>
 
-
-
                 <div class="table-responsive">
                     <table class="vibrant-table">
                         <thead>
@@ -589,22 +581,20 @@
                                 <th>User</th>
                                 <th>Plan</th>
                                 <th>Amount</th>
+                                <th>Refunded Amount</th>
                                 <th>Status</th>
                                 <th>Purchase Date</th>
                                 <th>Expiry Date</th>
+                                <th>Refund Date</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-
-
                             @forelse($subscriptions as $i => $subscription)
-
                                 <tr>
                                     <td style="font-weight: 700; color: #4f46e5;">
-                                        #{{ $i + 1 }}
+                                        #{{ $i + $subscriptions->firstItem() }}
                                     </td>
-
                                     <td>
                                         <div class="user-info-vibrant">
                                             <div>
@@ -613,7 +603,6 @@
                                             </div>
                                         </div>
                                     </td>
-
                                     <td>
                                         @if($subscription->plan)
                                             @if($subscription->plan->name == 'Premium')
@@ -637,10 +626,14 @@
                                     </td>
 
                                     <td>
-
+                                        <span class="amount-vibrant">${{ number_format($subscription->amount, 2) }}</span>
                                     </td>
-                                    <td>
 
+                                    <td>
+                                        <span class="amount-vibrant">${{ $subscription->amount_refunded }}</span>
+                                    </td>
+
+                                    <td>
                                         @if($subscription->payment_status == 'Paid')
                                             <span class="status-vibrant status-active">
                                                 <i class="fas fa-check-circle fa-xs"></i> Active
@@ -649,15 +642,16 @@
                                             <span class="status-vibrant status-cancelled">
                                                 <i class="fas fa-times-circle fa-xs"></i> Cancelled
                                             </span>
+                                        @elseif($subscription->payment_status == 'Refunded')
+                                            <span class="status-vibrant status-cancelled">
+                                                <i class="fas fa-exclamation-triangle fa-xs"></i> Refunded
+                                            </span>
                                         @else
                                             <span class="status-vibrant status-failed">
-                                                <i class="fas fa-exclamation-triangle fa-xs"></i> Failed
+                                                <i class="fas fa-exclamation-triangle fa-xs"></i> Fail
                                             </span>
                                         @endif
                                     </td>
-
-
-
                                     <td>
                                         <div class="date-vibrant">
                                             <i class="far fa-calendar-alt"></i>
@@ -668,6 +662,13 @@
                                         <div class="date-vibrant">
                                             <i class="far fa-clock"></i>
                                             {{ \Carbon\Carbon::parse($subscription->expiry_date)->format('d M Y') }}
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="date-vibrant">
+                                            <i class="far fa-clock"></i>
+                                            {{ \Carbon\Carbon::parse($subscription->refund_at) }}
                                         </div>
                                     </td>
                                     <td>
@@ -694,8 +695,6 @@
                                     </td>
                                 </tr>
                             @endforelse
-
-
                         </tbody>
                     </table>
                 </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Plan;
 use App\Models\Payment;
 use Illuminate\Http\Request;
+use Illuminate\JsonSchema\Types\Type;
 use Laravel\Cashier\Subscription;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -12,12 +13,14 @@ use Carbon\Carbon;
 use Log;
 use Stripe\StripeClient;
 use Stripe\Checkout\Session;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RefundProcessedMail;
+use App\Notifications\CancelSubscriptionNotification;
 
 class SubscriptionController extends Controller
 {
     public function plans()
     {
-        Log::info("hi");
         // Fetch active plans
         $plans = Plan::where('status', 1)
             ->orderBy('price', 'asc')
@@ -104,16 +107,16 @@ class SubscriptionController extends Controller
 
         $subscription = $user->subscription('default');
 
-        // Already subscribed
-        if (strtolower($user->plan) === strtolower($plan->name)) {
+        // Create pending payment FIRST
+        $payment = Payment::create([
+            'user_id' => $user->id,
+            'plan_id' => $plan->id,
+            'stripe_payment_id' => "Stripe_session",
+            'amount' => 0,
+            'payment_status' => 'Pending',
+            'paid_at' => null,
+        ]);
 
-            return redirect()
-                ->route('plans')
-                ->with(
-                    'error',
-                    "You are already subscribed to {$plan->name} plan."
-                );
-        }
 
         if ($subscription && $subscription->active()) {
 
@@ -146,9 +149,11 @@ class SubscriptionController extends Controller
                 'cancel_url' => route('subscription.cancel'),
 
                 'metadata' => [
+                    'payment_id' => $payment->id,
                     'upgrade' => false,
                     'user_id' => $user->id,
                     'plan_id' => $plan->id,
+                    'type' => $plan->name,
                 ],
             ]);
     }
@@ -299,18 +304,6 @@ class SubscriptionController extends Controller
 
         $stripe = new StripeClient(config('cashier.secret'));
 
-        \Log::info('Upgrade Calculation', [
-            'current_plan_price' => $currentPlan->price,
-            'new_plan_price' => $plan->price,
-            'start_date' => $startDate,
-            'end_date' => $endDate,
-            'total_days' => $totalDays,
-            'amountDue' => $amountDue,
-            'credit' => $credit,
-            'newPlanCost' => $newPlanCost,
-            'remaining_days' => $remainingDays,
-        ]);
-
         $session = $stripe->checkout->sessions->create([
             'mode' => 'payment',
 
@@ -349,6 +342,8 @@ class SubscriptionController extends Controller
 
                 'plan_id' =>
                     $plan->id,
+
+                'type' => $plan->name,
             ]
         ]);
 
@@ -382,47 +377,122 @@ class SubscriptionController extends Controller
             );
     }
 
+
+
+
     public function cancel()
     {
         $user = auth()->user();
 
         $subscription = $user->subscription('default');
 
-        $pyment = Payment::where('user_id', $user->id)
-            ->where('payment_status', 'paid')
+        if (!$subscription) {
+            return back()->with('error', 'No active subscription found.');
+        }
+
+        $payment = Payment::where('user_id', $user->id)
+            ->where('payment_status', 'Paid')
             ->latest()
             ->first();
 
-        if ($subscription) {
 
-            try {
+        $payments = Payment::where('user_id', $user->id)
+            ->where('payment_status', 'Paid')
+            ->get();
 
-                $subscription->cancelNow();
-
-                $pyment->update([
-                    'payment_status' => 'Cancelled',
-                ]);
-
-                $user->update([
-                    'role' => 'User',
-                    'plan' => 'free',
-                ]);
-
-
-            } catch (\Exception $e) {
-                return redirect()
-                    ->route('profile.myprofile')
-                    ->with('error', 'Failed to cancel subscription: ' . $e->getMessage());
-            }
-        } else {
-            return redirect()
-                ->route('profile.myprofile')
-                ->with('error', 'Failed to cancel subscription Try again later');
+        if (!$payments || !$payments->stripe_payment_id) {
+            return back()->with('error', 'No valid payment found for refund.');
         }
 
-        return redirect()
-            ->route('profile.myprofile')
-            ->with('success', 'Subscription cancelled successfully. If you are eligible for a refund, the amount will be credited to your account within 3-4 business days.');
+        $planName = DB::table('plans')
+            ->where('id', $payment->plan_id)
+            ->value('name');
+
+        // dd($refundAmount);
+
+        try {
+
+            // CALCULATE REFUND
+
+            $refundAmounts = [];
+            $i = 0;
+
+            foreach ($payments as $payment) {
+
+                $startDate = Carbon::parse($payment->updated_at);
+                $endDate = $startDate->copy()->addDays(30);
+
+                $totalDays = $startDate->diffInDays($endDate);
+                $usedDays = $startDate->diffInDays(now());
+                $remainingDays = max($totalDays - $usedDays, 0);
+
+                // dd(\Schema::getColumnListing('payments'));
+                $amount = (float) $payment->amount;
+
+                if ($amount <= 0) {
+                    return back()->with('error', 'Invalid payment amount.');
+                }
+
+                $refundAmounts[$i] = ($amount / $totalDays) * $remainingDays;
+
+                $i++;
+            }
+
+            $refundAmount = array_sum($refundAmounts);
+
+            // CANCEL SUBSCRIPTION
+
+            $subscription->cancelNow();
+
+            //STRIPE REFUND
+
+            \Stripe\Stripe::setApiKey(config('cashier.secret'));
+
+            $refund = \Stripe\Refund::create([
+                'payment_intent' => $payment->stripe_payment_id,
+                'amount' => (int) round($refundAmount),
+            ]);
+
+            // UPDATE DATABASE
+
+            $payments = Payment::where('user_id', $user->id)
+                ->where('payment_status', 'Paid')
+                ->get();
+
+            $i = 0;
+            foreach ($payments as $payment) {
+
+                $payment->update([
+                    'payment_status' => 'Refunded',
+                    'amount_refunded' => $refundAmounts[$i],
+                    'refund_at' => now(),
+                ]);
+
+                $i++;
+            }
+
+            // Mail::to($user->email)
+            //     ->send(new RefundProcessedMail(
+            //         $user,
+            //         (int) $refundAmount
+            //     ));
+
+            $user->update([
+                'role' => 'User',
+                'plan' => 'free',
+            ]);
+
+            auth()->user()->notify(
+                new CancelSubscriptionNotification($planName)
+            );
+
+            return redirect()
+                ->route('profile.myprofile')
+                ->with('success', "Your subscription has been canceled successfully. A refund of ₹{$refundAmount} has been initiated and will be credited to your original payment method shortly. We appreciate your trust in our platform and hope to serve you again in the future.");
+
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
 
     public function activateFreePlan(Plan $plan)
@@ -441,7 +511,7 @@ class SubscriptionController extends Controller
 
         // Create local subscription without Stripe
         $user->subscriptions()->create([
-            'type' => 'default',
+            'type' => 'free',
             'stripe_id' => 'free_plan_' . $user->id,
             'stripe_status' => 'active',
             'stripe_price' => $plan->stripe_price_id,

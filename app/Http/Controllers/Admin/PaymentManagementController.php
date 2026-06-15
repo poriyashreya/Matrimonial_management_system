@@ -13,7 +13,8 @@ class PaymentManagementController extends Controller
             ->latest()
             ->paginate(6);
 
-        $totalRevenue = Payment::sum('amount');
+        $totalRevenue = Payment::where('payment_status', 'Paid')
+            ->sum('amount');
 
         return view('admin.payments.index', compact(
             'payments',
