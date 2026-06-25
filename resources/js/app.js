@@ -12,4 +12,7 @@ import './dashboard';
 import './header';
 import './profile';
 
+axios.defaults.headers.common['X-Auth-Token'] =
+    sessionStorage.getItem('auth_token');
+
 

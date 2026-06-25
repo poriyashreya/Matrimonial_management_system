@@ -475,20 +475,18 @@
                             <a class="nav-link" href="#gallery">Gallery</a>
                         </li>
                         {{-- AUTH BUTTONS --}}
-                        @guest
-                            <li class="nav-item ms-lg-3">
-                                <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm">
-                                    Login
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('register') }}" class="btn register-btn btn-sm">
-                                    Register
-                                </a>
-                            </li>
-                        @endguest
+                        <li class="nav-item ms-lg-3">
+                            <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm">
+                                Login
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('register') }}" class="btn register-btn btn-sm">
+                                Register
+                            </a>
+                        </li>
 
-                        @auth
+                        <!-- @auth
                             <li class="nav-item dropdown ms-lg-3">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                     {{ Auth::user()->name }}
@@ -513,7 +511,7 @@
                                     </li>
                                 </ul>
                             </li>
-                        @endauth
+                        @endauth -->
 
                     </ul>
                 </div>

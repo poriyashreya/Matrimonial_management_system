@@ -41,11 +41,12 @@
         <i class="bi bi-gear me-2"></i> Settings
     </a>
 
-    <a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+    <a href="{{ route('admin.logout') }}" onclick="event.preventDefault();
+   document.getElementById('admin-logout-form').submit();">
         <i class="bi bi-box-arrow-right me-2"></i> Logout
     </a>
 
-    <form id="logout-form" action="{{ route('logout') }}" method="POST">
+    <form id="admin-logout-form" action="{{ route('admin.logout') }}" method="POST">
         @csrf
     </form>
 </aside>

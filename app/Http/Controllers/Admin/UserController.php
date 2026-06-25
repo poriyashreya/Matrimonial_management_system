@@ -8,13 +8,13 @@ use App\Models\Profile;
 use Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Join users with profiles
-        $users = DB::table('users')
+        $query = DB::table('users')
             ->leftJoin('profiles', 'users.id', '=', 'profiles.user_id')
             ->select(
                 'users.id as user_id',
@@ -35,12 +35,110 @@ class UserController extends Controller
                 'profiles.city',
                 'profiles.is_active'
             )
-            ->orderBy('users.id', 'desc')
             ->where('users.id', '!=', Auth::id())
-            ->where('users.id', '!=', 1)
-            ->paginate(7);
+            ->where('users.id', '!=', 1);
 
-        return view('admin.users.index', compact('users'));
+        /*
+        |--------------------------------------------------------------------------
+        | Search
+        |--------------------------------------------------------------------------
+        */
+        if ($request->filled('search')) {
+
+            $query->where(function ($q) use ($request) {
+
+                $q->where(
+                    'users.name',
+                    'like',
+                    '%' . $request->search . '%'
+                )
+                    ->orWhere(
+                        'users.email',
+                        'like',
+                        '%' . $request->search . '%'
+                    );
+            });
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Plan Filter
+        |--------------------------------------------------------------------------
+        */
+        if ($request->filled('plan')) {
+
+            $query->where(
+                'users.plan',
+                $request->plan
+            );
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Role Filter
+        |--------------------------------------------------------------------------
+        */
+        if ($request->filled('role')) {
+
+            $query->where(
+                'users.role',
+                $request->role
+            );
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Status Filter
+        |--------------------------------------------------------------------------
+        */
+        if ($request->filled('status')) {
+
+            if ($request->status == 'active') {
+
+                $query->where('profiles.is_active', 1);
+
+            } elseif ($request->status == 'inactive') {
+
+                $query->where('profiles.is_active', 0);
+
+            } elseif ($request->status == 'banned') {
+
+                $query->where('users.status', 'banned');
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Sorting
+        |--------------------------------------------------------------------------
+        */
+        switch ($request->sort_by) {
+
+            case 'name_asc':
+                $query->orderBy('users.name', 'asc');
+                break;
+
+            case 'name_desc':
+                $query->orderBy('users.name', 'desc');
+                break;
+
+            case 'oldest':
+                $query->orderBy('users.id', 'asc');
+                break;
+
+            default:
+                $query->orderBy('users.id', 'desc');
+                break;
+        }
+
+        $users = $query
+            ->paginate(7)
+            ->withQueryString();
+
+        return view(
+            'admin.users.index',
+            compact('users')
+        );
     }
 
     public function show(Profile $profile)

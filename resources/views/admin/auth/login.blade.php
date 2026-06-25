@@ -89,7 +89,7 @@
         <div class="col-md-6 p-5">
 
             <h2 class="text-center mb-4 fw-bold" style="color:#7a1f28;">
-                Login to Your Account
+                Login to Admin
             </h2>
 
             <!-- Session Messages -->
@@ -114,7 +114,7 @@
             @endif
 
             <!-- LOGIN FORM -->
-            <form method="POST" action="{{ route('login') }}">
+            <form method="POST" action="{{ route('admin.login.store') }}">
                 @csrf
 
                 <!-- Email -->
@@ -157,17 +157,9 @@
                 </button>
 
                 <p class="text-center mt-3" style="color:#7a1f28;">
-                    Click here to login Admin
-                    <a href="{{ route('admin.login') }}" class="fw-semibold" style="color:#7a1f28;">
-                        Admin Login
-                    </a>
-                </p>
-
-                <!-- Register -->
-                <p class="text-center mt-3" style="color:#7a1f28;">
-                    Don’t have an account?
-                    <a href="{{ route('register') }}" class="fw-semibold" style="color:#7a1f28;">
-                        Register
+                    Click here to login User side
+                    <a href="{{ route('login') }}" class="fw-semibold" style="color:#7a1f28;">
+                        User Login
                     </a>
                 </p>
             </form>

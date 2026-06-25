@@ -7,7 +7,7 @@
 
     <div class="container-fluid px-4">
         <style>
-            /* Fresh & Vibrant Color Scheme - Using PX Units */
+            /* ─── Fresh & Vibrant Color Scheme ─── */
             :root {
                 --primary: #5a1620;
                 --primary-dark: #3d0e15;
@@ -25,6 +25,10 @@
                 --indigo-light: #6366f1;
                 --indigo-soft: #e0e7ff;
 
+                --admin-primary: #4f46e5;
+                --admin-primary-dark: #4338ca;
+                --admin-primary-light: #6366f1;
+
                 --rose: #e11d48;
                 --rose-light: #fb7185;
                 --rose-soft: #ffe4e6;
@@ -41,19 +45,18 @@
                 --border: #e2e8f0;
                 --admin-border: #e5e7eb;
 
-
                 --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
                 --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
                 --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
             }
 
-            /* Main Container */
+            /* ─── Main Container ─── */
             .verification-container {
                 max-width: 1400px;
                 margin: 0 auto;
             }
 
-            /* Page Header */
+            /* ─── Page Header ─── */
             .page-header-vibrant {
                 margin-bottom: 28px;
             }
@@ -74,7 +77,7 @@
                 font-size: 14px;
             }
 
-            /* Stats Grid */
+            /* ─── Stats Grid ─── */
             .stats-grid-vibrant {
                 display: grid;
                 grid-template-columns: repeat(4, 1fr);
@@ -97,7 +100,6 @@
                 box-shadow: var(--shadow-lg);
             }
 
-            /* Card 1 - Teal */
             .stat-card-vibrant:nth-child(1) .stat-icon-vibrant {
                 background: var(--teal-soft);
                 color: var(--teal);
@@ -107,7 +109,6 @@
                 border-color: var(--teal);
             }
 
-            /* Card 2 - Amber */
             .stat-card-vibrant:nth-child(2) .stat-icon-vibrant {
                 background: var(--amber-soft);
                 color: var(--amber);
@@ -117,7 +118,6 @@
                 border-color: var(--amber);
             }
 
-            /* Card 3 - Indigo */
             .stat-card-vibrant:nth-child(3) .stat-icon-vibrant {
                 background: var(--indigo-soft);
                 color: var(--indigo);
@@ -127,7 +127,6 @@
                 border-color: var(--indigo);
             }
 
-            /* Card 4 - Rose */
             .stat-card-vibrant:nth-child(4) .stat-icon-vibrant {
                 background: var(--rose-soft);
                 color: var(--rose);
@@ -187,64 +186,222 @@
                 color: var(--rose);
             }
 
-            /* Info Cards Row */
-            .info-row {
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                gap: 20px;
+            /* ─── Search & Filter Section ─── */
+            .search-filter-section {
+                padding: 20px 24px;
+                background: white;
+                border-bottom: 1px solid var(--admin-border);
+                border-radius: 20px;
+                border: 1px solid var(--admin-border);
                 margin-bottom: 28px;
             }
 
-            .info-card {
-                background: var(--bg-card);
-                border-radius: 16px;
-                padding: 16px 20px;
-                border: 1px solid var(--border);
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
+            .search-filter-section .section-title {
+                font-size: 16px;
+                font-weight: 600;
+                color: var(--admin-text);
+                margin-bottom: 4px;
             }
 
-            .info-card-content h4 {
+            .search-filter-section .section-subtitle {
+                font-size: 13px;
+                color: var(--admin-text-light);
+                margin-bottom: 16px;
+            }
+
+            .search-filter-grid {
+                display: grid;
+                grid-template-columns: 2fr 1fr 1fr auto;
+                gap: 16px;
+                align-items: end;
+            }
+
+            .filter-group {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .filter-group label {
                 font-size: 11px;
                 font-weight: 600;
+                color: var(--admin-text-light);
                 text-transform: uppercase;
-                color: var(--slate);
-                margin: 0 0 4px 0;
+                letter-spacing: 0.5px;
             }
 
-            .info-card-content .value {
-                font-size: 24px;
-                font-weight: 800;
-                color: #1e293b;
+            .filter-group label i {
+                margin-right: 4px;
             }
 
-            .info-icon {
-                width: 48px;
-                height: 48px;
-                border-radius: 14px;
+            .filter-group .search-input {
+                padding: 10px 14px;
+                border: 1px solid var(--admin-border);
+                border-radius: 8px;
+                font-size: 14px;
+                transition: all 0.2s;
+                background: white;
+                color: var(--admin-text);
+                width: 100%;
+            }
+
+            .filter-group .search-input:focus {
+                outline: none;
+                border-color: var(--admin-primary);
+                box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            }
+
+            .filter-group .search-input::placeholder {
+                color: var(--admin-text-light);
+                font-size: 13px;
+            }
+
+            .filter-group select {
+                padding: 10px 14px;
+                border: 1px solid var(--admin-border);
+                border-radius: 8px;
+                font-size: 14px;
+                background: white;
+                color: var(--admin-text);
+                cursor: pointer;
+                transition: all 0.2s;
+                appearance: none;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 12px center;
+                padding-right: 36px;
+                width: 100%;
+            }
+
+            .filter-group select:focus {
+                outline: none;
+                border-color: var(--admin-primary);
+                box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            }
+
+            .filter-group select option {
+                padding: 8px;
+            }
+
+            .filter-actions {
+                display: flex;
+                gap: 8px;
+                align-items: end;
+                padding-bottom: 1px;
+            }
+
+            .btn-filter-apply {
+                background: var(--admin-primary);
+                color: white;
+                border: none;
+                padding: 10px 28px;
+                border-radius: 8px;
+                font-weight: 600;
+                font-size: 14px;
+                cursor: pointer;
+                transition: all 0.2s;
+                white-space: nowrap;
                 display: flex;
                 align-items: center;
-                justify-content: center;
-                font-size: 21px;
+                gap: 8px;
             }
 
-            .info-card:nth-child(1) .info-icon {
-                background: linear-gradient(135deg, var(--teal), var(--teal-light));
-                color: white;
+            .btn-filter-apply:hover {
+                background: var(--admin-primary-dark);
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
             }
 
-            .info-card:nth-child(2) .info-icon {
-                background: linear-gradient(135deg, var(--amber), var(--amber-light));
-                color: white;
+            .btn-filter-reset {
+                background: white;
+                color: var(--admin-text);
+                border: 1px solid var(--admin-border);
+                padding: 10px 18px;
+                border-radius: 8px;
+                font-weight: 600;
+                font-size: 14px;
+                cursor: pointer;
+                transition: all 0.2s;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                white-space: nowrap;
             }
 
-            .info-card:nth-child(3) .info-icon {
-                background: linear-gradient(135deg, var(--indigo), var(--indigo-light));
-                color: white;
+            .btn-filter-reset:hover {
+                background: var(--admin-bg);
+                border-color: var(--admin-text-light);
+                text-decoration: none;
+                color: var(--admin-text);
             }
 
-            /* Main Table Card */
+            /* ─── Active Filter Tags ─── */
+            .active-filters-tags {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 16px;
+                padding-top: 16px;
+                border-top: 1px solid var(--admin-border);
+            }
+
+            .filter-tag {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                background: #eef2ff;
+                color: var(--admin-primary);
+                padding: 4px 12px 4px 10px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: 500;
+                border: 1px solid #c7d2fe;
+            }
+
+            .filter-tag .remove-filter {
+                cursor: pointer;
+                font-size: 13px;
+                opacity: 0.6;
+                transition: all 0.2s;
+                margin-left: 2px;
+            }
+
+            .filter-tag .remove-filter:hover {
+                opacity: 1;
+                color: var(--admin-danger);
+                transform: scale(1.2);
+            }
+
+            .filter-tag.status-verified-tag {
+                background: #d1fae5;
+                color: #065f46;
+                border-color: #10b981;
+            }
+
+            .filter-tag.status-pending-tag {
+                background: #fef3c7;
+                color: #92400e;
+                border-color: #f59e0b;
+            }
+
+            .filter-tag.status-rejected-tag {
+                background: #fee2e2;
+                color: #991b1b;
+                border-color: #ef4444;
+            }
+
+            .no-filters-text {
+                font-size: 13px;
+                color: var(--admin-text-light);
+                padding: 4px 0;
+            }
+
+            .no-filters-text i {
+                margin-right: 6px;
+            }
+
+            /* ─── Table Card ─── */
             .table-card-vibrant {
                 background: var(--bg-card);
                 border-radius: 20px;
@@ -282,7 +439,6 @@
                 color: var(--primary);
             }
 
-            /* Elegant Table */
             .vibrant-table {
                 width: 100%;
                 border-collapse: collapse;
@@ -306,7 +462,6 @@
                 color: #334155;
             }
 
-            /* User Info */
             .user-info-vibrant {
                 display: flex;
                 align-items: center;
@@ -337,7 +492,6 @@
                 color: var(--slate);
             }
 
-            /* Status Badges */
             .status-vibrant {
                 display: inline-flex;
                 align-items: center;
@@ -363,7 +517,6 @@
                 color: var(--rose);
             }
 
-            /* Action Buttons */
             .btn-action {
                 display: inline-flex;
                 align-items: center;
@@ -389,7 +542,6 @@
                 color: white;
             }
 
-            /* Empty State */
             .empty-state {
                 text-align: center;
                 padding: 60px 20px;
@@ -406,6 +558,54 @@
                 color: var(--slate);
                 margin: 0;
                 font-size: 14px;
+            }
+
+            /* ─── Responsive ─── */
+            @media (max-width: 1200px) {
+                .search-filter-grid {
+                    grid-template-columns: 1fr 1fr 1fr;
+                }
+            }
+
+            @media (max-width: 992px) {
+                .search-filter-grid {
+                    grid-template-columns: 1fr 1fr;
+                }
+
+                .stats-grid-vibrant {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+            }
+
+            @media (max-width: 768px) {
+                .search-filter-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .filter-actions {
+                    flex-direction: column;
+                    width: 100%;
+                }
+
+                .btn-filter-apply,
+                .btn-filter-reset {
+                    width: 100%;
+                    justify-content: center;
+                }
+
+                .search-filter-section {
+                    padding: 16px;
+                }
+
+                .stats-grid-vibrant {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .stats-grid-vibrant {
+                    grid-template-columns: 1fr;
+                }
             }
         </style>
 
@@ -428,13 +628,10 @@
             @endphp
 
             <div class="stats-grid-vibrant">
-                <!-- Total Verifications - Teal -->
                 <div class="stat-card-vibrant">
                     <div class="stat-header-vibrant">
                         <span class="stat-label-vibrant">Total Verifications</span>
-                        <div class="stat-icon-vibrant">
-                            <i class="fas fa-users"></i>
-                        </div>
+                        <div class="stat-icon-vibrant"><i class="fas fa-users"></i></div>
                     </div>
                     <div class="stat-value-vibrant">{{ $totalVerifications }}</div>
                     <div class="stat-trend-vibrant">
@@ -442,14 +639,10 @@
                         <span>Total requests received</span>
                     </div>
                 </div>
-
-                <!-- Verified - Emerald -->
                 <div class="stat-card-vibrant">
                     <div class="stat-header-vibrant">
                         <span class="stat-label-vibrant">Verified</span>
-                        <div class="stat-icon-vibrant">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
+                        <div class="stat-icon-vibrant"><i class="fas fa-check-circle"></i></div>
                     </div>
                     <div class="stat-value-vibrant">{{ $verifiedCount }}</div>
                     <div class="stat-trend-vibrant">
@@ -459,14 +652,10 @@
                         <span>of total</span>
                     </div>
                 </div>
-
-                <!-- Pending - Amber -->
                 <div class="stat-card-vibrant">
                     <div class="stat-header-vibrant">
                         <span class="stat-label-vibrant">Pending</span>
-                        <div class="stat-icon-vibrant">
-                            <i class="fas fa-clock"></i>
-                        </div>
+                        <div class="stat-icon-vibrant"><i class="fas fa-clock"></i></div>
                     </div>
                     <div class="stat-value-vibrant">{{ $pendingCount }}</div>
                     <div class="stat-trend-vibrant">
@@ -474,14 +663,10 @@
                         <span>Awaiting review</span>
                     </div>
                 </div>
-
-                <!-- Rejected - Rose -->
                 <div class="stat-card-vibrant">
                     <div class="stat-header-vibrant">
                         <span class="stat-label-vibrant">Rejected</span>
-                        <div class="stat-icon-vibrant">
-                            <i class="fas fa-times-circle"></i>
-                        </div>
+                        <div class="stat-icon-vibrant"><i class="fas fa-times-circle"></i></div>
                     </div>
                     <div class="stat-value-vibrant">{{ $rejectedCount }}</div>
                     <div class="stat-trend-vibrant">
@@ -491,14 +676,139 @@
                 </div>
             </div>
 
-            <!-- Main Table Card -->
+            <!-- ─── SEARCH & FILTER SECTION ─── -->
+            <div class="search-filter-section">
+                <div class="section-title">
+                    <i class="fas fa-search" style="color: var(--admin-primary); margin-right: 6px;"></i>
+                    Search & Filter
+                </div>
+                <div class="section-subtitle">Refine your verification requests</div>
+
+                <form method="GET" action="{{ route('admin.verifications') }}" id="filterForm">
+                    <div class="search-filter-grid">
+                        <!-- Search -->
+                        <div class="filter-group">
+                            <label><i class="fas fa-search"></i> SEARCH</label>
+                            <input type="text"
+                                   name="search"
+                                   value="{{ request('search') }}"
+                                   placeholder="Search by name, email or document..."
+                                   class="search-input"
+                                   id="searchInput">
+                        </div>
+
+                        <!-- Status -->
+                        <div class="filter-group">
+                            <label><i class="fas fa-filter"></i> STATUS</label>
+                            <select name="status" id="statusFilter">
+                                <option value="">All Status</option>
+                                <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>
+                                    Pending
+                                </option>
+                                <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>
+                                    Verified
+                                </option>
+                                <option value="2" {{ request('status') === '2' ? 'selected' : '' }}>
+                                    Rejected
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Sort By -->
+                        <div class="filter-group">
+                            <label><i class="fas fa-sort"></i> SORT BY</label>
+                            <select name="sort" id="sortFilter">
+                                <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>
+                                    Newest First
+                                </option>
+                                <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>
+                                    Oldest First
+                                </option>
+                                <option value="name_asc" {{ request('sort') == 'name_asc' ? 'selected' : '' }}>
+                                    Name A-Z
+                                </option>
+                                <option value="name_desc" {{ request('sort') == 'name_desc' ? 'selected' : '' }}>
+                                    Name Z-A
+                                </option>
+                                <option value="verified" {{ request('sort') == 'verified' ? 'selected' : '' }}>
+                                    Verified First
+                                </option>
+                                <option value="pending" {{ request('sort') == 'pending' ? 'selected' : '' }}>
+                                    Pending First
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="filter-actions">
+                            <button type="submit" class="btn-filter-apply">
+                                <i class="fas fa-search"></i> Apply
+                            </button>
+                            <a href="{{ route('admin.verifications') }}" class="btn-filter-reset">
+                                <i class="fas fa-undo"></i> Reset
+                            </a>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Active Filters Tags -->
+                <div class="active-filters-tags">
+                    @if(request('search') || request('status') !== null || request('sort'))
+                        @if(request('search'))
+                            <span class="filter-tag">
+                                🔍 "{{ request('search') }}"
+                                <span class="remove-filter" onclick="removeFilter('search')">
+                                    <i class="fas fa-times"></i>
+                                </span>
+                            </span>
+                        @endif
+
+                        @if(request('status') !== null && request('status') !== '')
+                            <span class="filter-tag status-{{ request('status') == 1 ? 'verified' : (request('status') == 0 ? 'pending' : 'rejected') }}-tag">
+                                @if(request('status') == 1) ✅
+                                @elseif(request('status') == 0) ⏳
+                                @elseif(request('status') == 2) ❌
+                                @endif
+                                {{ request('status') == 1 ? 'Verified' : (request('status') == 0 ? 'Pending' : 'Rejected') }}
+                                <span class="remove-filter" onclick="removeFilter('status')">
+                                    <i class="fas fa-times"></i>
+                                </span>
+                            </span>
+                        @endif
+
+                        @if(request('sort'))
+                            <span class="filter-tag">
+                                📊
+                                @switch(request('sort'))
+                                    @case('newest') Newest First
+                                    @case('oldest') Oldest First
+                                    @case('name_asc') Name A-Z
+                                    @case('name_desc') Name Z-A
+                                    @case('verified') Verified First
+                                    @case('pending') Pending First
+                                    @default {{ request('sort') }}
+                                @endswitch
+                                <span class="remove-filter" onclick="removeFilter('sort')">
+                                    <i class="fas fa-times"></i>
+                                </span>
+                            </span>
+                        @endif
+                    @else
+                        <span class="no-filters-text">
+                            <i class="fas fa-info-circle"></i>
+                            No active filters
+                        </span>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Table Card -->
             <div class="table-card-vibrant">
                 <div class="table-header-vibrant">
                     <div class="table-title-vibrant">
                         <i class="fas fa-list-ul"></i>
                         <h4>Verification Requests</h4>
                     </div>
-
                 </div>
 
                 <div class="table-responsive">
@@ -515,9 +825,7 @@
                         <tbody>
                             @forelse($verifications as $v)
                                 <tr>
-                                    <td style="font-weight: 700; color: #4f46e5;">
-                                        #{{ $loop->iteration }}
-                                    </td>
+                                    <td style="font-weight: 700; color: #4f46e5;">#{{ $loop->iteration }}</td>
                                     <td>
                                         <div class="user-info-vibrant">
                                             <div class="user-name-vibrant">{{ $v->name }}</div>
@@ -570,21 +878,39 @@
 
 @section('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Auto-hide alerts after 5 seconds
-            setTimeout(function () {
-                const alerts = document.querySelectorAll('.alert-vibrant');
-                alerts.forEach(alert => {
-                    alert.style.transition = 'opacity 0.5s ease';
-                    alert.style.opacity = '0';
-                    setTimeout(() => alert.remove(), 500);
-                });
-            }, 5000);
-        });
-    </script>
+        function removeFilter(filterName) {
+            const url = new URL(window.location.href);
+            url.searchParams.delete(filterName);
+            window.location.href = url.toString();
+        }
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-submit on select change
+            const statusFilter = document.getElementById('statusFilter');
+            const sortFilter = document.getElementById('sortFilter');
+            const filterForm = document.getElementById('filterForm');
+
+            if (statusFilter && sortFilter && filterForm) {
+                statusFilter.addEventListener('change', function() {
+                    filterForm.submit();
+                });
+
+                sortFilter.addEventListener('change', function() {
+                    filterForm.submit();
+                });
+
+                // Search on Enter key
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    searchInput.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            filterForm.submit();
+                        }
+                    });
+                }
+            }
+
             @if(session('success'))
                 Swal.fire({
                     icon: 'success',
@@ -604,6 +930,6 @@
                     timer: 3000
                 });
             @endif
-                        });
+        });
     </script>
 @endsection

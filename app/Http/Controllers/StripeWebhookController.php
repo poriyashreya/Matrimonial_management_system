@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use App\Notifications\PaymentFailedNotification;
 use App\Notifications\PlanActivatedNotification;
 use function Laravel\Prompts\notify;
+use App\Jobs\HandlePaymentIntentSucceededJob;
 
 class StripeWebhookController extends CashierController
 {
@@ -26,7 +27,7 @@ class StripeWebhookController extends CashierController
     public function handleCheckoutSessionCompleted(array $payload)
     {
         \Log::info("this is checkout session");
-        \Log::info(json_encode($payload));
+
         $session = $payload['data']['object'];
 
         try {
@@ -35,8 +36,6 @@ class StripeWebhookController extends CashierController
                     $session['metadata']['upgrade'] === "true" ||
                     $session['metadata']['upgrade'] === true
                 ) {
-
-                    \Log::info('Upgrade' . $session['metadata']['upgrade']);
 
                     $user = User::find(
                         $session['metadata']['user_id']
@@ -63,21 +62,50 @@ class StripeWebhookController extends CashierController
                             'plan' => $plan->name,
                         ]);
 
-                        Payment::create([
-                            'user_id' => $user->id,
+                        $payment = Payment::where("user_id", $user->id)
+                            ->where('payment_status', 'Paid')
+                            ->latest()
+                            ->first();
+
+                        \Log::info("this is Payment");
+                        \Log::info($payment);
+
+                        $payment->update([
                             'plan_id' => $plan->id,
                             'stripe_payment_id' =>
                                 $session['payment_intent'],
                             'amount' =>
                                 ($session['amount_total'] ?? 0) / 100,
+                            'credit' => $session['metadata']['creadit'],
                             'payment_status' => 'Paid',
                             'paid_at' => now(),
+
                         ]);
 
-                        if ($plan) {
-                            $user->notify(new PlanActivatedNotification($plan));
-                        }
+                        Subscription::where('user_id', $user->id)
+                            ->where('ends_at', null)
+                            ->latest()
+                            ->first()
+                            ->update([
+                                'ends_at' => now()->addMonth()
+                            ]);
 
+
+                        // Payment::create([
+                        //     'user_id' => $user->id,
+                        //     'plan_id' => $plan->id,
+                        //     'stripe_payment_id' =>
+                        //         $session['payment_intent'],
+                        //     'amount' =>
+                        //         ($session['amount_total'] ?? 0) / 100,
+                        //     'credit' => $session['metadata']['creadit'],
+                        //     'payment_status' => 'Paid',
+                        //     'paid_at' => now(),
+                        // ]);
+
+                        // if ($plan) {
+                        //     $user->notify(new PlanActivatedNotification($plan));
+                        // }
                     }
 
                     return parent::successMethod();
@@ -92,15 +120,12 @@ class StripeWebhookController extends CashierController
                         return parent::successMethod();
                     }
 
-                    \Log::info('user_id' . $session['metadata']['user_id']);
-
                     $user = User::find($userId);
                     $plan = Plan::find($planId);
 
                     if (!$user || !$plan) {
                         return parent::successMethod();
                     }
-
                     // CREATE PENDING PAYMENT
                     Payment::create([
                         'user_id' => $user->id,
@@ -111,8 +136,6 @@ class StripeWebhookController extends CashierController
                         'paid_at' => null,
                         'failure_reason' => null,
                     ]);
-
-
 
                     $user->update([
                         'role' => 'User',
@@ -156,45 +179,18 @@ class StripeWebhookController extends CashierController
         return parent::successMethod();
     }
 
+
     /* Invoice Payment Succeeded */
     public function handlePaymentIntentSucceeded(array $payload)
     {
-
-        $paymentIntent = $payload['data']['object'];
+        \Log::info("this is Payment intent successed");
 
         try {
 
-            $user = User::where('stripe_id', $paymentIntent['customer'])->first();
+            HandlePaymentIntentSucceededJob::dispatch($payload)
+                ->delay(now()->addSeconds(1));
 
-            if (!$user)
-                return parent::successMethod();
-
-            $payment = Payment::where('user_id', $user->id)
-                ->where('payment_status', 'Pending')
-                ->latest()
-                ->first();
-
-            \Log::info('Payment', [
-                'payment_id' => $payment
-            ]);
-
-            if ($payment) {
-                $payment->update([
-                    'stripe_payment_id' => $paymentIntent['id'],
-                    'payment_status' => 'Paid',
-                    'amount' => ($paymentIntent['amount_received'] ?? 0) / 100,
-                    'paid_at' => now(),
-                ]);
-            }
-
-            $plan = Plan::find($payment->plan_id);
-
-            if ($plan) {
-                $user->notify(new PlanActivatedNotification($plan));
-            }
-
-
-            \Log::info('Payment updated successfully');
+            \Log::info("this is Payment");
 
         } catch (\Exception $e) {
             \Log::error($e->getMessage());

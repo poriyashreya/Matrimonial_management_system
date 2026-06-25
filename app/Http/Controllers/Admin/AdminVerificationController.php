@@ -9,7 +9,7 @@ class AdminVerificationController extends Controller
 {
     public function index()
     {
-        $verifications = DB::table('verifications')
+        $query = DB::table('verifications')
             ->join('profiles', 'verifications.profile_id', '=', 'profiles.id')
             ->join('users', 'profiles.user_id', '=', 'users.id')
             ->select(
@@ -17,6 +17,7 @@ class AdminVerificationController extends Controller
                 'verifications.doc_type',
                 'verifications.doc_path',
                 'verifications.status',
+                'verifications.created_at',
                 'users.name',
                 'users.email',
                 'users.role',
@@ -25,11 +26,71 @@ class AdminVerificationController extends Controller
                 'profiles.religion',
                 'profiles.city',
                 'profiles.verified_by'
-            )
-            ->orderBy('verifications.created_at', 'desc')
-            ->paginate(7);
+            );
 
-        return view('admin.verification.admin-verification', compact('verifications'));
+        // Search
+        if (request('search')) {
+            $search = request('search');
+
+            $query->where(function ($q) use ($search) {
+                $q->where('users.name', 'like', "%{$search}%")
+                    ->orWhere('users.email', 'like', "%{$search}%")
+                    ->orWhere('verifications.doc_type', 'like', "%{$search}%");
+            });
+        }
+
+        // Status Filter
+        if (request('status') !== null && request('status') !== '') {
+            $query->where('verifications.status', request('status'));
+        }
+
+        // Document Type Filter
+        if (request('doc_type')) {
+            $query->where('verifications.doc_type', request('doc_type'));
+        }
+
+        // Sorting
+        switch (request('sort')) {
+
+            case 'name_asc':
+                $query->orderBy('users.name', 'asc');
+                break;
+
+            case 'name_desc':
+                $query->orderBy('users.name', 'desc');
+                break;
+
+            case 'verified':
+                $query->orderBy('verifications.status', 'desc');
+                break;
+
+            case 'pending':
+                $query->orderByRaw("
+                CASE
+                    WHEN verifications.status = 0 THEN 1
+                    WHEN verifications.status = 1 THEN 2
+                    ELSE 3
+                END
+            ");
+                break;
+
+            case 'oldest':
+                $query->orderBy('verifications.created_at', 'asc');
+                break;
+
+            default:
+                $query->orderBy('verifications.created_at', 'desc');
+                break;
+        }
+
+        $verifications = $query
+            ->paginate(7)
+            ->withQueryString();
+
+        return view(
+            'admin.verification.admin-verification',
+            compact('verifications')
+        );
     }
 
     public function viewDocument($id)

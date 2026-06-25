@@ -117,7 +117,7 @@ Route::middleware('auth')->group(function () {
 
 
 
-Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+Route::prefix('admin')->middleware(['admin.session', 'admin'])->group(function () {
     Route::get('/settings/display', [AdminSettingController::class, 'index'])
         ->name('admin.settings.display');
 
@@ -138,7 +138,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 });
 
 
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+Route::middleware(['admin.session', 'admin'])->prefix('admin')->group(function () {
 
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
@@ -264,11 +264,6 @@ Route::get('/', [PublicDashboardController::class, 'index'])->name('/');
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware('auth')
     ->name('dashboard');
-
-
-Route::get('/user/dashboard', [DashboardController::class, 'index'])
-    ->middleware('auth')
-    ->name('user.dashboard');
 
 // Profile creation (after registration)
 Route::middleware('auth')->group(function () {

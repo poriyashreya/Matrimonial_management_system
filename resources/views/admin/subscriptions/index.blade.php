@@ -13,6 +13,10 @@
                 --primary-dark: #3d0e15;
                 --primary-light: #7a2a36;
 
+                --admin-primary: #4f46e5;
+                --admin-primary-dark: #4338ca;
+                --admin-primary-light: #6366f1;
+
                 --teal: #0d9488;
                 --teal-light: #14b8a6;
                 --teal-soft: #ccfbf1;
@@ -39,6 +43,7 @@
                 --bg-main: #f8fafc;
                 --bg-card: #ffffff;
                 --border: #e2e8f0;
+                --admin-border: #e5e7eb;
 
                 --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
                 --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -242,6 +247,290 @@
                 color: white;
             }
 
+            /* ─── Search & Filter Section ─── */
+            .search-filter-section {
+                padding: 20px 24px;
+                background: white;
+                border-bottom: 1px solid var(--admin-border);
+                border-radius: 20px;
+                border: 1px solid var(--admin-border);
+                margin-bottom: 28px;
+            }
+
+            .search-filter-section .section-title {
+                font-size: 16px;
+                font-weight: 600;
+                color: var(--admin-text);
+                margin-bottom: 4px;
+            }
+
+            .search-filter-section .section-subtitle {
+                font-size: 13px;
+                color: var(--admin-text-light);
+                margin-bottom: 16px;
+            }
+
+            .search-filter-grid {
+                display: grid;
+                grid-template-columns: 2fr 1fr 1.2fr 1fr auto;
+                gap: 16px;
+                align-items: end;
+            }
+
+            .filter-group {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .filter-group label {
+                font-size: 11px;
+                font-weight: 600;
+                color: var(--admin-text-light);
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .filter-group label i {
+                margin-right: 4px;
+            }
+
+            .filter-group .search-input {
+                padding: 10px 14px;
+                border: 1px solid var(--admin-border);
+                border-radius: 8px;
+                font-size: 14px;
+                transition: all 0.2s;
+                background: white;
+                color: var(--admin-text);
+                width: 100%;
+            }
+
+            .filter-group .search-input:focus {
+                outline: none;
+                border-color: var(--admin-primary);
+                box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            }
+
+            .filter-group .search-input::placeholder {
+                color: var(--admin-text-light);
+                font-size: 13px;
+            }
+
+            .filter-group select {
+                padding: 10px 14px;
+                border: 1px solid var(--admin-border);
+                border-radius: 8px;
+                font-size: 14px;
+                background: white;
+                color: var(--admin-text);
+                cursor: pointer;
+                transition: all 0.2s;
+                appearance: none;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 12px center;
+                padding-right: 36px;
+                width: 100%;
+            }
+
+            .filter-group select:focus {
+                outline: none;
+                border-color: var(--admin-primary);
+                box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            }
+
+            .filter-group select option {
+                padding: 8px;
+            }
+
+            .filter-group input[type="date"] {
+                padding: 10px 14px;
+                border: 1px solid var(--admin-border);
+                border-radius: 8px;
+                font-size: 14px;
+                transition: all 0.2s;
+                background: white;
+                color: var(--admin-text);
+                width: 100%;
+            }
+
+            .filter-group input[type="date"]:focus {
+                outline: none;
+                border-color: var(--admin-primary);
+                box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            }
+
+            .filter-actions {
+                display: flex;
+                gap: 8px;
+                align-items: end;
+                padding-bottom: 1px;
+            }
+
+            .btn-filter-apply {
+                background: var(--admin-primary);
+                color: white;
+                border: none;
+                padding: 10px 28px;
+                border-radius: 8px;
+                font-weight: 600;
+                font-size: 14px;
+                cursor: pointer;
+                transition: all 0.2s;
+                white-space: nowrap;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .btn-filter-apply:hover {
+                background: var(--admin-primary-dark);
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            }
+
+            .btn-filter-reset {
+                background: white;
+                color: var(--admin-text);
+                border: 1px solid var(--admin-border);
+                padding: 10px 18px;
+                border-radius: 8px;
+                font-weight: 600;
+                font-size: 14px;
+                cursor: pointer;
+                transition: all 0.2s;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                white-space: nowrap;
+            }
+
+            .btn-filter-reset:hover {
+                background: var(--admin-bg);
+                border-color: var(--admin-text-light);
+                text-decoration: none;
+                color: var(--admin-text);
+            }
+
+            /* ─── Active Filter Tags ─── */
+            .active-filters-tags {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 16px;
+                padding-top: 16px;
+                border-top: 1px solid var(--admin-border);
+            }
+
+            .filter-tag {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                background: #eef2ff;
+                color: var(--admin-primary);
+                padding: 4px 12px 4px 10px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: 500;
+                border: 1px solid #c7d2fe;
+            }
+
+            .filter-tag .remove-filter {
+                cursor: pointer;
+                font-size: 13px;
+                opacity: 0.6;
+                transition: all 0.2s;
+                margin-left: 2px;
+            }
+
+            .filter-tag .remove-filter:hover {
+                opacity: 1;
+                color: var(--admin-danger);
+                transform: scale(1.2);
+            }
+
+            .filter-tag.status-paid-tag {
+                background: #d1fae5;
+                color: #065f46;
+                border-color: #10b981;
+            }
+
+            .filter-tag.status-cancelled-tag {
+                background: #fee2e2;
+                color: #991b1b;
+                border-color: #ef4444;
+            }
+
+            .filter-tag.status-refunded-tag {
+                background: #fef3c7;
+                color: #92400e;
+                border-color: #f59e0b;
+            }
+
+            .filter-tag.status-failed-tag {
+                background: #fee2e2;
+                color: #991b1b;
+                border-color: #ef4444;
+            }
+
+            .no-filters-text {
+                font-size: 13px;
+                color: var(--admin-text-light);
+                padding: 4px 0;
+            }
+
+            .no-filters-text i {
+                margin-right: 6px;
+            }
+
+            /* Responsive */
+            @media (max-width: 1200px) {
+                .search-filter-grid {
+                    grid-template-columns: 1fr 1fr 1fr;
+                }
+            }
+
+            @media (max-width: 992px) {
+                .search-filter-grid {
+                    grid-template-columns: 1fr 1fr;
+                }
+
+                .stats-grid-vibrant {
+                    grid-template-columns: 1fr 1fr;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .search-filter-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .filter-actions {
+                    flex-direction: column;
+                    width: 100%;
+                }
+
+                .btn-filter-apply,
+                .btn-filter-reset {
+                    width: 100%;
+                    justify-content: center;
+                }
+
+                .search-filter-section {
+                    padding: 16px;
+                }
+
+                .stats-grid-vibrant {
+                    grid-template-columns: 1fr;
+                }
+
+                .info-row {
+                    grid-template-columns: 1fr;
+                }
+            }
+
             /* Main Table Card */
             .table-card-vibrant {
                 background: var(--bg-card);
@@ -281,7 +570,7 @@
             }
 
             .total-badge-vibrant {
-                background: linear-gradient(135deg, var(--primary), var(--primary-light));
+                background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-light));
                 color: white;
                 padding: 0.4rem 1rem;
                 border-radius: 30px;
@@ -382,6 +671,7 @@
                 font-weight: 800;
                 color: var(--emerald);
                 font-size: 0.9rem;
+                align-items: center !important;
             }
 
             /* Status Badges */
@@ -405,8 +695,13 @@
                 color: var(--rose);
             }
 
-            .status-failed {
+            .status-refunded {
                 background: #fef3c7;
+                color: #92400e;
+            }
+
+            .status-failed {
+                background: #fee2e2;
                 color: #991b1b;
             }
 
@@ -560,6 +855,153 @@
                 </div>
             </div>
 
+            <!-- ─── SEARCH & FILTER SECTION ─── -->
+            <div class="search-filter-section">
+                <div class="section-title">
+                    <i class="fas fa-search" style="color: var(--admin-primary); margin-right: 6px;"></i>
+                    Search & Filter
+                </div>
+                <div class="section-subtitle">Refine your subscription search</div>
+
+                <form method="GET" action="{{ route('admin.subscriptions') }}" id="filterForm">
+                    <div class="search-filter-grid">
+                        <!-- Search -->
+                        <div class="filter-group">
+                            <label><i class="fas fa-search"></i> SEARCH</label>
+                            <input type="text"
+                                   name="username"
+                                   value="{{ request('username') }}"
+                                   placeholder="Search by username..."
+                                   class="search-input"
+                                   id="searchInput">
+                        </div>
+
+                        <!-- Status -->
+                        <div class="filter-group">
+                            <label><i class="fas fa-filter"></i> STATUS</label>
+                            <select name="status" id="statusFilter">
+                                <option value="">All Status</option>
+                                <option value="Paid" {{ request('status') == 'Paid' ? 'selected' : '' }}>
+                                    Active
+                                </option>
+                                <option value="Cancelled" {{ request('status') == 'Cancelled' ? 'selected' : '' }}>
+                                    Cancelled
+                                </option>
+                                <option value="Refunded" {{ request('status') == 'Refunded' ? 'selected' : '' }}>
+                                    Refunded
+                                </option>
+                                <option value="Failed" {{ request('status') == 'Failed' ? 'selected' : '' }}>
+                                    Failed
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Expiry Date -->
+                        <div class="filter-group">
+                            <label><i class="fas fa-calendar-alt"></i> EXPIRY DATE</label>
+                            <input type="date"
+                                   name="expiry_date"
+                                   value="{{ request('expiry_date') }}"
+                                   class="search-input">
+                        </div>
+
+                        <!-- Sort By -->
+                        <div class="filter-group">
+                            <label><i class="fas fa-sort"></i> SORT BY</label>
+                            <select name="sort_by" id="sortFilter">
+                                <option value="newest" {{ request('sort_by') == 'newest' ? 'selected' : '' }}>
+                                    Newest First
+                                </option>
+                                <option value="oldest" {{ request('sort_by') == 'oldest' ? 'selected' : '' }}>
+                                    Oldest First
+                                </option>
+                                <option value="amount_asc" {{ request('sort_by') == 'amount_asc' ? 'selected' : '' }}>
+                                    Amount Low → High
+                                </option>
+                                <option value="amount_desc" {{ request('sort_by') == 'amount_desc' ? 'selected' : '' }}>
+                                    Amount High → Low
+                                </option>
+                                <option value="status_asc" {{ request('sort_by') == 'status_asc' ? 'selected' : '' }}>
+                                    Status A → Z
+                                </option>
+                                <option value="status_desc" {{ request('sort_by') == 'status_desc' ? 'selected' : '' }}>
+                                    Status Z → A
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="filter-actions">
+                            <button type="submit" class="btn-filter-apply">
+                                <i class="fas fa-search"></i> Apply
+                            </button>
+                            <a href="{{ route('admin.subscriptions') }}" class="btn-filter-reset">
+                                <i class="fas fa-undo"></i> Reset
+                            </a>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Active Filters Tags -->
+                <div class="active-filters-tags">
+                    @if(request('username') || request('status') || request('expiry_date') || request('sort_by'))
+                        @if(request('username'))
+                            <span class="filter-tag">
+                                "{{ request('username') }}"
+                                <span class="remove-filter" onclick="removeFilter('username')">
+                                    <i class="fas fa-times"></i>
+                                </span>
+                            </span>
+                        @endif
+
+                        @if(request('status'))
+                            <span class="filter-tag status-{{ strtolower(request('status')) }}-tag">
+                                @if(request('status') == 'Paid')
+                                @elseif(request('status') == 'Cancelled')
+                                @elseif(request('status') == 'Refunded')
+                                @elseif(request('status') == 'Failed')
+                                @endif
+                                {{ request('status') }}
+                                <span class="remove-filter" onclick="removeFilter('status')">
+                                    <i class="fas fa-times"></i>
+                                </span>
+                            </span>
+                        @endif
+
+                        @if(request('expiry_date'))
+                            <span class="filter-tag">
+                                {{ \Carbon\Carbon::parse(request('expiry_date'))->format('d M Y') }}
+                                <span class="remove-filter" onclick="removeFilter('expiry_date')">
+                                    <i class="fas fa-times"></i>
+                                </span>
+                            </span>
+                        @endif
+
+                        @if(request('sort_by'))
+                            <span class="filter-tag">
+                                @switch(request('sort_by'))
+                                    @case('newest') Newest First
+                                    @case('oldest') Oldest First
+                                    @case('amount_asc') Amount Low → High
+                                    @case('amount_desc') Amount High → Low
+                                    @case('status_asc') Status A → Z
+                                    @case('status_desc') Status Z → A
+                                    @default {{ request('sort_by') }}
+                                @endswitch
+                                <span class="remove-filter" onclick="removeFilter('sort_by')">
+                                    <i class="fas fa-times"></i>
+                                </span>
+                            </span>
+                        @endif
+                    @else
+                        <span class="no-filters-text">
+                            <i class="fas fa-info-circle"></i>
+                            No active filters
+                        </span>
+                    @endif
+                </div>
+            </div>
+
             <!-- Main Table Card -->
             <div class="table-card-vibrant">
                 <div class="table-header-vibrant">
@@ -578,15 +1020,16 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>User</th>
-                                <th>Plan</th>
+                                <th >User</th>
+                                <th class="text-center">Plan</th>
                                 <th>Amount</th>
+                                <th>Credit</th>
                                 <th>Refunded Amount</th>
-                                <th>Status</th>
-                                <th>Purchase Date</th>
-                                <th>Expiry Date</th>
-                                <th>Refund Date</th>
-                                <th>Action</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Purchase Date</th>
+                                <th class="text-center">Expiry Date</th>
+                                <th class="text-center">Refund Date</th>
+                                <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -625,12 +1068,16 @@
                                         @endif
                                     </td>
 
-                                    <td>
+                                    <td class="text-center">
                                         <span class="amount-vibrant">${{ number_format($subscription->amount, 2) }}</span>
                                     </td>
 
-                                    <td>
-                                        <span class="amount-vibrant">${{ $subscription->amount_refunded }}</span>
+                                    <td class="text-center">
+                                        <span class="amount-vibrant">${{number_format($subscription->credit, 2)}}</span>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <span class="amount-vibrant">${{ number_format($subscription->amount_refunded,2) }}</span>
                                     </td>
 
                                     <td>
@@ -643,12 +1090,12 @@
                                                 <i class="fas fa-times-circle fa-xs"></i> Cancelled
                                             </span>
                                         @elseif($subscription->payment_status == 'Refunded')
-                                            <span class="status-vibrant status-cancelled">
-                                                <i class="fas fa-exclamation-triangle fa-xs"></i> Refunded
+                                            <span class="status-vibrant status-refunded">
+                                                <i class="fas fa-undo-alt fa-xs"></i> Refunded
                                             </span>
                                         @else
                                             <span class="status-vibrant status-failed">
-                                                <i class="fas fa-exclamation-triangle fa-xs"></i> Fail
+                                                <i class="fas fa-exclamation-triangle fa-xs"></i> Failed
                                             </span>
                                         @endif
                                     </td>
@@ -689,7 +1136,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="8" class="text-center py-5">
+                                    <td colspan="11" class="text-center py-5">
                                         <i class="fas fa-inbox fa-3x text-muted mb-3 d-block"></i>
                                         <p class="text-muted mb-0">No subscriptions found</p>
                                     </td>
@@ -723,19 +1170,53 @@
 
 @section('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            @if(session('success'))
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: "{{ session('success') }}",
-                    confirmButtonColor: '#5a1620',
-                    timer: 3000
+        function removeFilter(filterName) {
+            const url = new URL(window.location.href);
+            url.searchParams.delete(filterName);
+            window.location.href = url.toString();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-submit on select change
+            const statusFilter = document.getElementById('statusFilter');
+            const sortFilter = document.getElementById('sortFilter');
+            const filterForm = document.getElementById('filterForm');
+
+            if (statusFilter && sortFilter && filterForm) {
+                statusFilter.addEventListener('change', function() {
+                    filterForm.submit();
                 });
-            @endif
+
+                sortFilter.addEventListener('change', function() {
+                    filterForm.submit();
+                });
+
+                // Search on Enter key
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    searchInput.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            filterForm.submit();
+                        }
+                    });
+                }
+            }
+
+            @if(session('success'))
+Swal.fire({
+    icon: 'success',
+    title: 'Success!',
+    html: `
+        <p>{{ session('success') }}</p>
+        <strong>Refund Amount: ${{ session('refund_amount') }}</strong>
+    `,
+    confirmButtonColor: '#5a1620'
+});
+@endif
 
             document.querySelectorAll('.cancel-btn').forEach(button => {
-                button.addEventListener('click', function (e) {
+                button.addEventListener('click', function(e) {
                     e.preventDefault();
                     let form = this.closest('form');
 

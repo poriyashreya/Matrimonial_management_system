@@ -969,7 +969,7 @@ class ProfileController extends Controller
             ->latest()
             ->first();
 
-        $profile->expire_date = $subscription?->ends_at;
+        $profile->expire_date = ($subscription?->updated_at)->addMonth();
 
         // dd($profile->expire_date);
 

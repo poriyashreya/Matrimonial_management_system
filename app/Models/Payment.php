@@ -19,6 +19,7 @@ class Payment extends Model
         'amount_refunded',
 
         'currency',
+        'credit',
 
         'payment_status',
         'failure_reason',
@@ -32,6 +33,7 @@ class Payment extends Model
         'refund_at' => 'datetime',
 
         'amount' => 'float',
+        'credit' => 'float',
         'amount_refunded' => 'float',
     ];
 

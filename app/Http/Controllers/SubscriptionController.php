@@ -107,15 +107,15 @@ class SubscriptionController extends Controller
 
         $subscription = $user->subscription('default');
 
-        // Create pending payment FIRST
-        $payment = Payment::create([
-            'user_id' => $user->id,
-            'plan_id' => $plan->id,
-            'stripe_payment_id' => "Stripe_session",
-            'amount' => 0,
-            'payment_status' => 'Pending',
-            'paid_at' => null,
-        ]);
+        // // Create pending payment FIRST
+        // $payment = Payment::create([
+        //     'user_id' => $user->id,
+        //     'plan_id' => $plan->id,
+        //     'stripe_payment_id' => "Stripe_session",
+        //     'amount' => 0,
+        //     'payment_status' => 'Pending',
+        //     'paid_at' => null,
+        // ]);
 
 
         if ($subscription && $subscription->active()) {
@@ -149,11 +149,12 @@ class SubscriptionController extends Controller
                 'cancel_url' => route('subscription.cancel'),
 
                 'metadata' => [
-                    'payment_id' => $payment->id,
+                    // 'payment_id' => $payment->id,
                     'upgrade' => false,
                     'user_id' => $user->id,
                     'plan_id' => $plan->id,
                     'type' => $plan->name,
+                    'creadit' => '0',
                 ],
             ]);
     }
@@ -295,6 +296,10 @@ class SubscriptionController extends Controller
             ($currentPlan->price / $totalDays)
             * $remainingDays;
 
+        $credit1 = number_format($credit);
+
+        Log::info($credit1);
+
         $newPlanCost =
             ($plan->price / $totalDays)
             * $remainingDays;
@@ -343,7 +348,9 @@ class SubscriptionController extends Controller
                 'plan_id' =>
                     $plan->id,
 
-                'type' => $plan->name,
+                'creadit' => $credit,
+
+                // 'payment_id' => $payment->id,
             ]
         ]);
 
@@ -356,7 +363,6 @@ class SubscriptionController extends Controller
         $user = auth()->user();
 
         $pendingPayment = Payment::where('user_id', $user->id)
-            ->where('created_at', '>=', Carbon::now()->subSeconds(5))
             ->latest()
             ->first();
 
@@ -376,9 +382,6 @@ class SubscriptionController extends Controller
                 'Thank you. Your payment is in process. We will inform you once completed.'
             );
     }
-
-
-
 
     public function cancel()
     {
@@ -400,7 +403,7 @@ class SubscriptionController extends Controller
             ->where('payment_status', 'Paid')
             ->get();
 
-        if (!$payments || !$payments->stripe_payment_id) {
+        if (!$payment || !$payment->stripe_payment_id) {
             return back()->with('error', 'No valid payment found for refund.');
         }
 
@@ -414,31 +417,48 @@ class SubscriptionController extends Controller
 
             // CALCULATE REFUND
 
-            $refundAmounts = [];
-            $i = 0;
+            // $refundAmounts = [];
+            // $i = 0;
 
-            foreach ($payments as $payment) {
+            // foreach ($payments as $payment) {
 
-                $startDate = Carbon::parse($payment->updated_at);
-                $endDate = $startDate->copy()->addDays(30);
+            //     $startDate = Carbon::parse($payment->updated_at);
+            //     $endDate = $startDate->copy()->addDays(30);
 
-                $totalDays = $startDate->diffInDays($endDate);
-                $usedDays = $startDate->diffInDays(now());
-                $remainingDays = max($totalDays - $usedDays, 0);
+            //     $totalDays = $startDate->diffInDays($endDate);
+            //     $usedDays = $startDate->diffInDays(now());
+            //     $remainingDays = max($totalDays - $usedDays, 0);
 
-                // dd(\Schema::getColumnListing('payments'));
-                $amount = (float) $payment->amount;
+            //     // dd(\Schema::getColumnListing('payments'));
+            //     $amount = (float) $payment->amount;
 
-                if ($amount <= 0) {
-                    return back()->with('error', 'Invalid payment amount.');
-                }
+            //     $price = $payment->amount+$payment->credit;
 
-                $refundAmounts[$i] = ($amount / $totalDays) * $remainingDays;
+            //     if ($amount <= 0) {
+            //         return back()->with('error', 'Invalid payment amount.');
+            //     }
 
-                $i++;
+            //     $refundAmounts[$i] = ($amount / $totalDays) * $remainingDays;
+
+            //     $i++;
+            // }
+
+            $startDate = Carbon::parse($payment->updated_at);
+            $endDate = $startDate->copy()->addDays(30);
+
+            $totalDays = $startDate->diffInDays($endDate);
+            $usedDays = $startDate->diffInDays(now());
+            $remainingDays = max($totalDays - $usedDays, 0);
+
+            $price = $payment->amount + $payment->credit;
+
+            if ($price <= 0) {
+                return back()->with('error', 'Invalid payment amount.');
             }
 
-            $refundAmount = array_sum($refundAmounts);
+            $refundAmounts = ($price / $totalDays) * $remainingDays;
+
+            // dd($remainingDays, $refundAmounts);
 
             // CANCEL SUBSCRIPTION
 
@@ -450,7 +470,7 @@ class SubscriptionController extends Controller
 
             $refund = \Stripe\Refund::create([
                 'payment_intent' => $payment->stripe_payment_id,
-                'amount' => (int) round($refundAmount),
+                'amount' => (int) round($refundAmounts),
             ]);
 
             // UPDATE DATABASE
@@ -459,17 +479,12 @@ class SubscriptionController extends Controller
                 ->where('payment_status', 'Paid')
                 ->get();
 
-            $i = 0;
-            foreach ($payments as $payment) {
+            $payment->update([
+                'payment_status' => 'Refunded',
+                'amount_refunded' => $refundAmounts,
+                'refund_at' => now(),
+            ]);
 
-                $payment->update([
-                    'payment_status' => 'Refunded',
-                    'amount_refunded' => $refundAmounts[$i],
-                    'refund_at' => now(),
-                ]);
-
-                $i++;
-            }
 
             // Mail::to($user->email)
             //     ->send(new RefundProcessedMail(
@@ -482,13 +497,13 @@ class SubscriptionController extends Controller
                 'plan' => 'free',
             ]);
 
-            auth()->user()->notify(
-                new CancelSubscriptionNotification($planName)
-            );
+            // auth()->user()->notify(
+            //     new CancelSubscriptionNotification($planName)
+            // );
 
             return redirect()
                 ->route('profile.myprofile')
-                ->with('success', "Your subscription has been canceled successfully. A refund of ₹{$refundAmount} has been initiated and will be credited to your original payment method shortly. We appreciate your trust in our platform and hope to serve you again in the future.");
+                ->with('success', "Your subscription has been canceled successfully. A refund of ₹{$refundAmounts} has been initiated and will be credited to your original payment method shortly. We appreciate your trust in our platform and hope to serve you again in the future.");
 
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());

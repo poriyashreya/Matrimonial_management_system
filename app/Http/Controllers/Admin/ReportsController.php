@@ -15,8 +15,12 @@ use App\Jobs\ResolveReportMail;
 class ReportsController extends Controller
 {
     // List all reports
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->search;
+        $status = $request->status;
+        $sort = $request->sort ?? 'latest';
+
         $reports = DB::table('reports')
             ->join('profiles as reporter_profiles', 'reports.reporter_id', '=', 'reporter_profiles.id')
             ->join('users as reporter_users', 'reporter_profiles.user_id', '=', 'reporter_users.id')
@@ -39,9 +43,52 @@ class ReportsController extends Controller
                 'reported_users.name as reported_name',
                 'reported_users.email as reported_email'
             )
-            ->orderBy('reports.created_at', 'desc')
-            ->paginate(10);
 
+            // SEARCH
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('reporter_users.name', 'like', "%{$search}%")
+                        ->orWhere('reporter_users.email', 'like', "%{$search}%")
+                        ->orWhere('reported_users.name', 'like', "%{$search}%")
+                        ->orWhere('reported_users.email', 'like', "%{$search}%")
+                        ->orWhere('reports.reason', 'like', "%{$search}%");
+                });
+            })
+
+            // STATUS FILTER
+            ->when($status, function ($query) use ($status) {
+                $query->where('reports.status', $status);
+            });
+
+        // SORTING
+        switch ($sort) {
+            case 'oldest':
+                $reports->orderBy('reports.created_at', 'asc');
+                break;
+
+            case 'reporter_asc':
+                $reports->orderBy('reporter_users.name', 'asc');
+                break;
+
+            case 'reporter_desc':
+                $reports->orderBy('reporter_users.name', 'desc');
+                break;
+
+            case 'reported_asc':
+                $reports->orderBy('reported_users.name', 'asc');
+                break;
+
+            case 'reported_desc':
+                $reports->orderBy('reported_users.name', 'desc');
+                break;
+
+            default:
+                $reports->orderBy('reports.created_at', 'desc');
+        }
+
+        $reports = $reports
+            ->paginate(10)
+            ->appends($request->query());
 
         return view('admin.reports.index', compact('reports'));
     }
